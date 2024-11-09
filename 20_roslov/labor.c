@@ -4,7 +4,7 @@
 #include <time.h>
 
 
-
+//test
 int check_sort(int a[], int n){
     int i;
     for (i = 0; i < n - 1; i++){
@@ -14,6 +14,7 @@ int check_sort(int a[], int n){
     }
     return 0;
 }
+
 
 
 void list_print(int a[], int n){
