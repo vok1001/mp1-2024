@@ -1,0 +1,592 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <time.h>
+
+//#define RAND_MIN = pow(10, n - 1)
+
+
+int main() {
+	srand(time(NULL));
+	setlocale(LC_ALL, "ru");
+	clock_t st, en;
+	double tim;
+	int res[1000], res1[1000], n, k, l, r,menu1, menu2, menu11, menu12, count1;
+	menu1 = menuIn();
+	while (menu1 != -2) {
+		
+		
+		if (menu1 == 1)
+			n = menuIn1(res1);
+		else
+			n = menuIn2(res1);
+
+		menu2 = menuSort();
+		while (menu2 != -2 && menu2 != -1)
+		{
+			for (int i = 0; i < n; i++)
+			{
+				res[i] = res1[i];
+			}
+			if (menu2 == 1) {
+				sortBuble(res, n);
+			}
+			else if (menu2 == 3) {
+				k = sortByAlam(res, n);
+				n = (n > k) ? k : n;
+			}
+			else if (menu2 == 4) {
+				st = clock();
+				l = 0;
+				r = n - 1;
+				count1 = 0;
+				
+				qs(res, l, r);
+
+				en = clock();
+				tim = ((double)(en - st)) / CLOCKS_PER_SEC;
+
+				for (int i = 0; i < n; i++)
+				{
+					printf("%d ", res[i]);
+				}
+				printf("\n");
+				printf("Сортировка слиянием выполонена успешно. Количество действий: %d\nВремя, потраченное на сортировку: %f\n", count1, tim);
+
+			}
+			
+			menu2 = menuSort();
+		}
+
+		if (menu2 == -2)
+			return 0;
+		else if (menu2 == -1) 
+			menu1 = menuIn();
+		
+	}
+	
+	
+	return 0;
+
+}
+
+
+/*------------------------------------------------------------*/
+
+int linSearch(int arr[], int val, int n, int **count) {
+
+	int i, k;
+	i = 0;
+	k = -1;
+	while ((i < n) && k == -1)
+	{
+		*(count)+=1;
+		if (arr[i] == val) k = i;
+		else i++;
+	}
+	
+	return k;
+
+}
+
+void createNotRepeat(int arr[], int n) {
+	int i, j, k, c;
+	i = 0;
+	j = 0;
+
+	while (i < n)
+	{
+		j = i + 1;
+		while (j < n)
+		{
+			if (arr[i] == arr[j]) 
+			{
+				for (k = i; k <= (n - 1); ++k)
+					arr[k] = arr[k + 1];
+				n -= 1; 
+			}
+			else ++j;
+		}
+		i++;
+	}
+
+}
+
+int binSearch(int arr[], int val, int n) {
+	int l, r, m, f;
+	l = 0;
+	r = n - 1;
+	f = -1;
+	while ((l < r) && f == -1)
+	{
+		m = round((l + r) / 2);
+		if (val > arr[m]) l = m + 1;
+		else if (val < arr[m]) r = m - 1;
+		else f = 0;
+
+	}
+	f = (arr[l] == val || arr[r] == val) ? 0 : -1;
+	return f;
+}
+
+int alamArr(int arr1[], int arr2[], int n1, int n2, int *count) {
+	int j, k, c, h, arr3[1000];
+	arr3[0] = (arr1[0] < arr2[0]) ? arr1[0] : arr2[0];
+	arr3[1] = (arr1[n1 - 1] > arr2[n2 - 1]) ? arr1[n1 - 1] : arr2[n2 - 1];
+	*(count)+=2;
+	c = 2;
+
+	printf("%d %d arr3", arr3[0], arr3[1]);
+	printf("\n");
+	for (int i = 0; i < n1; i++) {
+		k = linSearch(arr3, arr1[i], c, &*count);
+		
+		++*(count);
+		if (k == -1){
+			*(count) += 2;
+			c++;
+			h = c - 2;
+			printf("%d %d al", arr1[i], arr3[h]);
+			printf("\n");
+			while (arr1[i] < arr3[h]) {
+				j = arr3[h];
+				arr3[h] = arr1[i];
+				arr3[h + 1] = j;
+				h--;
+				*(count) += 4;
+			}
+		}
+	}
+
+	for (int i = 0; i < n2; i++) {
+		k = linSearch(arr3, arr2[i], c, &*count);
+
+		++*(count);
+		if (k == -1) {
+			*(count) += 2;
+			c++;
+			h = c - 2;
+			printf("%d %d al", arr2[i], arr3[h]);
+			printf("\n");
+			while (arr2[i] < arr3[h]) {
+				j = arr3[h];
+				arr3[h] = arr2[i];
+				arr3[h + 1] = j;
+				h--;
+				*(count) += 4;
+			}
+		}
+	}
+
+	for (int i = 0; i < c; i++) {
+		++*(count);
+		arr1[i] = arr3[i];
+	}
+	
+	return c;
+
+}
+
+int checkSort(int arr[], int n) {
+	if (arr[0] > arr[n - 1])
+		return 1;
+	else 
+		return 0;
+
+}
+
+int menuSort() {
+	int cho;
+	printf("Выберите метод сортировки:\n");
+	printf("1. Сортировка пузырьком(двустороняя)\n");
+	printf("2. Сортировка вставками\n");
+	printf("3. Сортировка слияние\n");
+	printf("4. Сортировка Хоара(быстрая)\n");
+	printf("5. Сортировка подсчетом\n");
+	printf("-1. Создать новый массив\n");
+	printf("-2. Выйти из программы\n");
+	
+	scanf_s("%d", &cho);
+	while (cho > 5 || cho < 1 && cho != -1 && cho != -2) {
+		printf("1. Сортировка пузырьком(двустороняя)\n");
+		printf("2. Сортировка вставками\n");
+		printf("3. Сортировка слияние\n");
+		printf("4. Сортировка Хоара(быстрая)\n");
+		printf("5. Сортировка подсчетом\n");
+		printf("-1. Создать новый массив\n");
+		printf("-2. Выйти из программы\n");
+
+		scanf_s("%d", &cho);
+	}
+
+	return cho;
+}
+
+int menuIn() {
+	int cho;
+
+	printf("Выберите способ ввода массива:\n");
+	printf("1. Вручную\n");
+	printf("2. Случайные числа в определенном диапозоне\n");
+	printf("-2. Выйти из программы\n");
+	
+	scanf_s("%d", &cho);
+	while (cho != 1 && cho != 2 && cho != -2)
+	{
+		printf("Выберите способ ввода массива:\n");
+		printf("1. Вручную\n");
+		printf("2. Случайные числа в определенном диапозоне\n");
+		printf("-2. Выйти из программы\n");
+
+		scanf_s("%d", &cho);
+	}
+
+
+	return cho;
+}
+
+int menuIn1(int arr[]) {
+	int val; int n;
+	n = 0;
+	val = 0;
+	printf("Введите числа массива, последним числом указав -1 или выйдите из программы, введя -2 или выйдите из заполнения, введя -3:\n");
+	for (int i = 0; val != -1 && n < 1001; i++) {
+		scanf_s("%d", &val);
+		if (val == -3)
+			return menuIn();
+		else if (val == -2)
+			return 0;
+		while (val == -1 && n == 0) {
+			printf("Нельзя оставлять массив пустым\n");
+			scanf_s("%d", &val);
+		}
+		if (val != -1)
+		{
+			arr[i] = val;
+			n++;
+		}
+	}
+	
+	return n;
+}
+
+int menuIn2(int arr[]) {
+	int n, k, r;
+
+	printf("Введите диапозон возможных чисел, где первое число меньше или равно второго:\n");
+	scanf_s("%d %d", &n, &k);
+	while (n > k)
+	{
+		printf("Первое число должно быть меньше второго\n");
+		scanf_s("%d %d", &n, &k);
+	}
+	printf("Введите количество чисел в массиве:\n");
+	scanf_s("%d", &r);
+	while (r < 1 && r <= 1000) {
+		printf("Длинна массива должна варироваться от 1 од 1000\n");
+		scanf_s("%d", &r);
+	}
+	for (int i = 0; i <= r; i++)
+	{
+		arr[i] = n + rand() % (k - n);
+	}
+	
+	return r;
+}
+
+int sortBuble(int arr[], int k) {
+	clock_t start, end;
+	double time;
+	start = clock();
+	int f, l, r, p, count;
+	
+	f = l = count = 0;
+	r = k;
+	for (int i = 0; (i < k); i++)
+	{
+		
+		if (i % 2 == 1) {
+			for (int j = l; j < r - 1; j++)
+			{
+				count++;
+				if (arr[j] > arr[j + 1]) {
+					p = arr[j];
+					arr[j] = arr[j + 1];					
+					arr[j + 1] = p;
+					f = 1;
+					count += 4;
+				}
+			}
+			count++;
+			r--;
+		}
+		else {
+			count += 2;
+			f = 0;
+			for (int j = r - 1; j > l; j--) {
+				count++;
+				if (arr[j] < arr[j - 1]) {
+					p = arr[j];
+					arr[j] = arr[j - 1];
+					arr[j - 1] = p;
+					f = 1;
+					count += 4;
+				}
+			}
+			l++;
+			for (int j = 0; j < k; j++)
+			{
+				printf("%d ", arr[j]);
+			}
+			printf("\n");
+
+		}
+	}
+	end = clock();
+	time = ((double)(end - start)) / CLOCKS_PER_SEC;
+	printf("Сортировка пузырьком выполонена успешно. Количество действий: %d\nВремя, протраченное на сортировку: %f\n", count, time);
+	return k;
+	
+	
+}
+
+int sortByAlam(int arr[], int k) {
+	clock_t start, end;
+	double time;
+	start = clock();
+	int count, r, c, n;
+	r = count = 0;
+	n = k;
+	count++;
+	if (n % 2 == 0) {
+		for (int i = 0; i < n - 1; i += 2)
+		{
+			count++;
+			if (arr[i] > arr[i + 1]) {
+				r = arr[i];
+				arr[i] = arr[i + 1];
+				arr[i + 1] = r;
+				count += 3;
+			}
+			
+		}
+	}
+	else {
+		for (int i = 0; i < n - 1; i += 2)
+		{
+			count++;
+			if (arr[i] > arr[i + 1]) {
+				r = arr[i];
+				arr[i] = arr[i + 1];
+				arr[i + 1] = r;
+				count += 3;
+			}
+
+		}
+
+	} 
+	for (int j = 0; j < n; j++)
+	{
+		printf("%d ", arr[j]);
+	}
+	printf("\n");
+
+	count++;
+	if (n == 2) {
+
+		for (int j = 0; j < n; j++)
+		{
+			printf("%d ", arr[j]);
+		}
+		printf("\n");
+		end = clock();
+		time = ((double)(end - start)) / CLOCKS_PER_SEC;
+		printf("Сортировка слиянием выполонена успешно. Количество действий: %d\nВремя, потраченное на сортировку: %f\n", count, time);
+		return k;
+	}
+	count++;
+	if (n == 3) {
+		while (arr[0] > arr[2] || arr[1] > arr[2]) {
+			count++;
+			if (arr[0] > arr[2]) {
+				r = arr[0];
+				arr[0] = arr[2];
+				arr[2] = r;
+				count += 3;
+			}
+			else if (arr[1] > arr[2]) {
+				r = arr[1];
+				arr[1] = arr[2];
+				arr[2] = r;
+				count += 3;
+			}
+		}
+		for (int j = 0; j < n; j++)
+		{
+			printf("%d ", arr[j]);
+		}
+		printf("\n");
+
+		printf("Сортировка слиянием выполонена успешно. Количество действий: %d\n", count);
+		return k;
+	}
+	
+	printf("\n");
+	
+
+	if (n % 2 == 0) {
+		int arr1[1000] = { arr[0], arr[1] };
+		for (int i = 2; i <= k - 2; i += 2)
+		{
+			printf("%d %d\n", arr[i], arr[i + 1]);
+			printf("\n");
+			int arr2[1000] = { arr[i], arr[i + 1] };
+			c = alamArr(arr1, arr2, i, 2, &count);
+
+			for (int j = 0; j < c; j++)
+			{
+				printf("%d ", arr1[j]);
+			}
+			printf("\n");
+		}
+		n = c;
+		for (int j = 0; j < n; j++)
+		{
+			arr[j] = arr1[j];
+
+		}
+		for (int j = 0; j < n; j++)
+		{
+			printf("%d ", arr[j]);
+		}
+		printf("\n");
+
+		end = clock();
+		time = ((double)(end - start)) / CLOCKS_PER_SEC;
+		printf("Сортировка слиянием выполонена успешно. Количество действий: %d\nВремя, потраченное на сортировку: %f\n", count, time);
+		
+	}
+	else {
+		int arr1[1000] = { arr[0], arr[1], arr[n - 1]};
+		while (arr1[0] > arr1[2] || arr1[1] > arr1[2]) {
+			count++;
+			if (arr1[0] > arr1[2]) {
+				r = arr1[0];
+				arr1[0] = arr1[2];
+				arr1[2] = r;
+				count += 3;
+			}
+			else if (arr1[1] > arr1[2]) {
+				r = arr1[1];
+				arr1[1] = arr1[2];
+				arr1[2] = r;
+				count += 3;
+			}
+		}
+		printf("%d %d %d arr1", arr1[0], arr1[1], arr1[2]);
+		printf("\n");
+		for (int i = 3; i < k; i += 2)
+		{
+
+			int arr2[1000] = { arr[i - 1], arr[i] };
+			printf("%d %d arr2", arr2[0], arr2[1]);
+			printf("\n");
+
+			c = alamArr(arr1, arr2, i, 2, &count);
+
+			n = c;
+			for (int j = 0; j < n; j++)
+			{
+				printf("%d | ", arr1[j]);
+			}
+			printf("\n");
+		}
+		for (int j = 0; j < n; j++)
+		{
+			arr[j] = arr1[j];
+
+		}
+		for (int j = 0; j < n; j++)
+		{
+			printf("%d ", arr[j]);
+		}
+		printf("\n");
+
+		end = clock();
+		time = ((double)(end - start)) / CLOCKS_PER_SEC;
+		printf("Сортировка слиянием выполонена успешно. Количество действий: %d\nВремя, потраченное на сортировку: %f\n", count, time);
+		
+	}
+	return n;
+
+}
+
+int sortQuick(int arr[], int l, int r, int *count) {
+	int m, v, ch, i, j;
+	i = l;
+	j = r;
+	m = (l + r) / 2;
+	
+	v = arr[m];
+	++*(count);
+	
+	while (i <= j) {
+		++*(count);
+		while (arr[i] < v) { 
+			i++; 
+			++*(count);
+		};
+		while (arr[j] > v) {
+			j++;
+			++*(count);
+		}
+		if (i <= j) {
+			if (arr[i] > arr[j]){
+				ch = arr[i];
+				arr[i] = arr[j];
+				arr[j] = ch;
+				*(count) += 3;
+			}
+			i++;
+			j--;
+			*(count) += 3;
+		}
+	}
+	if (i < r)
+		sortQuick(arr, i, r, &*count);
+	if (l < j) 
+		sortQuick(arr, l, j, &*count);
+	
+	
+}
+
+int qs(int s_arr[], int first, int last) {
+	int i = first, j = last, x = s_arr[(first + last) / 2], ch = 0;
+
+	do {
+		while (s_arr[i] < x) i++;
+		while (s_arr[j] > x) j--;
+
+		if (i <= j) {
+			if (s_arr[i] > s_arr[j]) {
+				ch = s_arr[i];
+				s_arr[i] = s_arr[j];
+				s_arr[j] = ch;
+			
+			};
+			i++;
+			j--;
+		}
+	} while (i <= j);
+
+	if (i < last)
+		qs(s_arr, i, last);
+	if (first < j)
+		qs(s_arr, first, j);
+}
+
+
