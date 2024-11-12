@@ -157,7 +157,7 @@ void bubble_sort(int arr[], int n){
     double duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
-    printf("Количество операция: %d\n", count);
+    printf("Количество операций: %d\n", count);
     printf("Время выполнения: %f sec\n ", duration);
 
 }
@@ -192,7 +192,7 @@ void counting_sort(int arr[], int n){
     double duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
-    printf("Количество операция: %d\n", count);
+    printf("Количество операций: %d\n", count);
     printf("Время выполнения: %f sec\n ", duration);
 }
 
@@ -222,7 +222,7 @@ void true_merge_sort(int arr[], int buffer[], int l, int r){
     }
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
-    printf("Количество операция: %d\n", count);
+    printf("Количество операций: %d\n", count);
     
 }
 
@@ -248,6 +248,7 @@ void insert_sort(int arr[], int n){
         while (j > 0 && arr[j - 1] > x){
             arr[j] = arr[j - 1];
             j--;
+            count++;
         }
         arr[j] = x; 
     }
@@ -255,7 +256,7 @@ void insert_sort(int arr[], int n){
     double duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
-    printf("Количество операция: %d\n", count);
+    printf("Количество операций: %d\n", count);
     printf("Время выполнения: %f sec\n ", duration);
 }
 
@@ -284,11 +285,11 @@ void selection_sort(int arr[], int n){
     double duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
-    printf("Количество операция: %d\n", count);
+    printf("Количество операций: %d\n", count);
     printf("Время выполнения: %f sec\n ", duration);
 }
 
-int partition(int arr[], int l, int r){
+int partition(int arr[], int l, int r, int *count){
     int x, i, tmp;
     int less;
     x = arr[r];
@@ -299,28 +300,24 @@ int partition(int arr[], int l, int r){
             arr[i] = arr[less];
             arr[less] = tmp;
             less++;
+            *count += 1;
         }
     }
     tmp = arr[less];
     arr[less] = arr[r];
     arr[r] = tmp;
+    *count += 3;
     return less;
 }
 
 
-void speed_sort(int arr[], int l, int r){
-    clock_t start, finish;
-    start = clock();
+void speed_sort(int arr[], int l, int r, int *count){
     if (l < r){
-        int q = partition(arr, l, r);
-        speed_sort(arr, l, q - 1);
-        speed_sort(arr, q + 1, r);
+        int q = partition(arr, l, r, &count);
+        speed_sort(arr, l, q - 1, &count);
+        speed_sort(arr, q + 1, r, &count);
     }
-    finish = clock();
-    double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-    printf("------------------------\n");
-    printf("Сортировка выполнена\n");
-    printf("Время выполнения: %f sec\n ", duration);
+    
 }
 //СОРТИРВКАИ end
 
@@ -332,6 +329,8 @@ int main(){
     int action, x;
     menu_print();
     scanf("%d", &action);
+    clock_t start, finish;
+    int count = 0;
     while (action != 0){
         switch (action)
         {
@@ -369,7 +368,13 @@ int main(){
             insert_sort(arr, n);
             break;
         case 8:
-            speed_sort(arr,0, n - 1);
+            speed_sort(arr,0, n - 1, &count);
+            finish = clock();
+            double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+            printf("------------------------\n");
+            printf("Сортировка выполнена\n");
+            printf("Количество операция: %d\n", count);
+            printf("Время выполнения: %f sec\n ", duration);
             break;
         case 9:
             printf("------------------------\n");
