@@ -335,7 +335,7 @@ int main() {
                 QueryPerformanceCounter(&finish);
                 time = (double)(finish.QuadPart -
                     start.QuadPart) / (double)freq.QuadPart;
-                printf("Массив отсортирован\n");}
+                printf("Время выполнения работы=%.5f\nМассив отсортирован\n");}
             else {
                 st(); printf("\n");
             }
