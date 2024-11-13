@@ -368,6 +368,7 @@ int main(){
             insert_sort(arr, n);
             break;
         case 8:
+            start = clock();
             speed_sort(arr,0, n - 1, &count);
             finish = clock();
             double duration = (double)(finish - start) / CLOCKS_PER_SEC;
