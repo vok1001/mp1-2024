@@ -1,0 +1,357 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void print_menu()
+{
+	printf("Welcome. (Use only integer numbers, array's max size is 1000, max number is 1000000)\n");
+	printf("-1. Exit\n");
+	printf("0. Input array\n");
+	printf("1. Random generate array\n");
+	printf("2. Print array\n");
+	printf("3. Insertion sort\n");
+	printf("4. Quicksort\n");
+	printf("5. Counting sort\n");
+	printf("6. Selection sort\n");
+	printf("7. Bubble sort\n");
+	printf("8. Binary search\n");
+	printf("9. Line search\n");
+}
+
+void input_array(int a[], int n)
+{
+	// array is a; len is n;
+	int current_element;
+	int i;
+	printf("Do not enter more than %d numbers\n", n);
+	for (i = 0; i < n; i++)
+	{
+		scanf_s("%d", &current_element);
+		a[i] = current_element;
+	}
+	printf("Input done\n");
+}
+
+void random_generate_array(int a[], int n)
+{
+	int l, r, t, i;
+	printf("Set the left border of the range:\n");
+	scanf_s("%d", &l);
+	printf("Set the right border of the range:\n");
+	scanf_s("%d", &r);
+	if (l == r)
+	{
+		printf("Incorret borders!\n");
+		return;
+	}
+	if (l > r)
+	{
+		t = l;
+		l = r;
+		r = t;
+	}
+	for (i = 0; i < n; i++)
+	{
+		a[i] = l + rand() % (r - l);
+	}
+	printf("Random generation done\n");
+}
+
+void print_array(int a[], int n)
+{
+	// array is a; len is n;
+	int i;
+	printf("Your array: \n");
+	for (i = 0; i < n; i++)
+	{
+		printf("%d ", a[i]);
+	}
+	printf("\n");
+}
+
+void insertion_sort(int a[], int n)
+{
+	int i, j, t;
+	for (i = 1; i < n; i++)
+	{
+		for (j = i; j > 0; j--)
+		{
+			if(a[j - 1] > a[j])
+			{
+				t = a[j - 1];
+				a[j - 1] = a[j];
+				a[j] = t;
+			}
+		}
+	}
+	printf("Sorting done\n");
+}
+
+void selection_sort(int a[], int n)
+{
+	int i, j, t;
+	for (i = 0; i < n; i++)
+	{
+		for (j = i; j < n; j++)
+		{
+			if (a[j] < a[i])
+			{
+				t = a[i];
+				a[i] = a[j];
+				a[j] = t;
+			}
+		}
+	}
+	printf("Sorting done\n");
+}
+
+void counting_sort(int a[], int n)
+{
+	int help[1000] = { 0 };
+	int i, j;
+	int index = 0;
+	for (i = 0; i < n; i++)
+	{
+		help[a[i]]++;
+	}
+	for (i = 0; i < 1000; i++)
+	{
+		for (j = 0; j < help[i]; j++)
+		{
+			a[index] = i;
+			index++;
+		}
+	}
+	printf("Sorting done\n");
+}
+
+void bubble_sort(int a[], int n)
+{
+	int l = 0;
+	int r = n - 1;
+	int i, t;
+	while (l <= r)
+	{
+		for (i = r; i > l; i--)
+		{
+			if (a[i - 1] > a[i])
+			{
+				t = a[i];
+				a[i] = a[i - 1];
+				a[i - 1] = t;
+			}
+		}
+		++l;
+		for (i = l; i < r; i++)
+		{
+			if (a[i] > a[i + 1])
+			{
+				t = a[i];
+				a[i] = a[i + 1];
+				a[i + 1] = t;
+			}
+		}
+		--r;
+	}
+	printf("Sorting done\n");
+}
+
+void binary_search(int a[], int n, int finding)
+{
+	int l, r, c;
+	l = 0;
+	r = n - 1;
+	while (l <= r)
+	{
+		c = (l + r) / 2;
+		if (a[c] == finding)
+		{
+			printf("Number is in array! Index is %d\n", c);
+			return;
+		}
+		if (a[c] > finding)
+		{
+			r = c - 1;
+		}
+		else
+			l = c + 1;
+	}
+	printf("No such number in array.\n");
+}
+
+void line_search(int a[], int n, int finding)
+{
+	int found = 0;
+	int i, index_result;
+	for (i = 0; i < n; i++)
+	{
+		if (a[i] == finding)
+		{
+			found = 1;
+			index_result = i;
+			break;
+		}
+	}
+	if (found == 1)
+	{
+		printf("Number is in array! Index is %d\n", index_result);
+	}
+	else
+		printf("No such number in array.\n");
+}
+
+void quicksort(int a[], int n)
+{
+	int t;
+	int i = 0;
+	int j = n - 1;
+	int c = a[n / 2];
+	do
+	{
+		while (a[i] < c)
+		{
+			i++;
+		}
+		while (a[j] > c)
+		{
+			j--;
+		}
+		if (i <= j)
+		{
+			t = a[i];
+			a[i] = a[j];
+			a[j] = t;
+			i++;
+			j--;
+		}
+	} while (i <= j);
+	if (j > 0)
+	{
+		quicksort(a, j + 1);
+	}
+	if (i < n)
+	{
+		quicksort(&a[i], n - i);
+	}
+}
+
+int is_array_check(int is_array)
+{
+	if (is_array == 0)
+	{
+		printf("You heven't entered array yet, please enter array with 0 or 1 navigation variables\n");
+		return 0;
+	}
+	else
+		return 1;
+}
+
+int main()
+{
+	int array_[1000]; // our array
+	int n; // array's len
+	int finding; //element to find
+	int c = 0; // navigation variable
+	int is_sorted = 0;
+	int is_array = 0;
+	srand(time(NULL));
+	printf("//////////////////////////////////////////\n");
+	print_menu();
+	while (c != -1)
+	{
+		printf("Choose navigation variable\n");
+		printf("//////////////////////////////////////////\n");
+		scanf_s("%d", &c);
+		switch (c)
+		{
+		case -1:
+			break;
+		case 0:
+			printf("Enter array's len:\n");
+			scanf_s("%d", &n);
+			if (n == 0)
+			{
+				printf("len must be more than 0\n");
+				is_array = 0;
+				break;
+			}
+			printf("Start entering numbers\n");
+			input_array(array_, n);
+			is_sorted = 0;
+			is_array = 1;
+			break;
+		case 1:
+			printf("Enter array's len:\n");
+			scanf_s("%d", &n);
+			if (n == 0)
+			{
+				printf("len must be more than 0\n");
+				is_array = 0;
+				break;
+			}
+			random_generate_array(array_, n);
+			is_sorted = 0;
+			is_array = 1;
+			break;
+		case 2:
+			if (is_array_check(is_array) == 0)
+				break;
+			print_array(array_, n);
+			break;
+		case 3:
+			if (is_array_check(is_array) == 0)
+				break;
+			insertion_sort(array_, n);
+			is_sorted = 1;
+			break;
+		case 4:
+			if (is_array_check(is_array) == 0)
+				break;
+			quicksort(array_, n);
+			is_sorted = 1;
+			printf("Sorting done\n");
+			break;
+		case 5:
+			if (is_array_check(is_array) == 0)
+				break;
+			counting_sort(array_, n);
+			is_sorted = 1;
+			break;
+		case 6:
+			if (is_array_check(is_array) == 0)
+				break;
+			selection_sort(array_, n);
+			is_sorted = 1;
+			break;
+		case 7:
+			if (is_array_check(is_array) == 0)
+				break;
+			bubble_sort(array_, n);
+			is_sorted = 1;
+			break;
+		case 8:
+			if (is_array_check(is_array) == 0)
+				break;
+			if (is_sorted == 0)
+			{
+				printf("Please, firstly sort array and than use binary search\n");
+				break;
+			}
+			printf("Enter element, that you want to find\n");
+			scanf_s("%d", &finding);
+			binary_search(array_, n, finding);
+			break;
+		case 9:
+			if (is_array_check(is_array) == 0)
+				break;
+			printf("Enter element, that you want to find\n");
+			scanf_s("%d", &finding);
+			line_search(array_, n, finding);
+			break;
+		default:
+			printf("You choose wrong navigation variable, please watch menu\n");
+			break;
+		}
+	}
+	return 0;
+}
