@@ -204,7 +204,7 @@ void true_merge_sort(int arr[], int buffer[], int l, int r){
         true_merge_sort(arr, buffer, middle + 1, r);
         int i, j;
         int k = l;
-        for(i = l, j = middle + 1; i <= middle && j <= r; ){
+        for(i = l, j = middle + 1; i <= middle || j <= r; ){
             if (j > r || (i <= middle && arr[i] < arr[j])){
                 buffer[k] = arr[i];
                 ++i;
@@ -233,7 +233,7 @@ void merge_sort(int arr[], int n){
     true_merge_sort(arr, buffer, 0, n - 1);
     finish = clock();
     double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-    printf("Время выполнения: %f\n sec", duration);
+    printf("Время выполнения: %f sec\n", duration);
     
 }
 
