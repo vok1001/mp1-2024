@@ -9,8 +9,7 @@
 
 #define and && 
 #define or ||
-#define pi 3.141592
-
+#define pi 3.1415
 int copy_massive(int a[], int b[], int n) {
 	for (int i = 0; i < n; i++) {
 		b[i] = a[i];
@@ -65,18 +64,20 @@ void proverka(int a[], int n) {
 }
 void Selection_sort(int a[], int n) {
 	clock_t start = clock();
-
+	long long iteration = 0; 
 	for (int i = 0; i < n - 1; i++) {
 		int min_idx = i;
 		for (int j = i + 1; j < n; j++) {
 			if (a[j] < a[min_idx]) {
 				min_idx = j;
+				iteration++;
 			}
 		}
 		if (min_idx != i) {
 			int t = a[i];
 			a[i] = a[min_idx];
 			a[min_idx] = t;
+			iteration++;
 		}
 	}
 	clock_t end = clock();
@@ -84,7 +85,10 @@ void Selection_sort(int a[], int n) {
 	for (int i = 0; i < n; i++) {
 		printf("%d ", a[i]);
 	}
+
 	printf("Âנולÿ נאבמעû גארוי ןנמדנאללû: %f \n", time_spent);
+	printf("kolichestvo iteracii: %d \n", iteration);
+
 	printf("\n");
 }
 
@@ -94,6 +98,7 @@ void Buble_sort(int a[], int n) {
 	int l = 1;
 	int r = n - 1;
 	int k;
+	long long iteration = 0; 
 	int f = 1;
 	clock_t start = clock();
 	while (l < r and f == 1) {
@@ -104,6 +109,7 @@ void Buble_sort(int a[], int n) {
 				a[i] = a[i - 1];
 				a[i - 1] = k;
 				f = 1;
+				iteration++;
 			}
 		}
 		l++;
@@ -113,6 +119,7 @@ void Buble_sort(int a[], int n) {
 				a[i] = a[i - 1];
 				a[i - 1] = k;
 				f = 1;
+				iteration++;
 			}
 		}
 		r--;
@@ -120,35 +127,41 @@ void Buble_sort(int a[], int n) {
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("~~~~~~~~~~~~~~~~~~ \n");
-
 	for (int i = 0; i < n; i++) {
 		printf("%d ", a[i]);
 	}
 	printf("\n");
 	printf("~~~~~~~~~~~~~~~~~~ \n");
 	printf("Âנולÿ נאבמעû גארוי ןנמדנאללû: %f \n", time_spent);
+	printf("kolichestvo iteracii: %d \n", iteration);
+
 	printf("\n");
 }
 
 void Insertion_sort(int a[], int n) {
 	clock_t start = clock();
-
+	long long iteration = 0; 
 	for (int i = 1; i < n; i++) {
 		int k = a[i];
 		int j = i - 1;
 		while (j >= 0 and a[j] > k) {
 			a[j + 1] = a[j];
 			j--;
+			iteration++;
 		}
 		a[j + 1] = k;
+		iteration++;
 	}
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	for (int i = 0; i < n; i++) {
 		printf("%d ", a[i]);
 	}
+
 	printf("\n");
 	printf("Âנולÿ נאבמעû גארוי ןנמדנאללû: %f \n", time_spent);
+	printf("kolichestvo iteracii: %d \n", iteration);
+
 	printf("\n");
 
 }
@@ -203,15 +216,18 @@ void Merge_sort(int arr[], int l, int r) {
 void Counting_sort(int a[], int n) {
 	int s[20000], mx = -1000000, mn = 1000000, g = 0;
 	clock_t start = clock();
+	long long iteration = 0;
 	for (int i = 0; i < n; i++) {
 		s[a[i]]++;
 		mx = max1(mx, a[i]);
 		mn = min1(mn, a[i]);
+		iteration++; 
 	}
 	for (int i = mn - 2; i < mx + 2; i++) {
 		if (s[i] >= 1) {
 			for (int j = 0; j < s[i] + 1; j++) {
 				printf("%d ", i);
+				iteration++;
 			}
 		}
 	}
@@ -219,6 +235,7 @@ void Counting_sort(int a[], int n) {
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("\n");
 	printf("Âנולÿ נאבמעû גארוי ןנמדנאללû: %f \n", time_spent);
+	printf("kolichestvo iteracii: %d \n", iteration);
 	printf("\n");
 }
 
@@ -237,7 +254,7 @@ int partition(int arr[], int low, int high) {
 			k = arr[i];
 			arr[i] = arr[j];
 			arr[j] = k;
-			i++;
+			i++; 
 		}
 	}
 
@@ -277,6 +294,7 @@ void Merge_sort_nr(int arr[], int n) {
 }
 int Binary_search(int arr[], int n, int e) {
 	int l = 0, r = n - 1, f = 0, mid, k, pos = -1;
+	long long iteration = 0; 
 	clock_t start = clock();
 	while (l <= r) {
 		mid = (l + r) / 2;
@@ -301,16 +319,19 @@ int Binary_search(int arr[], int n, int e) {
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("Âנולÿ נאבמעû גארוי ןנמדנאללû: %f \n", time_spent);
+	printf("kolichestvo iteracii: %d \n", iteration);
 	printf("\n");
 	return pos;
 }
 void Linear_search(int a[], int n, int e) {
 	int f = 0;
+	long long iteration = 0; 
 	clock_t start = clock();
 	for (int i = 0; i < n; i++) {
 		if (a[i] == e) {
 			f = 1;
 		}
+		iteration++; 
 	}
 	if (f == 1) {
 		printf("~~~~~~~~~~~~~~~~ \n×טסכמ םאיהוםמ \n~~~~~~~~~~~~~~~~ \n");
@@ -321,7 +342,9 @@ void Linear_search(int a[], int n, int e) {
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("Âנולÿ נאבמעû גארוי ןנמדנאללû: %f \n", time_spent);
+	printf("kolichestvo iteracii: %d \n", iteration);
 	printf("\n");
+
 }
 void printa(int a[], int n) {
 	for (int i = 0; i < n; i++) {
