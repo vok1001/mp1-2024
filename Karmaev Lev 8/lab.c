@@ -9,9 +9,6 @@
 #define cm(a,b) ((a)>(b))
 
 
-
-
-
 void qs(int* s_arr, int first, int last,long int p,int p1[])
 {
     
