@@ -1,0 +1,7 @@
+git checkout -b <new branch>
+git merge <branch>
+git add 
+git commit
+test1
+test2
+itmm
