@@ -56,10 +56,10 @@ void proverka(int a[], int n) {
 		}
 	}
 	if (f == 0) {
-		printf("Массив не отсортирован!");
+		printf("Array not sorted!");
 	}
 	else {
-		printf("Массив отсортирован!");
+		printf("Array sorted!");
 	}
 }
 void Selection_sort(int a[], int n) {
@@ -86,7 +86,7 @@ void Selection_sort(int a[], int n) {
 		printf("%d ", a[i]);
 	}
 
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("kolichestvo iteracii: %d \n", iteration);
 
 	printf("\n");
@@ -132,7 +132,7 @@ void Buble_sort(int a[], int n) {
 	}
 	printf("\n");
 	printf("~~~~~~~~~~~~~~~~~~ \n");
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("kolichestvo iteracii: %d \n", iteration);
 
 	printf("\n");
@@ -159,7 +159,7 @@ void Insertion_sort(int a[], int n) {
 	}
 
 	printf("\n");
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("kolichestvo iteracii: %d \n", iteration);
 
 	printf("\n");
@@ -210,7 +210,7 @@ void Merge_sort(int arr[], int l, int r) {
 	}
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("\n");
 }
 void Counting_sort(int a[], int n) {
@@ -234,7 +234,7 @@ void Counting_sort(int a[], int n) {
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("\n");
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("kolichestvo iteracii: %d \n", iteration);
 	printf("\n");
 }
@@ -273,24 +273,34 @@ void Quick_sort(int arr[], int low, int high) {
 	}
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("\n");
 }
 
 void Shell_sort(int arr[], int n) {
-	printf("Ещё не реализовано!!!");
+	printf("not released!!!");
+	printf("\n");
+
 }
 void Piramyd_sort(int arr[], int n) {
-	printf("Ещё не реализовано!!!");
+	printf("not released!!!");
+	printf("\n");
+
 }
 void Radix_sort(int arr[], int n) {
-	printf("Ещё не реализовано!!!");
+	printf("not released!!!");
+	printf("\n");
+
 }
 void Quick_sort_nr(int arr[], int n) {
-	printf("Ещё не реализовано!!!");
+	printf("not released!!!");
+	printf("\n");
+
 }
 void Merge_sort_nr(int arr[], int n) {
-	printf("Ещё не реализовано!!!");
+	printf("not released!!!");
+	printf("\n");
+
 }
 int Binary_search(int arr[], int n, int e) {
 	int l = 0, r = n - 1, f = 0, mid, k, pos = -1;
@@ -318,7 +328,7 @@ int Binary_search(int arr[], int n, int e) {
 	}
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("kolichestvo iteracii: %d \n", iteration);
 	printf("\n");
 	return pos;
@@ -334,14 +344,14 @@ void Linear_search(int a[], int n, int e) {
 		iteration++; 
 	}
 	if (f == 1) {
-		printf("~~~~~~~~~~~~~~~~ \nЧисло найдено \n~~~~~~~~~~~~~~~~ \n");
+		printf("~~~~~~~~~~~~~~~~ \nNumber is here\n~~~~~~~~~~~~~~~~ \n");
 	}
 	else {
-		printf("~~~~~~~~~~~~~~~~ \n Число не найдено \n~~~~~~~~~~~~~~~~ \n");
+		printf("~~~~~~~~~~~~~~~~ \n Number Not is here \n~~~~~~~~~~~~~~~~ \n");
 	}
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("Время работы вашей программы: %f \n", time_spent);
+	printf("Time spent your programm: %f \n", time_spent);
 	printf("kolichestvo iteracii: %d \n", iteration);
 	printf("\n");
 
@@ -365,29 +375,29 @@ int main() {
 	LARGE_INTEGER freq, start, finish;
 	double time;
 	int vibor;
-	printf("Выберите размер массива:");
+	printf("Choose size your array:");
 	scanf_s("%d", &n);
-	printf("Выберите способ задания массива: \n 1.Вручную \n 2.Случайная генерация элеменов массива \n");
+	printf("Choose the way to set the array: \n 1.To hand \n 2.Random \n");
 	scanf_s("%d", &vibor);
 	if (vibor == 2) {
 		for (int i = 0; i < n; i++) {
 			a[i] = (rand() % 20001) - 10000;
 		}
-		printf("Массив сгенерирован: \n");
+		printf("The array is generated: \n");
 		printa(a, n);
 	}
 	else {
-		printf("Введите числа в массив через пробел: \n");
+		printf("Enter the numbers in the array separated by a space: \n");
 		for (int i = 0; i < n; i++) {
 			scanf_s("%d", &a[i]);
 		}
 	}
 	while (true) {
 		print_menu();
-		printf("Выберите вариант: ");
+		printf("Choose your way: ");
 		scanf_s("%d", &c);
 		switch (c) {
-		case 0: printf("Работа программы завершена");  return 0; break;
+		case 0: printf("The program has completed the work");  return 0; break;
 		case 1: copy_massive(a, ac, n); Buble_sort(ac, n); break;
 		case 2: copy_massive(a, ac, n); Insertion_sort(ac, n); break;
 		case 3: copy_massive(a, ac, n); Selection_sort(ac, n); break;
@@ -400,29 +410,29 @@ int main() {
 		case 10: copy_massive(a, ac, n); Quick_sort_nr(ac, n); break;
 		case 11: copy_massive(a, ac, n); Merge_sort_nr(ac, n); break;
 		case 12: copy_massive(a, ac, n);
-			printf("Введите элемент который ищем: \n");
+			printf("Enter the element we are looking for: \n");	
 			scanf_s("%d", &e);
 			Binary_search(ac, n, e);
 			break;
 		case 13: copy_massive(a, ac, n);
-			printf("Введите элемент который ищем: \n");
+			printf("Enter the element we are looking for: \n");
 			scanf_s("%d", &e);
 			Linear_search(ac, n, e);
 			break;
 		case 14:
-			printf("Выберите размер массива:");
+			printf("Choose size your array:");
 			scanf_s("%d", &n);
-			printf("Выберите способ задания массива: \n 1.Вручную \n 2.Случайная генерация элеменов массива \n");
+			printf("Choose the way to set the array: \n 1.To hand \n 2.Random \n");
 			scanf_s("%d", &vibor);
 			if (vibor == 2) {
 				for (int i = 0; i < n; i++) {
 					a[i] = (rand() % 20001) - 10000;
 				}
-				printf("Массив сгенерирован: \n");
+				printf("The array is generated: \n");
 				printa(a, n);
 			}
 			else {
-				printf("Введите числа в массив через пробел: \n");
+				printf("Enter the numbers in the array separated by a space: \n");
 				for (int i = 0; i < n; i++) {
 					scanf_s("%d", &a[i]);
 				}
