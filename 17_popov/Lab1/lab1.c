@@ -6,6 +6,16 @@
 
 #define C  15000
 
+
+
+double Times(double t)
+{
+	printf("\n\n");
+	printf("%f" t);
+	printf("\n\n\n");
+}
+
+
 void merge(int mass[], int left, int m, int right) {
 	int n1 = m - left + 1;  
 	int n2 = right - m;     
@@ -34,7 +44,9 @@ void merge(int mass[], int left, int m, int right) {
 		mass[k] = massleft[i];
 	}
 
-	// Копирование оставшихся элементов из massright
+
+
+
 	for (; j < n2; j++, k++) {
 		mass[k] = massright[j];
 	}
@@ -66,6 +78,10 @@ double ShakerSort(int mass[], int n, int *p)
 					mass[j] = mass[j + 1];
 					mass[j + 1] = tmp;
 					f = 1;
+
+
+					(*k)++;
+
 				}
 				
 			}
@@ -81,6 +97,10 @@ double ShakerSort(int mass[], int n, int *p)
 					mass[j] = mass[j - 1];
 					mass[j - 1] = tmp;
 					f = 1;
+
+
+					(*k)++;
+
 				}
 				
 
@@ -100,6 +120,7 @@ double InsertionSort(int mass[], int n, int *p)
 	QueryPerformanceCounter(&start);
 
 	int tmp = 0;
+
 	int k, x;
 
 	for (x = 1; x < n; x++) {
@@ -109,6 +130,20 @@ double InsertionSort(int mass[], int n, int *p)
 		while (k > 0 && mass[k - 1] > tmp) {
 			mass[k] = mass[k - 1];
 			k--;
+
+	int c, i;
+
+	for (i = 0; i < n; i++) 
+	{
+		tmp = mass[i];
+		c = i;
+		(*p)++;
+		while (c > 0 && mass[c - 1] > tmp) 
+		{
+			mass[c] = mass[c - 1];
+			k--;
+			(*k)++;
+
 		}
 
 		mass[k] = tmp;
@@ -255,19 +290,27 @@ int random(int mass[], int n)
 }
 
 
-// Добавить сортировки быструю 
+
+
+
 
 int main()
 {
 	setlocale(LC_ALL, "Rus");
 	srand(time(NULL));
 
-	int p = 0, s = 0;
+
+	int p = 0, s = 0, k = 0;
+
 	double time;
 	double time1, time2, time3, time4, time5;
 	int a, M;
 	int N, n, i;
 	int mass[C];
+
+
+	
+
 	char answer = 'Y';
 Start:
 	printf("Выберите каким способом Вы хотите задать массив:\n1 - задать случайный массив;\n2 - задать свой массив.\n\n");
@@ -279,17 +322,26 @@ Start:
 		goto Start;
 
 
+
+	int array = (int*) malloc(sizeof(int) * n))
+
+
 	switch (N)
 	{
 	case 1:
 
-			random(mass, n);
+
+			random(array, n);
+
 			break;
 
 		case 2:
 			printf("Введите элементы массива:");
 			for (i = 0; i < n; i++)
-				scanf_s("%d", &mass[i]);
+
+	
+				scanf_s("%d", &array[i]);
+
 			break;
 		default:
 			printf("Выбран не существующий варинат. Попытайтесь снова.\n\n\n");
@@ -310,27 +362,45 @@ Choice:
 	switch (N)
 	{
 	case 1:
-		time = ShakerSort(mass, n, &p);
+
+
+		time1 = ShakerSort(array, n, &p);
+
 
 
 			break;
 	case 2:
-		time = InsertionSort(mass, n, &p);
+
+
+		time2 = InsertionSort(array, n, &p);
+
 
 
 			break;
 	case 3:
-		time = MergeSort(mass, 0, n - 1, &p);
+
+
+
+		time3 = MergeSort(array, 0, n - 1, &p);
+
 
 
 		break;
 	case 4:
-		time = QS(mass, 0, n - 1, &p);
+
+
+
+		time4 = QS(array, 0, n - 1, &p);
+
 
 
 		break;
 	case 5:
-		time = SortShell(mass, n, &p);
+
+
+
+		time5 = SortShell(array, n, &p);
+
 
 
 		break;
@@ -341,12 +411,15 @@ Choice:
 		break;
 	}
 	for (i = 0; i < n; i++)
-		printf("%d\t", mass[i]);
 
 
-	printf("\n\n");
+		printf("%d\t", array[i]);
+
+
+	/*printf("\n\n");
 	printf("%d\t%f", p, time);
-	printf("\n\n\n");
+	printf("\n\n\n");*/
+
 	Choice2:
 	printf("\nЖелаете выбрать другую сортировку или ввести другой массив?\n1 - выбрать другую сортировку.\n2 - ввести другой массив.\n3 - далее\n\n");
 	scanf_s("%d", &N);
@@ -378,10 +451,17 @@ Choice:
 	switch (N)
 	{
 	case 1:
+
 		M = LinearSearch_2(mass, n, a, &s);
 		break;
 	case 2:
 		M = BinarySearch(mass, n, a, &s);
+
+		M = LinearSearch_2(array, n, a, &s);
+		break;
+	case 2:
+		M = BinarySearch(array, n, a, &s);
+
 		break;
 	default:
 		printf("Выбран не существующий варинат. Попытайтесь снова.\n\n\n");
