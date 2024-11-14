@@ -56,7 +56,7 @@ int input_list(int arr[]){
     }else{
         srand(100);
         for (i = 0; i < n; i++){
-            arr[i] = rand();
+            arr[i] = rand() % 200 - 100;
         }
     }
     printf("Массив успешно создан!!!\n");
@@ -196,33 +196,31 @@ void counting_sort(int arr[], int n){
     printf("Время выполнения: %f sec\n ", duration);
 }
 
-void true_merge_sort(int arr[], int buffer[], int l, int r){
-    int count = 0;
+void true_merge_sort(int arr[], int buffer[], int l, int r, int *count){
     if (l < r){
         int middle = (l + r) / 2;
-        true_merge_sort(arr, buffer, l, middle);
-        true_merge_sort(arr, buffer, middle + 1, r);
+        true_merge_sort(arr, buffer, l, middle, count);
+        true_merge_sort(arr, buffer, middle + 1, r, count);
         int i, j;
         int k = l;
         for(i = l, j = middle + 1; i <= middle || j <= r; ){
             if (j > r || (i <= middle && arr[i] < arr[j])){
                 buffer[k] = arr[i];
                 ++i;
+                
             }else{
                 buffer[k] = arr[j];
                 ++j;
             }
             ++k;
-            count++;
+            *count++;
         }
         for (i = l; i <= r; ++i){
             arr[i] = buffer[i];
-            count++;
+            *count++;
         }
     }
-    printf("------------------------\n");
-    printf("Сортировка выполнена\n");
-    printf("Количество операций: %d\n", count);
+    
     
 }
 
@@ -230,9 +228,13 @@ void merge_sort(int arr[], int n){
     int buffer[n];
     clock_t start, finish;
     start = clock();
-    true_merge_sort(arr, buffer, 0, n - 1);
+    int count = 0;
+    true_merge_sort(arr, buffer, 0, n - 1, &count);
     finish = clock();
     double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+    printf("------------------------\n");
+    printf("Сортировка выполнена\n");
+    printf("Количество операций: %d\n", &count);
     printf("Время выполнения: %f sec\n", duration);
     
 }
@@ -388,7 +390,16 @@ int main(){
         default:
             break;
         }
-        menu_print();
+        if ((action >= 3) && (action <= 8)){
+            if (check_sort(arr, n)){
+                printf("Сортировка не выполнена\n");
+            }else{
+                printf("Сортировка выполнена\n");
+            }
+        }
+        
+        menu_print(); 
         scanf("%d", &action);
+
     }  
 }
