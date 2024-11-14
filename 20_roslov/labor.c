@@ -313,9 +313,9 @@ int partition(int arr[], int l, int r, int *count){
 
 void speed_sort(int arr[], int l, int r, int *count){
     if (l < r){
-        int q = partition(arr, l, r, &count);
-        speed_sort(arr, l, q - 1, &count);
-        speed_sort(arr, q + 1, r, &count);
+        int q = partition(arr, l, r, count);
+        speed_sort(arr, l, q - 1, count);
+        speed_sort(arr, q + 1, r, count);
     }
     
 }
