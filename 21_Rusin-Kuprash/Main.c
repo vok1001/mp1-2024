@@ -1,4 +1,5 @@
 #include "locale.h"
+#include "windows.h"
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
@@ -17,7 +18,7 @@ void fillRandList(float list[1000], int n) {
 }
 
 
-void check(float a, float b, int *h) {
+int check(float a, float b, int *h) {
 	(*h)++;
 	return (a > b);
 }
@@ -32,9 +33,39 @@ void swap(float *a, float *b, int *h) {
 }
 
 
-//state = 0: База - изменение массива
-void showBaseScreen(float list[1000], int n) {
-	int input;
+void DoubleBubble(float* const list, int n, int* checks, int* swaps) {
+	int l = 0, r = 0;
+	int dlt = 0;
+	for (int i = 0; (i < n) || (l + r) < n; i++) {
+		//Тянем вправо.
+		if (i % 2) {
+			dlt = 1;
+			for (int j = l; j + r < n; j++) {
+				if (check(list[j], list[j + 1], checks)) {
+					swap(&list[j], &list[j + 1], swaps);
+					dlt = 1;
+				}
+				else dlt++;
+			}
+			r += dlt;
+		}
+		//Тянем влево.
+		else {
+			dlt = 1;
+			for (int j = n - r - 1; j - 1 > l; j--) {
+				if (check(list[j - 1], list[j], checks)) {
+					swap(&list[j - 1], &list[j], swaps);
+					dlt = 1;
+				}
+				else dlt++;
+			}
+			l += dlt;
+		}
+	}
+}
+
+
+void listPrint(float list[1000], int n) {
 	int np;
 	//Вывод 10<= эл-ов массива.
 	np = min(n, 10);
@@ -45,6 +76,13 @@ void showBaseScreen(float list[1000], int n) {
 	if (n > 10) {
 		printf("...");
 	}
+}
+
+
+//state = 0: База - изменение массива
+void showBaseScreen(float list[1000], int n) {
+	int input;
+	listPrint(list, n);
 
 	//Панель выбора.
 	printf("\n1) Заполнить массив (только при n < 11).\n");
@@ -94,26 +132,64 @@ void listSizeChangeScreen(float list[1000], int *n) {
 	state = 0;
 }
 
+//state = 3: Сортировки
+void sortScreen(float list[1000], int n, LARGE_INTEGER freq) {
+	int input;
+	LARGE_INTEGER start, finish;
+	int checks = 0, swaps = 0;
+	float* const sr_list = (float*)malloc(sizeof(float) * n);
+	state = 0;
+	
+	if (sr_list == 0) printf("Нет памяти((.");
+	else {
+		listPrint(list, n);
+
+		memcpy(sr_list, list, sizeof(float) * n);
+
+		printf("\n1) Двунаправленный пузывёк.\n");
+		printf("2) Случайно заполнить массив.\n");
+		printf("3) Изменить размер массива.\n");
+		printf("\n4) Отсортировать массив.\n");
+		scanf_s("%d", &input);
+
+		
+
+		switch (input) {
+		case(1): 
+			QueryPerformanceCounter(&start);
+			DoubleBubble(sr_list, n, &checks, &swaps);
+			QueryPerformanceCounter(&finish);
+			printf("Время выполнения: %lf", (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart);
+
+			break;
+		}
+	}
+	
+}
+
 
 
 int main() {
-	//int checks = 5;
-	srand(time(NULL));
+	LARGE_INTEGER freq;
 	float list[1000];
 	int n = 10;
+	//для таймера:
+	QueryPerformanceFrequency(&freq);
+	//для языка:
+	setlocale(LC_ALL, "Russian");
+	//рандом + рандомный лист:
+	srand(time(NULL));
 	fillRandList(list, n);
 
-	setlocale(LC_ALL, "Russian");
-	printf("Для выхода введите 25\n\n");
-
 	while (state != 255) {
-		if (state > 2) {
+		if (state > 3) {
 			state = 0;
 		}
 		switch (state) {
 		case(0): showBaseScreen(list, n); break;
 		case(1): manualFillScreen(list, n); break;
 		case(2): listSizeChangeScreen(list, &n); break;
+		case(3): listSizeChangeScreen(list, &n); break;
 		}
 	}
 }
