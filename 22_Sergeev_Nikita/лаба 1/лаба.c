@@ -53,28 +53,38 @@ void selectionSort(int arr[], int n, int* iterationCount) {
 
 void countingSort(int arr[], int size, int* iterationCount) {
     *iterationCount = 0;
+
+    int min = arr[0];
     int max = arr[0];
     for (int i = 1; i < size; i++) {
         (*iterationCount)++;
         if (arr[i] > max) {
             max = arr[i];
         }
+        if (arr[i] < min) {
+            min = arr[i];
+        }
     }
 
-    int* count = (int*)calloc(max + 1, sizeof(int));
+    int range = max - min + 1;
+
+    int* count = (int*)calloc(range, sizeof(int));
+
+
     for (int i = 0; i < size; i++) {
-        count[arr[i]]++;
+        count[arr[i] - min]++;
         (*iterationCount)++;
     }
 
     int index = 0;
-    for (int i = 0; i <= max; i++) {
+    for (int i = 0; i < range; i++) {
         while (count[i] > 0) {
-            arr[index++] = i;
+            arr[index++] = i + min;
             count[i]--;
             (*iterationCount)++;
         }
     }
+
     free(count);
 }
 
