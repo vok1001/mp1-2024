@@ -177,10 +177,8 @@ int main() {
                 clock_t end = clock();
                 double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 
-                printf("\nОтсортированный массив (сортировка вставками): ");
-                for (int i = 0; i < globalArraySize; i++) {
-                    printf("%d ", globalArray[i]);
-                }
+                printf("\nОтсортированный массив (сортировка вставками)");
+
                 printf("\nКоличество итераций: %d\n", iterations);
                 printf("Время выполнения: %.6f секунд\n\n", time_spent);
                 if (isSorted(globalArray, globalArraySize) == 1) {
@@ -205,10 +203,8 @@ int main() {
                 clock_t end = clock();
                 double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 
-                printf("\nОтсортированный массив (сортировка выбором): ");
-                for (int i = 0; i < globalArraySize; i++) {
-                    printf("%d ", globalArray[i]);
-                }
+                printf("\nОтсортированный массив (сортировка выбором)");
+
                 printf("\nКоличество итераций: %d\n", iterations);
                 printf("Время выполнения: %.6f секунд\n\n", time_spent);
                 if (isSorted(globalArray, globalArraySize) == 1) {
@@ -233,10 +229,8 @@ int main() {
                 clock_t end = clock();
                 double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 
-                printf("\nОтсортированный массив (сортировка подсчетом): ");
-                for (int i = 0; i < globalArraySize; i++) {
-                    printf("%d ", globalArray[i]);
-                }
+                printf("\nОтсортированный массив (сортировка подсчетом)");
+
                 printf("\nКоличество итераций: %d\n", iterations);
                 printf("Время выполнения: %.6f секунд\n\n", time_spent);
                 if (isSorted(globalArray, globalArraySize) == 1) {
@@ -261,10 +255,8 @@ int main() {
                 clock_t end = clock();
                 double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 
-                printf("\nОтсортированный массив (сортировка шелла): ");
-                for (int i = 0; i < globalArraySize; i++) {
-                    printf("%d ", globalArray[i]);
-                }
+                printf("\nОтсортированный массив (сортировка шелла)");
+
                 printf("\nКоличество итераций: %d\n", iterations);
                 printf("Время выполнения: %.6f секунд\n\n", time_spent);
                 if (isSorted(globalArray, globalArraySize) == 1) {
