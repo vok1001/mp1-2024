@@ -5,6 +5,30 @@
 
 
 //test
+
+int get_min(int a[], int n){
+    int i;
+    int minim = 10000000;
+    for (i = 0; i < n; i++){
+        if (minim > a[i]){
+            minim = a[i];
+        }
+        
+    }
+    return minim;
+}
+
+int get_max(int a[], int n){
+    int i;
+    int maxim = -10000000;
+    for (i = 0; i < n; i++){
+        if (maxim < a[i]){
+            maxim = a[i];
+        }
+    }
+    return maxim;
+}
+
 int check_sort(int a[], int n){
     int i;
     for (i = 0; i < n - 1; i++){
@@ -175,22 +199,42 @@ void bubble_sort(int arr[], int n){
 }
 
 void counting_sort(int arr[], int n){
-    int a[20000], count = 0;
+    int k, sdvit;
+    int flag = 0;
+    if (get_min(arr, n) < 0){
+        k = (get_min(arr, n) * -1);
+        sdvit = (get_min(arr, n) * -1) + get_max(arr,n) + 1;
+        flag = 1;
+    }else{
+        k = get_max(arr,n);
+        sdvit = get_max(arr,n) + 1;
+    }
+    
+    int a[sdvit];
+    int count = 0;
     int i;
     clock_t start, finish;
     start = clock();
-    for (i = 0; i < 20000; i++){
+    for (i = 0; i < sdvit; i++){
         a[i] = 0;
         count++;
     }
     for (i = 0; i < n; i++){
-        a[arr[i] + 10000] += 1;
+        if (get_min(arr, n) < 0){
+            a[arr[i] + k] += 1;
+        }else{
+            a[arr[i]] += 1;
+        }
         count++;
     }
     int index = 0;
-    for(i = 0; i < 20000; i++){
+    for(i = 0; i < sdvit; i++){
         while (a[i] != 0){
-            arr[index] = i - 10000;
+            if(flag){
+                arr[index] = i - (-1 * get_min(arr, n));
+            }else{
+                arr[index] = i;
+            }
             a[i]--;
             index++;
             count++;
