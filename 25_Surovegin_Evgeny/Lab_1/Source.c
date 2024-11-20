@@ -3,7 +3,28 @@
 #include<stdio.h>
 #include<locale.h>
 #include<time.h>
-
+void check(int n,int* a)
+{
+	int k = 0;
+	for (int i = 0; i < n; i++)
+	{
+		if (i != n - 1)
+		{
+			if (a[i] <= a[i + 1])
+			{
+				k++;
+			}
+		}
+	}
+	if (k == n - 1)
+	{
+		printf("ћассив отсортирован\n");
+	}
+	else
+	{
+		printf("ћассив не отсортирован\n");
+	}
+}
 int Generation_n()
 {
 	int n;
@@ -135,7 +156,7 @@ struct sort_stat podschet(int n, int* a)
 	struct sort_stat res;
 	res.srav = 0;
 	res.per = 0;
-	int pos = 0, max = a[0];//сортировка подсчетом
+	int pos = 0, max = a[0], min=a[0];//сортировка подсчетом
 	int* count;
 	for (int i = 0; i < n; i++)
 	{
@@ -144,32 +165,29 @@ struct sort_stat podschet(int n, int* a)
 		{
 			max = a[i];
 		}
+		if (a[i] < min)
+		{
+			min = a[i];
+		}
 	}
-	count = malloc(sizeof(int) * max);
-	for (int i = 0; i <= max; i++)
+	min = abs(min);
+	count = malloc(sizeof(int) * (max+min));
+	for (int i = 0; i <= max+min; i++)
 	{
 		count[i] = 0;
 	}
 	for (int i = 0; i < n; i++)
 	{
-		if (a[i] >= 0)
-		{
-			count[a[i]]++;
-		}
-		else
-		{
-			printf("ѕодсчет не работает с отрицательными числами");
-			return res;
-		}
+			count[a[i]+min]++;
 	}
-	for (int i = 0; i <= max; i++)
+	for (int i = 0; i <= max+min; i++)
 	{
 		res.srav++;
 		if (count[i] > 0)
 		{
 			for (int j = 0; j < count[i]; j++)
 			{
-				a[pos] = i;
+				a[pos] = i-min;
 				pos++;
 			}
 		}
@@ -441,38 +459,47 @@ int main()
 			}
 			// засечь врем€
 			unsigned long long time_start = vremya();
+			switch(ans1)
+			{
+				case 1:
+				{
+					res = def_bubble(n, a);
+					break;
+				}
+				case 2:
+				{
+					res = vstavka(n, a);
+					break;
+				}
+				case 3:
+				{
+					res = vibor(n, a);
+					break;
+				}
+				case 4:
+				{
+					res = podschet(n, a);
+					break;
+				}
+				case 5:
+				{
+					res = double_bubble(n, a);
+					break;
+				}
+				case 6:
+				{
+					res = Hoar(0, n - 1, res, n, a);
 
-			if (ans1 == 1)
-			{
-				res = def_bubble(n, a);
-			}
-			else if (ans1 == 2)
-			{
-				res = vstavka(n, a);
-			}
-			else if (ans1 == 3)
-			{
-				res = vibor(n, a);
-			}
-			else if (ans1 == 4)
-			{
-				res = podschet(n, a);
-			}
-			else if (ans1 == 5)
-			{
-				res = double_bubble(n, a);
-			}
-			else if (ans1 == 6)
-			{
-				res = Hoar(0, n - 1, res, n, a);
-			}
-			else if (ans1 == 7)
-			{
-				res = razbivka(0, n - 1, res, n, a);
+				}
+				case 7:
+				{
+					res = razbivka(0, n - 1, res, n, a);
+					break;
+				}
 			}
 			// засечь врем€ второй раз
 			unsigned long long time_end = vremya();
-
+			check(n, a);
 			printf("ќригинальный массив:\n");
 			for (int i = 0; i < n; i++)
 			{
