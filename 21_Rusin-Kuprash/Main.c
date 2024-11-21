@@ -41,6 +41,21 @@ int checkListSorted(float list[], int n) {
 }
 
 
+void ChoiceSort(float* const list, int n, int* checks, int* swaps) {
+	int imn;
+	//float mn = -(float)RAND_MAX;
+	for (int i = 0; i < n - 1; i++) {
+		imn = i;
+		for (int j = i + 1; j < n; j++) {
+			if (check(list[imn], list[j], checks)) {
+				imn = j;
+			}
+		}
+		swap(&list[imn], &list[i], swaps);
+	}
+}
+
+
 void DoubleBubble(float* const list, int n, int* checks, int* swaps) {
 	int l = 0, r = 0;
 	int dlt = 0;
@@ -157,8 +172,8 @@ void sortScreen(float list[], int n, LARGE_INTEGER freq) {
 
 		memcpy(sr_list, list, sizeof(float) * n);
 
-		printf("\n1) Двунаправленный пузывёк.\n");
-		//printf("2) Случайно заполнить массив.\n");
+		printf("\n1) Двунаправленный пузырёк.\n");
+		printf("2) Сортировка выбором\n");
 		//printf("3) Изменить размер массива.\n");
 		//printf("\n4) Отсортировать массив.\n");
 		scanf_s("%d", &input);
@@ -167,12 +182,16 @@ void sortScreen(float list[], int n, LARGE_INTEGER freq) {
 		QueryPerformanceCounter(&start);
 		switch (input) {
 		case(1): 
-			DoubleBubble(sr_list, n, &checks, &swaps);
-			break;
+			printf("\nДвунаправленный пузырёк:\n");
+			DoubleBubble(sr_list, n, &checks, &swaps);break;
+		case(2):
+			printf("\nСортировка выбором:\n");
+			ChoiceSort(sr_list, n, &checks, &swaps); break;
 		}
 		QueryPerformanceCounter(&finish);
-		printf("%d\n\n", checkListSorted(sr_list, n));
-
+		if (checkListSorted(sr_list, n))
+			printf("Отсортирован.\n");
+		else printf("Ошибка сортировки!!\n");
 		listPrint(sr_list, n);
 		printf("\nВремя выполнения: %lf\n", (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart);
 		printf("Кол-во проверок: %d, Кол-во перемен: %d\n\n", checks, swaps);
