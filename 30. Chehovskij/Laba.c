@@ -80,23 +80,18 @@ int bubblsort(int a[], int n) {
 
 
 void sort_vuborom(int a[], int n) {
-	int min_index, count = 0;
-	for (int i = 1; i < n; i++) {
-		min_index = i;
-		for (int j = i + 1; j < n; j++) {
-			if (a[min_index] > a[j]) {
-				min_index = j;
-			}
+	int i, count = 0;
+	clock_t start, finish;
+	start = clock();
+	for (i = 1; i < n; i++) {
+		int x = a[i];
+		int j = i;
+		while (j > 0 && a[j - 1] > x) {
+			a[j] = a[j - 1];
+			j--;
 			count++;
 		}
-		count++;
-		if (min_index != i)
-		{
-			int temp = a[i];
-			a[i] = a[min_index];
-			a[min_index] = temp;
-		}
-		count++;
+		a[j] = x;
 	}
 	count++;
 	for (int i = 0; i < n; i++) {
@@ -332,5 +327,3 @@ int main() {
 
 	printf("Programma zavershena");
 }
-
-
