@@ -9,11 +9,11 @@ int state;
 
 
 float genRand() {
-	return (float)rand();
+	return (float)rand() - 16383;
 }
 
 
-void fillRandList(float list[1000], int n) {
+void fillRandList(float list[5000], int n) {
 	for (int i = 0; i < n; i++) list[i] = genRand(); /*list[i] = 4;*/
 }
 
@@ -33,14 +33,23 @@ void swap(float *a, float *b, int *h) {
 }
 
 
-void DoubleBubble(float* const list, int n, int* checks, int* swaps) {
+int checkListSorted(float* list, int n) {
+	int i = 0;
+	int ch = 1;
+	while ((i < n) || ch == 1) ch = list[i] < list[++i];
+	return ch;
+}
+
+
+void DoubleBubble(float* list, int n, int* checks, int* swaps) {
 	int l = 0, r = 0;
 	int dlt = 0;
 	for (int i = 0; (i < n) || (l + r) < n; i++) {
 		//Тянем вправо.
 		if (i % 2) {
 			dlt = 1;
-			for (int j = l; j + r < n; j++) {
+			for (int j = l; j + r - 1 < n; j++) {
+				//printf("%d ", j);
 				if (check(list[j], list[j + 1], checks)) {
 					swap(&list[j], &list[j + 1], swaps);
 					dlt = 1;
@@ -52,7 +61,8 @@ void DoubleBubble(float* const list, int n, int* checks, int* swaps) {
 		//Тянем влево.
 		else {
 			dlt = 1;
-			for (int j = n - r - 1; j - 1 > l; j--) {
+			for (int j = n - r - 1; j > l; j--) {
+				//printf("%d ", j);
 				if (check(list[j - 1], list[j], checks)) {
 					swap(&list[j - 1], &list[j], swaps);
 					dlt = 1;
@@ -65,7 +75,7 @@ void DoubleBubble(float* const list, int n, int* checks, int* swaps) {
 }
 
 
-void listPrint(float list[1000], int n) {
+void listPrint(float list[5000], int n) {
 	int np;
 	//Вывод 10<= эл-ов массива.
 	np = min(n, 10);
@@ -80,7 +90,7 @@ void listPrint(float list[1000], int n) {
 
 
 //state = 0: База - изменение массива
-void showBaseScreen(float list[1000], int n) {
+void showBaseScreen(float list[5000], int n) {
 	int input;
 	listPrint(list, n);
 
@@ -117,11 +127,11 @@ void manualFillScreen(float list[10], int n) {
 
 
 //state = 2: Изменение размера массива.
-void listSizeChangeScreen(float list[1000], int *n) {
+void listSizeChangeScreen(float list[5000], int *n) {
 	int input = 0;
-	printf("\nРазмер массива ограничен от 2 - 1000 элементов,\n на данный момент размер массива - %d\n", *n);
+	printf("\nРазмер массива ограничен от 2 - 5000 элементов,\n на данный момент размер массива - %d\n", *n);
 	scanf_s("%d", &input);
-	while ((input < 2) || (input > 1000)) {
+	while ((input < 2) || (input > 5000)) {
 		printf("Недопустимый размер массива.\n");
 		scanf_s("%d", &input);
 	}
@@ -133,17 +143,17 @@ void listSizeChangeScreen(float list[1000], int *n) {
 }
 
 //state = 3: Сортировки
-void sortScreen(float list[1000], int n, LARGE_INTEGER freq) {
+void sortScreen(float list[5000], int n, LARGE_INTEGER freq) {
 	int input;
 	LARGE_INTEGER start, finish;
 	int checks = 0, swaps = 0;
-	float* const sr_list = (float*)malloc(sizeof(float) * n);
+	float* sr_list = (float*)malloc(sizeof(float) * n);
 	state = 0;
 	
-	if (sr_list == 0) printf("Нет памяти((.");
+	if (sr_list == NULL) printf("\nНет памяти((.\n");
 	else {
 		listPrint(list, n);
-
+		printf("\nразмер = %d\n", sizeof(float) * n);
 		memcpy(sr_list, list, sizeof(float) * n);
 
 		printf("\n1) Двунаправленный пузывёк.\n");
@@ -153,16 +163,16 @@ void sortScreen(float list[1000], int n, LARGE_INTEGER freq) {
 		scanf_s("%d", &input);
 
 		
-
+		QueryPerformanceCounter(&start);
 		switch (input) {
-		case(1): 
-			QueryPerformanceCounter(&start);
-			DoubleBubble(sr_list, n, &checks, &swaps);
-			QueryPerformanceCounter(&finish);
-			printf("Время выполнения: %lf", (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart);
-
-			break;
+		case(1):
+			DoubleBubble(sr_list, n, &checks, &swaps);break;
 		}
+		QueryPerformanceCounter(&finish);
+		printf("Время выполнения: %lf\n", (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart);
+		listPrint(sr_list, n);
+		printf("\n%d\n", checkListSorted(sr_list, n));
+		free(sr_list);
 	}
 	
 }
@@ -171,8 +181,9 @@ void sortScreen(float list[1000], int n, LARGE_INTEGER freq) {
 
 int main() {
 	LARGE_INTEGER freq;
-	float list[1000];
+	float list[5000];
 	int n = 10;
+	//printf("%d\n", RAND_MAX);
 	//для таймера:
 	QueryPerformanceFrequency(&freq);
 	//для языка:
@@ -189,7 +200,7 @@ int main() {
 		case(0): showBaseScreen(list, n); break;
 		case(1): manualFillScreen(list, n); break;
 		case(2): listSizeChangeScreen(list, &n); break;
-		case(3): listSizeChangeScreen(list, &n); break;
+		case(3): sortScreen(list, n, freq); break;
 		}
 	}
 }
