@@ -212,10 +212,9 @@ void Merge_sort(int arr[], int l, int r) {
 	printf("Time spent your programm: %f \n", time_spent);
 	printf("\n");
 }
-#define MAX_SIZE 20001
 
 void Counting_sort(int a[], int n) {
-	int s[MAX_SIZE] = { 0 }; 
+	int s[20001] = { 0 }; 
 	int mx = INT_MIN, mn = INT_MAX; 
 	clock_t start = clock(); 
 	long long iteration = 0;
