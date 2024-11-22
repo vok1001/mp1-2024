@@ -5,11 +5,10 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <windows.h>
-
+//задебагать couting sort для отрицательных 
 
 #define and && 
 #define or ||
-#define pi 3.1415
 int copy_massive(int a[], int b[], int n) {
 	for (int i = 0; i < n; i++) {
 		b[i] = a[i];
@@ -213,69 +212,63 @@ void Merge_sort(int arr[], int l, int r) {
 	printf("Time spent your programm: %f \n", time_spent);
 	printf("\n");
 }
+#define MAX_SIZE 20001
+
 void Counting_sort(int a[], int n) {
-	int s[20000], mx = -1000000, mn = 1000000, g = 0;
-	clock_t start = clock();
+	int s[MAX_SIZE] = { 0 }; 
+	int mx = INT_MIN, mn = INT_MAX; 
+	clock_t start = clock(); 
 	long long iteration = 0;
 	for (int i = 0; i < n; i++) {
-		s[a[i]]++;
-		mx = max1(mx, a[i]);
-		mn = min1(mn, a[i]);
-		iteration++; 
+		int index = 10000 + a[i]; 
+		s[index]++;
+		mx = max(mx, a[i]);
+		mn = min(mn, a[i]);
+		iteration++;
 	}
-	for (int i = mn - 2; i < mx + 2; i++) {
-		if (s[i] >= 1) {
-			for (int j = 0; j < s[i] + 1; j++) {
-				printf("%d ", i);
-				iteration++;
+
+	for (int i = mn; i <= mx; i++) {
+		if (s[10000 + i] > 0) {
+			for (int j = 0; j < s[10000 + i]; j++) {
+				printf("%d ", i); 
 			}
 		}
 	}
-	clock_t end = clock();
+
+	clock_t end = clock(); 
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("\n");
-	printf("Time spent your programm: %f \n", time_spent);
-	printf("kolichestvo iteracii: %d \n", iteration);
+	printf("Time spent your program: %f\n", time_spent);
+	printf("Number of iterations: %lld\n", iteration);
 	printf("\n");
 }
-
-int partition(int arr[], int low, int high) {
+int partition(int a[], int l, int r) {
+	int pivot = a[(l + r) / 2];
 	int k;
-	int mid = low + (high - low) / 2;
-	int pivot = arr[mid];
-
-	k = arr[mid];
-	arr[mid] = arr[high];
-	arr[high] = k;
-	int i = low;
-
-	for (int j = low; j < high; j++) {
-		if (arr[j] < pivot) {
-			k = arr[i];
-			arr[i] = arr[j];
-			arr[j] = k;
-			i++; 
+	while (l <= r) {
+		while (a[l] < pivot)
+			l++;
+		while (a[r] > pivot)
+			r--;
+		if (l <= r) {
+			k = a[l];
+			a[l] = a[r];
+			a[r] = k;
+			l++;
+			r--;
 		}
 	}
-
-	k = arr[i];
-	arr[i] = arr[high];
-	arr[high] = k;
-	return i;
+	return l;
 }
 
-void Quick_sort(int arr[], int low, int high) {
-	clock_t start = clock();
-	if (low < high) {
-		int pivotIndex = partition(arr, low, high);
-		Quick_sort(arr, low, pivotIndex - 1);
-		Quick_sort(arr, pivotIndex + 1, high);
+void Quick_sort(int a[], int l, int r) {
+	if (l < r) {
+		int pi = partition(a, l, r);
+		Quick_sort(a, l, pi - 1);
+		Quick_sort(a, pi, r);
 	}
-	clock_t end = clock();
-	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("Time spent your programm: %f \n", time_spent);
-	printf("\n");
 }
+
 
 void Shell_sort(int arr[], int n) {
 	printf("not released!!!");
