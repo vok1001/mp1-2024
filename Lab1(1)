@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
 
 void print_menu()
 {
-	printf("Welcome. (Use only integer numbers, array's max size is 1000, max number is 1000000)\n");
+	printf("Welcome. (Use only integer numbers, array's max size is 50000, max number is 50000)\n");
 	printf("-1. Exit\n");
 	printf("0. Input array\n");
 	printf("1. Random generate array\n");
@@ -74,8 +75,6 @@ void print_array(int a[], int n)
 
 void insertion_sort(int a[], int n)
 {
-	clock_t timer = clock();
-	double total_time;
 	int i, j, current_element;
 	int count_swap = 0;
 	for (i = 1; i < n; i++)
@@ -93,17 +92,12 @@ void insertion_sort(int a[], int n)
 			count_swap++;
 		// если вайл ни разу не запустится, то a[i - 1 + 1] , т. е.(a[i] = a[i])
 	}
-	clock_t end_timer = clock();
-	total_time = (double)(end_timer - timer);
-	printf("Time: %f \n", total_time);
 	printf("Swaps count is %d\n", count_swap);
 	printf("Sorting done\n");
 }
 
 void selection_sort(int a[], int n)
 {
-	clock_t timer = clock();
-	double time_total;
 	int i, j, t, minimum_index;
 	int count_swap = 0;
 	for (i = 0; i < n; i++)
@@ -121,50 +115,40 @@ void selection_sort(int a[], int n)
 		a[minimum_index] = t;
 		count_swap++;
 	}
-	clock_t end_timer = clock();
-	time_total = (double)(end_timer - timer);
-	printf("Time: %f \n", time_total);
 	printf("Swaps count is %d\n", count_swap);	
 	printf("Sorting done\n");
 }
 
 void counting_sort(int a[], int n)
 {
-	// в сортировке подсчетом нет же перестановок, мы просто записываем каждый желемент по
-	// его индексу
-	clock_t timer = clock();
-	double time_total;
-	int help[2000] = { 0 };
+	int help[50000 * 2] = { 0 };
 	int i, j;
 	int index = 0;
 	for (i = 0; i < n; i++)
 	{
-		help[a[i] + 1000]++;
+		help[a[i] + 50000]++;
 	}
-	for (i = 0; i < 2000; i++)
+	for (i = 0; i < 50000 * 2; i++)
 	{
 		for (j = 0; j < help[i]; j++)
 		{
-			a[index] = i - 1000;
+			a[index] = i - 50000;
 			index++;
 		}
 	}
-	clock_t end_timer = clock();
-	time_total = (double)(end_timer - timer);
-	printf("Time: %f \n", time_total);
 	printf("Sorting done\n");
 }
 
 void bubble_sort(int a[], int n)
 {
-	clock_t timer = clock();
-	double time_total;
 	int count_swap = 0;
 	int l = 0;
 	int r = n - 1;
 	int i, t;
+	int flag = 0;
 	while (l <= r)
 	{
+		flag = 0;
 		for (i = r; i > l; i--)
 		{
 			if (a[i - 1] > a[i])
@@ -172,6 +156,7 @@ void bubble_sort(int a[], int n)
 				t = a[i];
 				a[i] = a[i - 1];
 				a[i - 1] = t;
+				flag = 1;
 			}
 		}
 		++l;
@@ -183,21 +168,19 @@ void bubble_sort(int a[], int n)
 				a[i] = a[i + 1];
 				a[i + 1] = t;
 				count_swap++;
+				flag = 1;
 			}
 		}
 		--r;
+		if (flag == 0)
+			break;
 	}
-	clock_t end_timer = clock();
-	time_total = (double)(end_timer - timer);
-	printf("Time: %f \n", time_total);
 	printf("Swaps count is %d\n", count_swap);
 	printf("Sorting done\n");
 }
 
 int binary_search(int a[], int n, int finding)
 {
-	clock_t timer = clock();
-	double time_total;
 	int count_compare = 0;
 	int l, r, c;
 	l = 0;
@@ -208,9 +191,6 @@ int binary_search(int a[], int n, int finding)
 		if (a[c] == finding)
 		{
 			count_compare++;
-			clock_t end_timer = clock();
-			time_total = (double)(end_timer - timer);
-			printf("Time: %f \n", time_total);
 			printf("Count compare is %d\n", count_compare);
 			return c;
 		}
@@ -225,17 +205,12 @@ int binary_search(int a[], int n, int finding)
 			l = c + 1;
 		}
 	}
-	clock_t end_timer = clock();
-	time_total = (double)(end_timer - timer);
-	printf("Time: %f \n", time_total);
 	printf("Count compare is %d\n", count_compare);
 	return -1;
 }
 
 int line_search(int a[], int n, int finding)
 {
-	clock_t timer = clock();
-	double time_total;
 	int count_compare = 0;
 	int found = 0;
 	int i;
@@ -250,16 +225,12 @@ int line_search(int a[], int n, int finding)
 			break;
 		}
 	}
-	clock_t end_timer = clock();
-	time_total = (double)(end_timer - timer);
 		if (found == 1)
 		{
-			printf("Time: %f \n", time_total);
 			printf("Count compare is %d\n", count_compare);
 			return index_result;
 		}
 		else
-			printf("Time: %f \n", time_total);
 			printf("Count compare is %d\n", count_compare);
 			return -1;
 }
@@ -320,8 +291,8 @@ int is_array_check(int is_array)
 
 void is_sorted_(int a[], int n)
 {
+	int array_sorted_quicksort[50000];
 	//проверяю по квиксорту потому что квиксорт сделан точно правильно
-	int array_sorted_quicksort[1000];
 	copy(a, array_sorted_quicksort, n);
 	quicksort(array_sorted_quicksort, n);
 	for (int i = 0; i < n; i++)
@@ -335,16 +306,19 @@ void is_sorted_(int a[], int n)
 	printf("Array is sorted\n");
 }
 
+int array_[50000]; // our array
+int array_copy[50000]; // copy of our array;
 int main()
 {
 	int search_result;
-	int array_[1000]; // our array
-	int array_copy[1000]; // copy of our array;
 	int n; // array's len
 	int finding; //element to find
 	int c = 0; // navigation variable
 	int is_sorted = 0;
 	int is_array = 0;
+	LARGE_INTEGER freq, start, finish;
+	double timer;
+	QueryPerformanceFrequency(&freq);
 	srand(time(NULL));
 	printf("//////////////////////////////////////////\n");
 	print_menu();
@@ -360,9 +334,9 @@ int main()
 		case 0:
 			printf("Enter array's len:\n");
 			scanf_s("%d", &n);
-			if (n == 0)
+			if ((n == 0) || (n >= 50000))
 			{
-				printf("len must be more than 0\n");
+				printf("Inncorect length\n");
 				is_array = 0;
 				break;
 			}
@@ -375,9 +349,9 @@ int main()
 		case 1:
 			printf("Enter array's len:\n");
 			scanf_s("%d", &n);
-			if (n == 0)
+			if ((n == 0) || (n >= 50000))
 			{
-				printf("len must be more than 0\n");
+				printf("Inncorect length\n");
 				is_array = 0;
 				break;
 			}
@@ -394,32 +368,52 @@ int main()
 		case 3:
 			if (is_array_check(is_array) == 0)
 				break;
+			QueryPerformanceCounter(&start);
 			insertion_sort(array_, n);
+			QueryPerformanceCounter(&finish);
+			timer = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
+			printf("Your rime: %0.7f\n", timer);
 			is_sorted = 1;
 			break;
 		case 4:
 			if (is_array_check(is_array) == 0)
 				break;
+			QueryPerformanceCounter(&start);
 			quicksort(array_, n);
+			QueryPerformanceCounter(&finish);
+			timer = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
+			printf("Your rime: %0.7f\n", timer);
 			is_sorted = 1;
 			printf("Sorting done\n");
 			break;
 		case 5:
 			if (is_array_check(is_array) == 0)
 				break;
+			QueryPerformanceCounter(&start);
 			counting_sort(array_, n);
+			QueryPerformanceCounter(&finish);
+			timer = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
+			printf("Your rime: %0.7f\n", timer);
 			is_sorted = 1;
 			break;
 		case 6:
 			if (is_array_check(is_array) == 0)
 				break;
+			QueryPerformanceCounter(&start);
 			selection_sort(array_, n);
+			QueryPerformanceCounter(&finish);
+			timer = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
+			printf("Your rime: %0.7f\n", timer);
 			is_sorted = 1;
 			break;
 		case 7:
 			if (is_array_check(is_array) == 0)
 				break;
+			QueryPerformanceCounter(&start);
 			bubble_sort(array_, n);
+			QueryPerformanceCounter(&finish);
+			timer = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
+			printf("Your rime: %0.7f\n", timer);
 			is_sorted = 1;
 			break;
 		case 8:
