@@ -1,4 +1,4 @@
-#include <stdio.h>
+clude <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
@@ -161,7 +161,16 @@ void linpoisk(int a[], int n) {
 	}
 }
 
+int proverka(int a[], int n) {
+	int i, c;
+	for (i = 0; i < n - 1; i++) {
+		if (a[i] > a[i + 1]) {
+			return 0;
+		}
+	}
+	printf("massiv_otsortirivan");
 
+}
 void b_poisk(int a[], int n) {
 	int x, flag = 0, count = 0;
 	int l = 0, r = n - 1, c;
@@ -274,6 +283,8 @@ int main() {
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
 				printf("Vremya: %f sec\n ", duration);
 				printf("\n");
+				proverka(a, n);
+				printf("\n");
 				break;
 
 			}
@@ -285,6 +296,8 @@ int main() {
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
 				printf("\n");
+				proverka(a, n);
+				printf("\n");
 				break;
 			}
 			case 5: {
@@ -294,6 +307,8 @@ int main() {
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
+				printf("\n");
+				proverka(a, n);
 				printf("\n");
 				break;
 
@@ -306,6 +321,8 @@ int main() {
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
 				printf("\n");
+				proverka(a, n);
+				printf("\n");
 				break;
 			}
 			case 7: {
@@ -316,14 +333,19 @@ int main() {
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
 				printf("\n");
+				proverka(a, n);
+				printf("\n"); ;
 				break;
+			
 			}
 
-
 			}
+		
+
 		}
 
 	}
 
 	printf("Programma zavershena");
 }
+
