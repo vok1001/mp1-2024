@@ -42,14 +42,15 @@ void input_array(int A[],int n) {
     }
 
 }
-int vstavk (int a[],int n){
-    int A[n];
+void copy_array(int A[],int B[],int n) {
+  for(int i=0;i<n;i++) {
+    A[i]=B[i];
+    }
+}
+int vstavk (int A[],int n){
     int sw=0;
     int val, pos,i;
     int k;
-    for (i=0; i<n; i++) {
-        A[i] = a[i];
-    }
     for (pos=1;pos<n;pos++) {
         val = A[pos];
         k = pos-1;
@@ -70,33 +71,41 @@ void generate_array(int A[],int n) {
         A[i] = rand()%10000;
     }
 }
-int bubble_sort(int a[],int n) {
-    int A[n];
+int bubble_sort(int A[],int n) {
+    int fl = 0;
+    int fl2 = 0;
     int i,j,f=1,left, right, k,sw=0;
     left=0; right=n - 2;
-    for (i=0; i<n; i++) {
-        A[i] = a[i];
-    }
     while(left<right) {
         k = -1;
         for(i=left; i<= right; i++ ) {
+            fl=0;
             if(A[i]>A[i+1]) {
                 int temp = A[i];
                 A[i] = A[i+1];
                 A[i+1] = temp;
                 k = i;
                 sw++;
+                fl=1;
+            }
+            if(fl==0) {
+                break;
             }
         }
         right = k;
         k = n;
         for (j=right - 1; j>=left; j--) {
+            fl2=0;
             if(A[j]>A[j+1]) {
                 int temp = A[j];
                 A[j] = A[j+1];
                 A[j+1] = temp;
                 k =  j-1;
                 sw++;
+                fl2=1;
+            }
+            if(fl2==0) {
+                break;
             }
         }
         left = k;
@@ -105,13 +114,9 @@ int bubble_sort(int a[],int n) {
     return sw;
 }
 
-int vybor(int a[],int n) {
+int vybor(int A[],int n) {
     int i,j,pos,ind,mni; int mn,temp;
-    int A[n];
     int sw=0;
-    for (i=0; i<n; i++) {
-        A[i] = a[i];
-    }
     for (pos=0; pos<n; pos++) {
         mn = A[pos];
         mni = pos;
@@ -245,21 +250,21 @@ int main() {
                 masiv2[i] = masiv[i];
             }
             break;
-            case 3:start = PortableGetTime();
-                sw[0] = bubble_sort (masiv,n);// работает
+            case 3:copy_array(masiv,masiv2,n);
+                start = PortableGetTime();
+                sw[0] = bubble_sort (masiv2,n);// работает
             finish = PortableGetTime();
             time = finish - start;
             vrem[0]=time;
             break;
-            case 4:start = PortableGetTime();
-                sw[1] = vstavk(masiv,n); //работает
+            case 4:copy_array(masiv,masiv2,n);
+                start = PortableGetTime();
+                sw[1] = vstavk(masiv2,n); //работает
             finish = PortableGetTime();
             time = finish - start;
             vrem[1]=time;
             break;
-            case 5:for(int i=0;i<n;i++) {
-                masiv2[i] = masiv[i];
-            }
+            case 5:copy_array(masiv,masiv2,n);
                 start = PortableGetTime();
             countsort(masiv2,n);
             finish = PortableGetTime();
@@ -267,15 +272,14 @@ int main() {
             print(masiv2,n);
             vrem[2]=time;
             break;
-            case 6:start = PortableGetTime();
-                sw[3] = vybor(masiv,n); // работает
+            case 6:copy_array(masiv,masiv2,n);
+                start = PortableGetTime();
+                sw[3] = vybor(masiv2,n); // работает
             finish = PortableGetTime();
             time = finish - start;
             vrem[3]=time;
             break;
-            case 7:for(int i=0;i<n;i++) {
-                masiv2[i] = masiv[i];
-            }
+            case 7:copy_array(masiv,masiv2,n);
                 start = PortableGetTime();
             sw[4] = quicksort(masiv2,0,n-1,0);
             finish = PortableGetTime();
