@@ -5,6 +5,30 @@
 
 
 //test
+
+int get_min(int a[], int n){
+    int i;
+    int minim = 10000000;
+    for (i = 0; i < n; i++){
+        if (minim > a[i]){
+            minim = a[i];
+        }
+        
+    }
+    return minim;
+}
+
+int get_max(int a[], int n){
+    int i;
+    int maxim = -10000000;
+    for (i = 0; i < n; i++){
+        if (maxim < a[i]){
+            maxim = a[i];
+        }
+    }
+    return maxim;
+}
+
 int check_sort(int a[], int n){
     int i;
     for (i = 0; i < n - 1; i++){
@@ -13,6 +37,13 @@ int check_sort(int a[], int n){
         }
     }
     return 0;
+}
+
+int copy_list(int arr[], int arr_copy[], int n){
+    int i;
+    for(i = 0; i < n; i++){
+        arr[i] = arr_copy[i];
+    }
 }
 
 
@@ -25,7 +56,7 @@ void list_print(int a[], int n){
     printf("\n");
 }
 
-int input_list(int arr[]){
+int input_list(int arr[], int arr_copy[]){
     int i;
     printf("Выбирите способ ввода массива:\n");
     printf("1. Вручную\n");
@@ -37,7 +68,7 @@ int input_list(int arr[]){
         printf("Введите еще раз число: ");
         scanf("%d", &type_input);
     }
-    int n;
+    int n, k;
     printf("Размер массива: ");
     scanf("%d", &n);
     while(n > 10000){
@@ -51,12 +82,16 @@ int input_list(int arr[]){
     if (type_input == 1){
         printf("Ввод чисел: \n");
         for (i = 0; i < n; i++){
-            scanf("%d", &arr[i]);
+            scanf("%d", &k);
+            arr[i] = k;
+            arr_copy[i] = k;
         }
     }else{
         srand(100);
         for (i = 0; i < n; i++){
-            arr[i] = rand() % 200 - 100;
+            k = rand() % 200 - 100;
+            arr[i] = k;
+            arr_copy[i] = k;
         }
     }
     printf("Массив успешно создан!!!\n");
@@ -78,6 +113,7 @@ void menu_print(){
     printf("8. Сортировка быстрая\n");
     printf("9. Распечатать массив\n");
     printf("10. Ввести массив заново\n");
+    printf("11. Скопировать массив\n");
     printf("0. Выход\n");
     printf("Ввод: ");
     
@@ -158,27 +194,47 @@ void bubble_sort(int arr[], int n){
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
     printf("Количество операций: %d\n", count);
-    printf("Время выполнения: %f sec\n ", duration);
+    printf("Время выполнения: %f sec\n", duration);
 
 }
 
 void counting_sort(int arr[], int n){
-    int a[20000], count = 0;
+    int k, sdvit;
+    int flag = 0;
+    if (get_min(arr, n) < 0){
+        k = (get_min(arr, n) * -1);
+        sdvit = (get_min(arr, n) * -1) + get_max(arr,n) + 1;
+        flag = 1;
+    }else{
+        k = get_max(arr,n);
+        sdvit = get_max(arr,n) + 1;
+    }
+    
+    int a[sdvit];
+    int count = 0;
     int i;
     clock_t start, finish;
     start = clock();
-    for (i = 0; i < 20000; i++){
+    for (i = 0; i < sdvit; i++){
         a[i] = 0;
         count++;
     }
     for (i = 0; i < n; i++){
-        a[arr[i] + 10000] += 1;
+        if (get_min(arr, n) < 0){
+            a[arr[i] + k] += 1;
+        }else{
+            a[arr[i]] += 1;
+        }
         count++;
     }
     int index = 0;
-    for(i = 0; i < 20000; i++){
+    for(i = 0; i < sdvit; i++){
         while (a[i] != 0){
-            arr[index] = i - 10000;
+            if(flag){
+                arr[index] = i - (-1 * get_min(arr, n));
+            }else{
+                arr[index] = i;
+            }
             a[i]--;
             index++;
             count++;
@@ -193,7 +249,7 @@ void counting_sort(int arr[], int n){
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
     printf("Количество операций: %d\n", count);
-    printf("Время выполнения: %f sec\n ", duration);
+    printf("Время выполнения: %f sec\n", duration);
 }
 
 void true_merge_sort(int arr[], int buffer[], int l, int r, int *count){
@@ -259,7 +315,7 @@ void insert_sort(int arr[], int n){
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
     printf("Количество операций: %d\n", count);
-    printf("Время выполнения: %f sec\n ", duration);
+    printf("Время выполнения: %f sec\n", duration);
 }
 
 void selection_sort(int arr[], int n){
@@ -288,7 +344,7 @@ void selection_sort(int arr[], int n){
     printf("------------------------\n");
     printf("Сортировка выполнена\n");
     printf("Количество операций: %d\n", count);
-    printf("Время выполнения: %f sec\n ", duration);
+    printf("Время выполнения: %f sec\n", duration);
 }
 
 int partition(int arr[], int l, int r, int *count){
@@ -327,7 +383,8 @@ void speed_sort(int arr[], int l, int r, int *count){
 int main(){
     int i;
     int arr[10000];
-    int n = input_list(arr);
+    int arr_copy[10000];
+    int n = input_list(arr, arr_copy);
     int action, x;
     menu_print();
     scanf("%d", &action);
@@ -377,7 +434,7 @@ int main(){
             printf("------------------------\n");
             printf("Сортировка выполнена\n");
             printf("Количество операция: %d\n", count);
-            printf("Время выполнения: %f sec\n ", duration);
+            printf("Время выполнения: %f sec\n", duration);
             break;
         case 9:
             printf("------------------------\n");
@@ -385,16 +442,21 @@ int main(){
             break;
         case 10:
             printf("------------------------\n");
-            input_list(arr);
+            input_list(arr, arr_copy);
             break;
+        case 11:
+            printf("------------------------\n");
+            copy_list(arr, arr_copy, n);
+            list_print(arr, n);
+            break;  
         default:
             break;
         }
         if ((action >= 3) && (action <= 8)){
             if (check_sort(arr, n)){
-                printf("Сортировка не выполнена\n");
+                printf("Сортировка неправильная\n");
             }else{
-                printf("Сортировка выполнена\n");
+                printf("Сортировка правильная\n");
             }
         }
         

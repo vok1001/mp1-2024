@@ -1,12 +1,30 @@
+#include<malloc.h>
+//#include <stdlib.h>  // для malloc() 
 #include<stdio.h>
 #include<locale.h>
 #include<time.h>
-#include <stdlib.h>  // для malloc() 
-
-int* a = NULL; 
-int* user = NULL;
-int n;
-
+void check(int n,int* a)
+{
+	int k = 0;
+	for (int i = 0; i < n; i++)
+	{
+		if (i != n - 1)
+		{
+			if (a[i] <= a[i + 1])
+			{
+				k++;
+			}
+		}
+	}
+	if (k == n - 1)
+	{
+		printf("Массив отсортирован\n");
+	}
+	else
+	{
+		printf("Массив не отсортирован\n");
+	}
+}
 int Generation_n()
 {
 	int n;
@@ -18,7 +36,7 @@ int Generation_n()
 	}
 	return n;
 }
-void Massiv(int ans)
+void Massiv(int ans, int n, int* user)
 {
 	if (ans == 1)
 	{
@@ -63,7 +81,7 @@ struct sort_stat
 	int per;
 };
 
-struct sort_stat def_bubble()
+struct sort_stat def_bubble(int n, int* a)
 {
 	struct sort_stat res;
 	res.srav = 0;
@@ -86,7 +104,7 @@ struct sort_stat def_bubble()
 	}
 	return res;
 }
-struct sort_stat  vstavka()
+struct sort_stat  vstavka(int n, int* a)
 {
 	struct sort_stat res;
 	res.srav = 0;
@@ -109,7 +127,7 @@ struct sort_stat  vstavka()
 	}
 	return res;
 }
-struct sort_stat vibor()
+struct sort_stat vibor(int n, int* a)
 {
 	struct sort_stat res;
 	res.srav = 0;
@@ -133,25 +151,13 @@ struct sort_stat vibor()
 	}
 	return res;
 }
-struct sort_stat podschet()
+struct sort_stat podschet(int n, int* a)
 {
 	struct sort_stat res;
 	res.srav = 0;
 	res.per = 0;
-	int max = -10000, min = 10000, k = 0, b[20001], z = 0;//сортировка подсчетом
-	for (int i = 0; i < n + 10001; i++)
-	{
-		b[i] = 0;
-	}
-	for (int i = 0; i < n; i++)
-	{
-		res.srav++;
-		if (a[i] > 10000 || a[i] < -10000)
-		{
-			printf("Плохие входные данные: %d\n", a[i]);
-			return(res);
-		}
-	}
+	int pos = 0, max = a[0], min=a[0];//сортировка подсчетом
+	int* count;
 	for (int i = 0; i < n; i++)
 	{
 		res.srav++;
@@ -159,48 +165,39 @@ struct sort_stat podschet()
 		{
 			max = a[i];
 		}
-		else
+		if (a[i] < min)
 		{
-			if (a[i] < min)
-			{
-				min = a[i];
-			}
+			min = a[i];
 		}
 	}
-	min += 10000;
-	max += 10000;
-
-	for (int i = min; i <= max; i++)
+	min = abs(min);
+	count = malloc(sizeof(int) * (max+min));
+	for (int i = 0; i <= max+min; i++)
 	{
-		for (int j = 0; j < n; j++)
-		{
-			res.srav++;
-			if (i == a[j] + 10000)
-			{
-				k++;
-			}
-		}
-		b[i] = k;
-		k = 0;
+		count[i] = 0;
 	}
-	for (int i = 0; i <= max; i++)
+	for (int i = 0; i < n; i++)
 	{
-		if (b[i] > 0)
+			count[a[i]+min]++;
+	}
+	for (int i = 0; i <= max+min; i++)
+	{
+		res.srav++;
+		if (count[i] > 0)
 		{
-			res.srav++;
-			for (int j = z; j < b[i] + z; j++)
+			for (int j = 0; j < count[i]; j++)
 			{
-				a[j] = i - 10000;
-				//printf("%d\n", a[j]);
+				a[pos] = i-min;
+				pos++;
 			}
-			z += b[i];
 		}
 	}
 	return res;
 }
+	
 
 
-struct sort_stat double_bubble()
+struct sort_stat double_bubble(int n, int* a)
 {
 	struct sort_stat res;
 	res.srav = 0;
@@ -244,7 +241,7 @@ struct sort_stat double_bubble()
 	}
 	return res;
 }
-struct sort_stat Hoar(int left, int right, struct sort_stat res)//Хоар
+struct sort_stat Hoar(int left, int right, struct sort_stat res,int n, int* a)//Хоар
 {
 	int i = left, j = right;
 	int mid = (right + left) / 2;
@@ -273,15 +270,15 @@ struct sort_stat Hoar(int left, int right, struct sort_stat res)//Хоар
 	}
 	if (j > left)
 	{
-		res = Hoar(left, j, res);
+		res = Hoar(left, j, res, n, a);
 	}
 	if (i < right)
 	{
-		res = Hoar(i, right, res);
+		res = Hoar(i, right, res, n, a);
 	}
 	return res;
 }
-struct sort_stat sliyanie(int l, int mid, int r, struct sort_stat res)
+struct sort_stat sliyanie(int l, int mid, int r, struct sort_stat res, int n, int* a)
 {
 	int i, j, k;
 	int n1 = mid - l + 1;
@@ -334,19 +331,19 @@ struct sort_stat sliyanie(int l, int mid, int r, struct sort_stat res)
 
 	return res;
 }
-struct sort_stat razbivka(int l, int r, struct sort_stat res)
+struct sort_stat razbivka(int l, int r, struct sort_stat res, int n, int* a)
 {
 	if (l < r)
 	{
 		int  mid = (l + r) / 2;
-		res = razbivka(l, mid, res);
-		res = razbivka(mid + 1, r, res);
-		res = sliyanie(l, mid, r, res);
+		res = razbivka(l, mid, res, n, a);
+		res = razbivka(mid + 1, r, res, n, a);
+		res = sliyanie(l, mid, r, res, n, a);
 	}
 
 	return res;
 }
-int poisk()
+int poisk(int n, int* a)
 {
 	int chislo, ans2;
 	printf("Выберете число для поиска\n");
@@ -427,6 +424,9 @@ unsigned long long vremya() // наносекунды
 
 int main()
 {
+	int* a = NULL;
+	int* user = NULL;
+	int n; 
 	setlocale(LC_ALL, "Rus");
 	srand(time(NULL));
 	int ans, ans1, per = 0, srav = 0, chislo, index, ok;
@@ -445,7 +445,7 @@ int main()
 		}
 		user = malloc(sizeof(int) * n);
 		a = malloc(sizeof(int) * n);
-		Massiv(ans);
+		Massiv(ans,n, user);
 		do
 		{
 			ok = 0;
@@ -459,38 +459,47 @@ int main()
 			}
 			// засечь время
 			unsigned long long time_start = vremya();
+			switch(ans1)
+			{
+				case 1:
+				{
+					res = def_bubble(n, a);
+					break;
+				}
+				case 2:
+				{
+					res = vstavka(n, a);
+					break;
+				}
+				case 3:
+				{
+					res = vibor(n, a);
+					break;
+				}
+				case 4:
+				{
+					res = podschet(n, a);
+					break;
+				}
+				case 5:
+				{
+					res = double_bubble(n, a);
+					break;
+				}
+				case 6:
+				{
+					res = Hoar(0, n - 1, res, n, a);
 
-			if (ans1 == 1)
-			{
-				res = def_bubble();
-			}
-			else if (ans1 == 2)
-			{
-				res = vstavka();
-			}
-			else if (ans1 == 3)
-			{
-				res = vibor();
-			}
-			else if (ans1 == 4)
-			{
-				res = podschet();
-			}
-			else if (ans1 == 5)
-			{
-				res = double_bubble();
-			}
-			else if (ans1 == 6)
-			{
-				res = Hoar(0, n - 1, res);
-			}
-			else if (ans1 == 7)
-			{
-				res = razbivka(0, n - 1, res);
+				}
+				case 7:
+				{
+					res = razbivka(0, n - 1, res, n, a);
+					break;
+				}
 			}
 			// засечь время второй раз
 			unsigned long long time_end = vremya();
-
+			check(n, a);
 			printf("Оригинальный массив:\n");
 			for (int i = 0; i < n; i++)
 			{
@@ -503,7 +512,7 @@ int main()
 				printf("%d ", a[i]);
 			}
 			printf("\n");
-			index = poisk();
+			index = poisk(n,a);
 			unsigned time_diff = time_end - time_start;
 			if (index == -1)
 			{
