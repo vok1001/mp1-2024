@@ -13,25 +13,28 @@ int SwapArray[5] = {0};
 
 int MaxArray(int A[], int n)
 {
-	int max, i,min;
-	max = A[0];
-	min = A[0];
+	int max=A[0], i;
 	for (i = 0; i < n; i++)
 	{
-		if (max < A[i])
+		if (A[i] > max)
 		{
 			max = A[i];
 		}
-		if (min > A[i])
+	}
+	return (max);
+}
+
+int MinArray(int A[], int n)
+{
+	int min = A[0], i;
+	for (i = 0; i < n; i++)
+	{
+		if (A[i] < min)
 		{
 			min = A[i];
 		}
 	}
-	if (max < (-1) * min)
-	{
-		max = (-1) * min;
-	}
-	return(max);
+	return (min);
 }
 
 void ArrayOutput(int A[], int n)
@@ -111,9 +114,9 @@ void RandArrayInput(int A[], int n)
 	}
 }
 
-void ArraySortTest(int A[], int n)
+int ArraySortTest(int A[], int n)
 {
-	int i;
+	int i,is_sort = 1;
 	for (i = 0; i < n-1; i++)
 	{
 		if (A[i] > A[i+1])
@@ -121,8 +124,8 @@ void ArraySortTest(int A[], int n)
 			is_sort = 0;
 			break;
 		}
-		is_sort = 1;
 	}
+	return(is_sort);
 }
 
 int ArraySettings()
@@ -369,26 +372,26 @@ void SearchMenu(int n)
 	main(n);
 }
 
-void Swap(int i, int j, int A[])
+void Swap(int i, int j, int A[], int q)
 {
 	int temp;
 	temp = A[i];
 	A[i] = A[j];
 	A[j] = temp;
+	SwapArray[q]++;
 }
 
 void BubbleSort(int A[], int n)
 {
 	SwapArray[0] = 0;
-	int left = 0, right = n - 1, i;
-	while (left <= right)
+	int left = 0, right = n - 1, i, is_sort = 0;
+	while ((left <= right)&&(!is_sort))
 	{
 		for (i = right; i > left; i--)
 		{
 			if (A[i - 1] > A[i])
 			{
-				Swap(i, i-1, A);
-				SwapArray[0]++;
+				Swap(i, i - 1, A, 0);
 			}
 		}
 		++left;
@@ -396,12 +399,12 @@ void BubbleSort(int A[], int n)
 		{
 			if (A[i] > A[i + 1])
 			{
-				Swap(i, i + 1, A);
-				SwapArray[0]++;
+				Swap(i, i + 1, A, 0);
 			}
 		}
 		--right;
 	}
+	is_sort = ArraySortTest(A, n);
 }
 
 void InsertSort(int A[], int n)
@@ -437,36 +440,35 @@ void ChoiseSort(int A[], int n)
 				pos = j;
 			}
 		}
-		Swap(pos, i, A);
-		SwapArray[2]++;
+		Swap(pos, i, A, 2);
 	}
 }
 void CountSort(int A[], int n)
 {
 	SwapArray[3] = 0;
-	int max, i, q, j, pos=0;
-	max = MaxArray(GlobArray, n);
-	if (max < 0)
+	int min, max, i, q, j, pos=0;
+	for (q = 0; q < n; q++)
 	{
-		max = (-1) * max;
+		A[q] = GlobArray[q];
 	}
-	int max2 = max * 2;
-	int* B = malloc(max2 * sizeof(int));
-	for (q = 0; q < max2; q++)
+	min = MinArray(GlobArray, n);
+	max = MaxArray(GlobArray, n);
+	int* B = malloc((max-min+1) * sizeof(int));
+	for (q = 0; q < (max-min+1); q++)
 	{
 		B[q] = 0;
 	}
 	for (i = 0; i < n; i++)
 	{
-		B[A[i]+max]+=1;
+		B[A[i]-min]+=1;
 	}
-	for (i = 0; i < max2; i++)
+	for (i = 0; i <= max-min; i++)
 	{
 		if (B[i] > 0)
 		{
 			for (j = 0; j < B[i]; j++)
 			{
-				A[pos] = i-max;
+				A[pos] = i+min;
 				SwapArray[3]++;
 				pos++;
 			}
@@ -490,8 +492,7 @@ void QSort(int* A, int end)
 		}
 		if (i <= j)
 		{
-			Swap(i, j, A);
-			SwapArray[4]++;
+			Swap(i, j, A, 4);
 			i++;
 			j--;
 		}
@@ -510,7 +511,7 @@ void SortMenu(int n)
 {
 	LARGE_INTEGER freq, start, finish;
 	double time;
-	int i, stuptest = 0, sorttemp, w;
+	int i, stuptest = 0, sorttemp, w, is_sort=0;
 	int* A = malloc(n * sizeof(int));
 	QueryPerformanceFrequency(&freq);
 	for (i = 0; i < n; i++)
@@ -530,28 +531,29 @@ void SortMenu(int n)
 		switch(sorttemp)
 		{
 		case 1:
+			is_sort = 0;
 			QueryPerformanceCounter(&start);
 			BubbleSort(A, n);
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			Time[0] = time;
-			ArraySortTest(A, n);
-			if (is_sort)
+			if (ArraySortTest(A, n))
 			{
 				for (w = 0; w < n; w++)
 				{
 					GlobSort[w] = A[w];
 				}
 			}
-			ArrayOutput(GlobSort, n);
+			ArrayOutput(A, n);
 			break;
 		case 2:
+			is_sort = 0;
 			QueryPerformanceCounter(&start);
 			InsertSort(A, n);
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			Time[1] = time;
-			ArraySortTest(A, n);
+			is_sort=ArraySortTest(A, n);
 			if (is_sort)
 			{
 				for (w = 0; w < n; w++)
@@ -562,12 +564,13 @@ void SortMenu(int n)
 			ArrayOutput(GlobSort, n);
 			break;
 		case 3:
+			is_sort = 0;
 			QueryPerformanceCounter(&start);
 			ChoiseSort(A, n);
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			Time[2] = time;
-			ArraySortTest(A, n);
+			is_sort = ArraySortTest(A, n);
 			if (is_sort)
 			{
 				for (w = 0; w < n; w++)
@@ -584,31 +587,32 @@ void SortMenu(int n)
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			Time[3] = time;
-			ArraySortTest(A, n);
-			if (is_sort)
+			if (ArraySortTest(A, n))
 			{
+
 				for (w = 0; w < n; w++)
 				{
 					GlobSort[w] = A[w];
 				}
 			}
-			ArrayOutput(GlobSort, n);
+			ArrayOutput(A, n);
 			break;
 		case 5:
+			is_sort = 0;
 			QueryPerformanceCounter(&start);
 			QSort(A, n);
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			Time[4] = time;
-			ArraySortTest(A, n);
+			is_sort = ArraySortTest(A, n);
 			if (is_sort)
 			{
+				ArrayOutput(A, n);
 				for (w = 0; w < n; w++)
 				{
 					GlobSort[w] = A[w];
 				}
 			}
-			ArrayOutput(GlobSort, n);
 			break;
 		default:
 			printf("Введёная команда не существует!\n");
