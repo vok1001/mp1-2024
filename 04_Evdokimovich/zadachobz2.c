@@ -21,7 +21,7 @@ int main() {
     scanf("%d %d", &n, &m);
     printf("\n");
     double **a = (double**)malloc(n*sizeof(double*));
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         a[i] = (double*)malloc(m*sizeof(double));
     }
     for ( i = 0; i < n; i++) {
