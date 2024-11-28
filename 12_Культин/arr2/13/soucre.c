@@ -50,6 +50,7 @@ int hw13(int **arr, int k1, int k2) {
 		}
 	}
 	printf("%d %d %d ", m, mM1, mM2);
+	free(arr[mM1]);
 	return 0;
 }
 
