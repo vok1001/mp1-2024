@@ -16,7 +16,7 @@ int main() {
     int n;
     int m;
     double Mid;
-    double sum;
+    double sum=0.0;
     int i,j,kol,l,l1;
     scanf("%d %d", &n, &m);
     printf("\n");
