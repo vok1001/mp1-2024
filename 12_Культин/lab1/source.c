@@ -8,8 +8,6 @@
 #include <time.h>
 
 //#define RAND_MIN = pow(10, n - 1)
-
-
 int main() {
 	srand(time(NULL));
 	setlocale(LC_ALL, "ru");
@@ -80,7 +78,12 @@ int main() {
 				printf("Сортировка подсчетом выполонена успешно. Количество действий: %d\nВремя, потраченное на сортировку: %f\n", count, time);
 
 			}
-			
+			if (linCheck(res, n) == 1)
+				printf("Сортировка не выполнена");
+			else
+				printf("Сортировка выполнена");
+
+			printf("\n");
 			menu2 = menuSort();
 		}
 
@@ -96,9 +99,15 @@ int main() {
 
 }
 
+int linCheck(int arr[], int n) {
+	for (int i = 0; i < n - 1; i++)
+	{
+		if (arr[i] > arr[i + 1])
+			return 1;
 
-/*------------------------------------------------------------*/
-
+	}
+	return 0;
+}
 int linSearch(int arr[], int val, int n, int **count) {
 
 	int i, k;
@@ -460,56 +469,56 @@ int sortCount(int arr[], int n, int* count) {
 
 	for (int i = 0; i <= nCp; i++)
 		arrCp[i] = 0;
+	for (int i = 0; i <= nCm; i++)
+		arrCm[i] = 0;
 	for (int i = 0; i < n; i++) {
 		if (arr[i] >= 0)
 			arrCp[arr[i]] += 1;
-	}
-	for (int i = 0; i <= nCm; i++)
-		arrCm[i] = 0;
-
-	for (int i = 0; i < n; i++) {
-		if (arr[i] < 0)
+		else
 			arrCm[abs(arr[i])] += 1;
 	}
+	
+
 	(*count) += 2 * n + nCp + nCm;
+
+	
+	for (int i = nCm; i >= 0; i--)
+	{
+		for (int j = 0; j < arrCm[i]; j++)
+		{
+			arr[c] = -i;
+			c++;
+		}
+	}
 
 	for (int i = 0; i <= nCp; i++)
 	{
 		for (int j = 0; j < arrCp[i]; j++)
 		{
-			arr2p[c] = i;
+			arr[c] = i;
 			c++;
 		}
 	}
-	nP = c;
-	c = 0;
+
 	
-	for (int i = 0; i <= nCm; i++)
-	{
-		for (int j = 0; j < arrCm[i]; j++)
-		{
-			arr2m[c] = -i;
-			c++;
-		}
-	}
-	nM = c;
-
-	for (int i = nM - 1; i >= 0; i--)
-	{
-		arr[nM - 1 - i] = arr2m[i];
-		++(*count);
-	}
-	for (int i = 0; i < nP; i++)
-	{
-		arr[i + nM] = arr2p[i];
-
-		++(*count);
-	}
-
+	printf("\n");
 	return 0;
 
 
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
