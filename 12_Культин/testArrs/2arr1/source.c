@@ -1,3 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <time.h>
+
+//#define RAND_MIN = pow(10, n - 1)
+
 int main() {
 	srand(time(NULL));
 	setlocale(LC_ALL, "ru");
