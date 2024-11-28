@@ -36,6 +36,7 @@ int main() {
     }
     Mid = sum/(n*m);
     l= 0;
+    l1=0;
     printf("%.3lf\n", Mid);
     for ( j = 0; j < m; j++) {
         kol = 0;
