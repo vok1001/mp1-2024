@@ -9,7 +9,7 @@ int state;
 
 
 float genRand() {
-	return (float)rand();
+	return (float)rand() / (float)RAND_MAX;
 }
 
 
@@ -19,6 +19,12 @@ void fillRandList(float list[1000], int n) {
 
 
 int check(float a, float b, int *h) {
+	(*h)++;
+	return (a > b);
+}
+
+
+int checkE(float a, float b, int* h) {
 	(*h)++;
 	return (a > b);
 }
@@ -36,8 +42,23 @@ void swap(float *a, float *b, int *h) {
 int checkListSorted(float list[], int n) {
 	int ch = 1;
 	int i = 0;
-	while ((i < n - 1) || ch == 0) ch = list[i] > list[i++ + 1];
+	while ((i < n - 1) && ch == 1) ch = list[i] > list[i++ + 1];
 	return ch;
+}
+
+
+void listPrint(float list[], int n) {
+	int np;
+	//Вывод 10<= эл-ов массива.
+	np = min(n, 10);
+	printf("%.2f", list[0]);
+	for (int i = 1; i < np; i++) {
+		printf(" %.2f", list[i]);
+	}
+	if (n > 10) {
+		printf("...");
+	}
+	printf("\n");
 }
 
 
@@ -88,16 +109,39 @@ void DoubleBubble(float* const list, int n, int* checks, int* swaps) {
 }
 
 
-void listPrint(float list[1000], int n) {
-	int np;
-	//Вывод 10<= эл-ов массива.
-	np = min(n, 10);
-	printf("%.2f", list[0]);
-	for (int i = 1; i < np; i++) {
-		printf(" %.2f", list[i]);
-	}
-	if (n > 10) {
-		printf("...");
+void QuickSort(float* const list, int n, int* checks, int* swaps) {
+	if (n >= 2) {
+
+		listPrint(list, n);
+
+		int mid = n / 2;
+		float val = list[mid];
+		int i = 0, j = n - 1;
+		//while (checkE(val, list[i], checks)) i++;
+		//while (checkE(list[j], val, checks)) j--;
+		//while (i <= j) {
+		//	swap(&list[i], &list[j], swaps);
+		//	i++; j--;
+		//	while (checkE(val, list[i], checks)) i++;
+		//	while (checkE(list[j], val, checks)) j--;
+		//}
+
+		while (i <= j) {
+			while (checkE(val, list[i], checks)) i++;
+			while (!checkE(val, list[j], checks)) j--;
+			if (i <= j) {
+				swap(&list[i], &list[j], swaps);
+				i++; j--;
+			}
+		}
+		printf("val %f\n", val);
+		listPrint(list, n);
+		printf("%d %d - данные \n", i, j);
+		if (j >= 0) {
+			QuickSort(list, i, checks, swaps);
+			QuickSort(list + i, n - j - 1, checks, swaps);
+		}
+		
 	}
 }
 
@@ -174,7 +218,7 @@ void sortScreen(float list[], int n, LARGE_INTEGER freq) {
 
 		printf("\n1) Двунаправленный пузырёк.\n");
 		printf("2) Сортировка выбором\n");
-		//printf("3) Изменить размер массива.\n");
+		printf("3) Быстрая сортировка.\n");
 		//printf("\n4) Отсортировать массив.\n");
 		scanf_s("%d", &input);
 
@@ -187,6 +231,9 @@ void sortScreen(float list[], int n, LARGE_INTEGER freq) {
 		case(2):
 			printf("\nСортировка выбором:\n");
 			ChoiceSort(sr_list, n, &checks, &swaps); break;
+		case(3):
+			printf("\nБыстрая сортировка:\n");
+			QuickSort(sr_list, n, &checks, &swaps); break;
 		}
 		QueryPerformanceCounter(&finish);
 		if (checkListSorted(sr_list, n))
@@ -211,7 +258,7 @@ int main() {
 	//для языка:
 	setlocale(LC_ALL, "Russian");
 	//рандом + рандомный лист:
-	srand(time(NULL));
+	//srand(time(NULL));
 	fillRandList(list, n);
 
 	while (state != 255) {
