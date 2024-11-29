@@ -80,23 +80,18 @@ int bubblsort(int a[], int n) {
 
 
 void sort_vuborom(int a[], int n) {
-	int min_index, count = 0;
-	for (int i = 1; i < n; i++) {
-		min_index = i;
-		for (int j = i + 1; j < n; j++) {
-			if (a[min_index] > a[j]) {
-				min_index = j;
-			}
+	int i, count = 0;
+	clock_t start, finish;
+	start = clock();
+	for (i = 1; i < n; i++) {
+		int x = a[i];
+		int j = i;
+		while (j > 0 && a[j - 1] > x) {
+			a[j] = a[j - 1];
+			j--;
 			count++;
 		}
-		count++;
-		if (min_index != i)
-		{
-			int temp = a[i];
-			a[i] = a[min_index];
-			a[min_index] = temp;
-		}
-		count++;
+		a[j] = x;
 	}
 	count++;
 	for (int i = 0; i < n; i++) {
@@ -166,7 +161,16 @@ void linpoisk(int a[], int n) {
 	}
 }
 
+int proverka(int a[], int n) {
+	int i, c;
+	for (i = 0; i < n - 1; i++) {
+		if (a[i] > a[i + 1]) {
+			return 0;
+		}
+	}
+	printf("massiv_otsortirivan");
 
+}
 void b_poisk(int a[], int n) {
 	int x, flag = 0, count = 0;
 	int l = 0, r = n - 1, c;
@@ -279,6 +283,8 @@ int main() {
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
 				printf("Vremya: %f sec\n ", duration);
 				printf("\n");
+				proverka(a, n);
+				printf("\n");
 				break;
 
 			}
@@ -290,6 +296,8 @@ int main() {
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
 				printf("\n");
+				proverka(a, n);
+				printf("\n");
 				break;
 			}
 			case 5: {
@@ -299,6 +307,8 @@ int main() {
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
+				printf("\n");
+				proverka(a, n);
 				printf("\n");
 				break;
 
@@ -311,6 +321,8 @@ int main() {
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
 				printf("\n");
+				proverka(a, n);
+				printf("\n");
 				break;
 			}
 			case 7: {
@@ -321,16 +333,19 @@ int main() {
 				printf("Vremya: %f sec\n ", duration);
 				vivodmassive(a, n);
 				printf("\n");
+				proverka(a, n);
+				printf("\n"); ;
 				break;
+			
 			}
 
-
 			}
+		
+
 		}
 
 	}
 
 	printf("Programma zavershena");
 }
-
 
