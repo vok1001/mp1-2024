@@ -195,7 +195,7 @@ void Quick_Sort(int a[], int l, int p) {
 		if (i <= j) { tmp = a[i]; a[i] = a[j]; a[j] = tmp; i++; j--; }
 		count++;
 	}
-
+	   
 	if (j > l) Quick_Sort(a, l, j);
 	count++;
 	if (i < p) Quick_Sort(a, i, p);
@@ -212,11 +212,14 @@ static void vubor_vvoda_massive() {
 	printf("1.Vvedu sam\n");
 	printf("2.Random massive\n");
 }
-void random_massive(int a[], int n) {
+void random_massive(int a[],int b[], int n) {
 	srand(100);
-	int i;
+	int i, l;
 	for (i = 0; i < n; i++) {
-		a[i] = rand() % 100;
+		l = rand() % 100;
+		a[i] = l;
+		b[i] = l;
+
 	}
 }
 
@@ -332,14 +335,6 @@ void podschet_sort(int a[], int n) {
 
 }
 
-int copy(int a[], int n) {
-	int b[1000];
-	for (int i = 0; i < n; i++) {
-		b[i] = a[i];
-	}
-	return b;
-
-}
 
 
 
@@ -361,12 +356,17 @@ void menu()
 
 
 
-void genmassiva_sam(int a[], int n)
+void genmassiva_sam(int a[], int b[], int n)
 {
-	int i;
+	int i, l;
+	
 	for (i = 0; i < n; i++) {
-		scanf_s("%d", &a[i]);
+		scanf_s("%d", &l);
+
+		a[i] = l;
+		b[i] = l;
 	}
+
 }
 
 void vivodmassive(int a[], int n) {
@@ -378,9 +378,18 @@ void vivodmassive(int a[], int n) {
 }
 
 
+int copy(int a[], int b[], int n) {
+	int i;
+	for (i = 0; i < n; i++) {
+		a[i] = b[i];
+	}
+}
+
+
+
 
 int main() {
-	int c, n, g = 1;
+	int c, n, g = 1, i;
 	int a[100];
 	int b[100];
 	clock_t start, finish;
@@ -392,24 +401,32 @@ int main() {
 		if (c == 1) {
 			printf("Vvedite dliny massiva\n");
 			scanf_s("%d", &n);
-			genmassiva_sam(a, n);
+			genmassiva_sam(a, b, n);
 			vivodmassive(a, n);
-			copy(a, n);
+			
+			
+			
+
 
 		}
 		if (c == 2) {
 			printf("Vvedite dliny massiva\n");
 			scanf_s("%d", &n);
-			random_massive(a, n);
+			random_massive(a, b,n);
 			vivodmassive(a, n);
-			copy(a, n);
+			
+
 
 
 		}
 		printf("\n");
+		
+
+
+
 
 		while (g != 10) {
-
+			copy_list(a, b, n);
 			printf("Vubrite sortirovky ili poisk\n");
 			menu();
 			scanf_s("%d", &g);
@@ -417,7 +434,7 @@ int main() {
 			{
 			case 1: {
 
-
+				
 				b_poisk(a, n);
 				break;
 			}
@@ -428,8 +445,9 @@ int main() {
 				break;
 			}
 			case 3: {
+			
 				start = clock();
-				
+
 				sort_vuborom(a, n);
 
 				printf("\n");
