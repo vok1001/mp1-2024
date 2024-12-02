@@ -214,31 +214,35 @@ void Merge_sort(int arr[], int l, int r) {
 }
 
 void Counting_sort(int a[], int n) {
-	int s[20001] = { 0 }; 
-	int mx = INT_MIN, mn = INT_MAX; 
-	clock_t start = clock(); 
-	long long iteration = 0;
+	int mn = 100000000, mx = -10000000;
+	clock_t start = clock();
+
 	for (int i = 0; i < n; i++) {
-		int index = 10000 + a[i]; 
-		s[index]++;
-		mx = max(mx, a[i]);
-		mn = min(mn, a[i]);
-		iteration++;
+		mn = min1(mn, a[i]);
+		mx = max1(mx, a[i]);
 	}
+	int range = mx - mn + 1;
+	int* count = (int*)calloc(range, sizeof(int));
 
-	for (int i = mn; i <= mx; i++) {
-		if (s[10000 + i] > 0) {
-			for (int j = 0; j < s[10000 + i]; j++) {
-				printf("%d ", i); 
-			}
-		}
+	for (int i = 0; i < n; i++)
+		count[a[i] - mn]++;
+	for (int i = 1; i < range; i++)
+		count[i] += count[i - 1];
+	int* output = (int*)malloc(n * sizeof(int));
+	for (int i = n - 1; i >= 0; i--) {
+		output[count[a[i] - mn] - 1] = a[i];
+		count[a[i] - mn]--;
 	}
-
-	clock_t end = clock(); 
+	for (int i = 0; i < n; i++){
+		a[i] = output[i];
+	printf("%d ", a[i]);
+}
+	free(count);
+	free(output);
+	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("\n");
 	printf("Time spent your program: %f\n", time_spent);
-	printf("Number of iterations: %lld\n", iteration);
 	printf("\n");
 }
 int partition(int a[], int l, int r) {
