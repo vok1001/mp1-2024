@@ -122,59 +122,59 @@ void selection_sort(int a[], int n)
 
 void counting_sort(int a[], int n)
 {
-	int help[50000 * 2] = { 0 };
+	//Создал функцию, которая ищет минимум в массиве
+	int minimumo = find_minimum(a, n);
+	if (minimumo < 0)
+		minimumo *= -1;
+	int* help = (int*)calloc(n, sizeof(int));
 	int i, j;
 	int index = 0;
+	for (i = 0; i < minimumo * 2; i++)
+	{
+		help[i] = 0;
+	}
 	for (i = 0; i < n; i++)
 	{
-		help[a[i] + 50000]++;
+		help[a[i] + minimumo]++;
 	}
-	for (i = 0; i < 50000 * 2; i++)
+	for (i = 0; i < minimumo * 2; i++)
 	{
 		for (j = 0; j < help[i]; j++)
 		{
-			a[index] = i - 50000;
+			a[index] = i - minimumo;
 			index++;
 		}
 	}
 	printf("Sorting done\n");
 }
 
-void bubble_sort(int a[], int n)
-{
-	int count_swap = 0;
-	int l = 0;
-	int r = n - 1;
-	int i, t;
+void bubble_sort(int a[], int n) 
+{ //написал заново с флагом
+	int x = 0;
 	int flag = 0;
-	while (l <= r)
+	int count_swap = 0;
+	int i, j;
+	for (i = 0; i < n; i++) 
 	{
 		flag = 0;
-		for (i = r; i > l; i--)
+		for (j = 0; j < n; j++) 
 		{
-			if (a[i - 1] > a[i])
+			if (a[i] < a[j]) 
 			{
-				t = a[i];
-				a[i] = a[i - 1];
-				a[i - 1] = t;
-				flag = 1;
-			}
-		}
-		++l;
-		for (i = l; i < r; i++)
-		{
-			if (a[i] > a[i + 1])
-			{
-				t = a[i];
-				a[i] = a[i + 1];
-				a[i + 1] = t;
+				x = a[j];
+				a[j] = a[i];
+				a[i] = x;
 				count_swap++;
 				flag = 1;
 			}
+			else 
+			{
+				flag = 1;
+			}
 		}
-		--r;
-		if (flag == 0)
+		if (flag == 0) {
 			break;
+		}
 	}
 	printf("Swaps count is %d\n", count_swap);
 	printf("Sorting done\n");
