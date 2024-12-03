@@ -61,4 +61,5 @@ int main()
 	{
 		printf("%d ", arrayresult[i]);
 	}
+	return 0;
 }
