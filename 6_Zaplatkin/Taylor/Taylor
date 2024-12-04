@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <windows.h>
+
+void Once()
+{
+	int fun, x, N;
+	double acc, res=0.0;
+	printf("Choise Function\n1. Sin\n2. Cos\n3. Exp\n4. Ln\n");
+	scanf_s("%d", &fun);
+	printf("Enter X\n");
+	scanf_s("%d", &x);
+	printf("Enter Accuracy\n");
+	scanf_s("%lf", &acc);
+	printf("Enter N\n");
+	scanf_s("%d", &N);
+
+}
+
+void main()
+{
+	int tmp, exit;
+	while (!exit)
+	{
+		exit = 1;
+		printf("1. First mode\n2. Second mode\n");
+		scanf_s("%d", &tmp);
+		switch (tmp)
+		{
+		case 1:
+			Once();
+		default:
+			printf("Command doesn't exist.");
+			exit = 0;
+			break;
+		}
+	}
+}
