@@ -81,7 +81,7 @@ static void print_menu()
 	printf("5. Selection sort\n");
 	printf("6. Quick sort\n");
 	printf("7. Podschet sort\n");
-    printf("8. Input array\n");
+	printf("8. Input array\n");
 	printf("0. Exit\n");
 }
 
@@ -102,7 +102,7 @@ static void Linear_search(int arr[], int len, int a) {
 	else printf("the number is not in the array");
 }
 
-static void Binar_search( int mass[], int len, int a)
+static void Binar_search(int mass[], int len, int a)
 {
 	int cnt = 0;
 	int ind = -1;
@@ -172,7 +172,7 @@ static void Insertion_sort(int arr[], int n)//вставка
 	{
 		el = arr[i];
 		ind = i - 1;
-		while (ind >= 0 && arr[ind] > el){
+		while (ind >= 0 && arr[ind] > el) {
 			arr[ind + 1] = arr[ind];
 			ind = ind - 1;
 			cnt++;
@@ -185,7 +185,8 @@ static void Insertion_sort(int arr[], int n)//вставка
 }
 
 static void selectionSort(int arr[], int N)//выбор 
-{	int cnt = 0;
+{
+	int cnt = 0;
 	for (int i = 0; i < N - 1; i++) {
 		int min_idx = i;
 		for (int j = i + 1; j < N; j++) {
@@ -232,31 +233,31 @@ static void quicksort(int arr[], int lf, int rt) {
 	printf("number of comparisons:%d \n", cnt);
 }
 
-static void Podschet_sorted(int arr[], int n) 
+static void Podschet_sorted(int arr[], int n)
 {
-	int min = INT_MAX;
+	int min = INT_MAX, max = INT_MIN;
 	for (int i = 0; i < n; i++) {
 		if (arr[i] < min) {
 			min = arr[i];
 		}
+		if (arr[i] > max) {
+			max = arr[i];
+		}
 	}
-	if (min < 0) {
-		min *= -1;
-	}
-	int* help = (int*)calloc(n, sizeof(int));
+	int* arr1 = (int*)malloc((max-min+1)* sizeof(int));
 	int i, j;
 	int index = 0;
 	for (i = 0; i < min * 2; i++)
 	{
-		help[i] = 0;
+		arr1[i] = 0;
 	}
 	for (i = 0; i < n; i++)
 	{
-		help[arr[i] + min]++;
+		arr1[arr[i] + min]++;
 	}
 	for (i = 0; i < min * 2; i++)
 	{
-		for (j = 0; j < help[i]; j++)
+		for (j = 0; j < arr1[i]; j++)
 		{
 			arr[index] = i - min;
 			index++;
@@ -297,7 +298,7 @@ int main()
 		case 2:
 			printf("number to determine:");
 			scanf_s("%d", &ch);
-			Binar_search(arr,n, ch);
+			Binar_search(arr, n, ch);
 			break;
 		case 3:
 			QueryPerformanceCounter(&start);
@@ -322,14 +323,14 @@ int main()
 			break;
 		case 6:
 			QueryPerformanceCounter(&start);
-			quicksort(arr,0 , n);
+			quicksort(arr, 0, n);
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			printf("Your time: %0.7f\n", time);
 			break;
 		case 7:
 			QueryPerformanceCounter(&start);
-			Podschet_sorted(arr,n);
+			Podschet_sorted(arr, n);
 			QueryPerformanceCounter(&finish);
 			time = (double)(finish.QuadPart - start.QuadPart) / (double)freq.QuadPart;
 			printf("Your time: %0.7f\n", time);
