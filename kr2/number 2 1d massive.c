@@ -12,22 +12,6 @@ int proverka(int a[], int n, int index) {
     return 1;
 }
 
-void Sort_vstavkami(int a[], int n)
-{
-    int i;
-    for (i = 1; i < n; i++) {
-        int x = a[i];
-        int j = i;
-        while (j > 0 && a[j - 1] > x) {
-            a[j] = a[j - 1];
-            j--;
-
-        }
-        a[j] = x;
-    }
-
-}
-
 
 
 int main() {
@@ -59,7 +43,7 @@ int main() {
         }
     }
     printf("%d\n", chislo);
-    Sort_vstavkami(c, chislo);
+    
     for (int i = 0; i < chislo; i++) {
         printf("%d ", c[i]);
     }
