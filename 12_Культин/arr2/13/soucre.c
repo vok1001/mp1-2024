@@ -13,10 +13,11 @@ int main() {
 	setlocale(LC_ALL, "ru");
 	int n, i;
 	scanf_s("%d", &n);
+	scanf_s("%d", &n2);
 	int** res = (int**)malloc(sizeof(int*) * n); // = { {1, 2, 3, 4},  {4,3, 4, 21} };
 	
 	for (i = 0; i < n; i++)
-		res[i] = (int*)malloc(sizeof(int) * n);
+		res[i] = (int*)malloc(sizeof(int) * n2);
 
 
 	for (int i = 0; i < n; i++) {
@@ -29,14 +30,14 @@ int main() {
 		}
 	}
 
-	hw13(res, n, n);
+	hw14(res, n, n2);
 	
 	return 0;
 
 }
 
 
-int hw13(int **arr, int k1, int k2) {
+int hw14(int **arr, int k1, int k2) {
 	int m, mM1, mM2;
 	m = mM1 = mM2 = 10000000;
 	for (int i = 0; i < k1; i++)
@@ -49,8 +50,33 @@ int hw13(int **arr, int k1, int k2) {
 			}
 		}
 	}
+	if (mM2 == k2 - 1)
+		for (int i = 0; i < k1; i++)
+		{
+			arr[i][mM2] = 0;
+		}
+	else
+	{
+		
+		for (int i = 0; i < k1; i++)
+		{
+			for (int j = mM2; j < k2 - 1; j++)
+			{
+				
+				arr[i][j] = arr[i][j + 1];
+			}
+		}
+	}
+	for (int i = 0; i < k1; i++)
+	{
+		for (int j = 0; j < k2 - 1; j++) {
+			printf("%d ", arr[i][j]);
+		}
+		printf("\n");
+	}
+	
+
 	printf("%d %d %d ", m, mM1, mM2);
-	free(arr[mM1]);
 	return 0;
 }
 
