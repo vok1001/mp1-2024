@@ -399,3 +399,6 @@ FodyWeavers.xsd
 21_Rusin-Kuprash/ЛабораторнаяРабота-Сортировки/Lab1.sln
 21_Rusin-Kuprash/ЛабораторнаяРабота-Сортировки/Lab1.vcxproj
 21_Rusin-Kuprash/ЛабораторнаяРабота-Сортировки/Lab1.vcxproj.filters
+*.vcxproj
+*.filters
+*.sln

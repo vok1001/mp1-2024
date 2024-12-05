@@ -377,4 +377,5 @@ int main() {
 		case(3): sortScreen(list, n, freq); break;
 		}
 	}
+	return 1;
 }
