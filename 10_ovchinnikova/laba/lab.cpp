@@ -23,28 +23,37 @@ void print_menu3()
 	printf("8. Binary_search\n");
 }
 
-void Bubble_sort(int A[], int n, int k)
+void Bubble_sort(int A[], int n)
 {
-	printf("Сортировка пузырьком\n");
-	int i, j, temp, sr;
-	sr = 0;
-	for (i = 0; i < n - 1; i++)
-	{
-		sr++;
-		for (j = 0; j < n - i - 1; j++)
-		{
-			sr++;
-			if (A[j] > A[j + 1])
-				sr++;
-			{// Меняем A[j] и A[j+1]
-				temp = A[j];
-				A[j] = A[j + 1];
-				A[j + 1] = temp;
-				sr = sr + 3;
+	int swapped;
+	int start = 0;
+	int end = n - 1;
+
+	do {
+		swapped = 0;
+
+		for (int i = start; i < end; i++) {
+			if (A[i] > A[i + 1]) {
+				int temp = A[i];
+				A[i] = A[i + 1];
+				A[i + 1] = temp;
+				swapped = 1;
 			}
 		}
-	}
-	printf("\nчисло сравнений и перестановок равно %d\n", sr);
+		end--;
+
+	
+		for (int i = end; i > start; i--) {
+			if (A[i] < A[i - 1]) {
+				int temp = A[i];
+				A[i] = A[i - 1];
+				A[i - 1] = temp;
+				swapped = 1;
+			}
+		}
+		start++; 
+
+	} while (swapped);
 }
 
 void Insert_sort(int A[], int n)
@@ -148,7 +157,7 @@ void QS(int* A, int per, int pos, long int p, int p1[])
 
 }
 
-void Linear_search(int A[], int n, int val)
+int Linear_search(int A[], int n, int val)
 {
 	int i, k, sr;
 	i = 0;
@@ -162,10 +171,9 @@ void Linear_search(int A[], int n, int val)
 		k = i;
 		sr++;
 	}
-	printf("\nпеременная расположена на %d месте", k + 1);
-	printf("\nчисло сравнений равно %d\n", sr);
+	return k;
 }
-void Binary_search(int A[], int n, int val)
+int Binary_search(int A[], int n, int val)
 {
 	int m, l, r, f, sr;
 	m = 0;
@@ -189,8 +197,7 @@ void Binary_search(int A[], int n, int val)
 		else f = 1;
 
 	}
-	printf("\nпеременная расположена на %d месте", m + 1);
-	printf("\nчисло сравнений равно %d\n", sr);
+	return m;
 }
 
 void Copy_array(int A[], int B[], int n)
@@ -272,7 +279,7 @@ int main()
 	int p1[2] = { 0,0 };
 	if (c == 2) {
 		int k = 0;
-		Bubble_sort(A, n, k);
+		Bubble_sort(A, n);
 		for (int j = 0; j < n; j++) {
 			printf("%d ", A[j]);
 		}
@@ -311,16 +318,18 @@ int main()
 	print_menu3();
 	scanf_s("%d", &c);
 	if (c == 7) {
-		int val;
+		int val, k;
 		printf("введи значение, которое необходимо найти ");
 		scanf_s("%d", &val);
-		Linear_search(A, n, val);
+		k=Linear_search(A, n, val);
+		printf("%d", k + 1);
 	}
 	if (c == 8) {
-		int val;
+		int val, m;
 		printf("\nвведи значение, которое необходимо найти ");
 		scanf_s("%d", &val);
-		Binary_search(A, n, val);
+		m=Binary_search(A, n, val);
+		printf("%d", m + 1);
 	}
 
 }
