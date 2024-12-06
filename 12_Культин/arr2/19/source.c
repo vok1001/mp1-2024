@@ -11,16 +11,19 @@
 int main() {
 	srand(time(NULL));
 	setlocale(LC_ALL, "ru");
-	int n, i;
+
+	int n, n2;
 	scanf_s("%d", &n);
-	int** res = (int**)malloc(sizeof(int*) * n); // = { {1, 2, 3, 4},  {4,3, 4, 21} };
+	scanf_s("%d", &n2);
+
+	int** res = (int**)malloc(sizeof(int*) * n); 
 	
-	for (i = 0; i < n; i++)
-		res[i] = (int*)malloc(sizeof(int) * 3);
+	for (int i = 0; i < n; i++)
+		res[i] = (int*)malloc(sizeof(int) * n2);
 
 
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++)
+		for (int j = 0; j < n2; j++)
 		{
 			int f;
 			scanf_s("%d", &f);
@@ -29,48 +32,31 @@ int main() {
 		}
 	}
 
-	hw19(res, n, n);
-	
+	hw22(res, n, n2);
 	return 0;
 
 }
 
 
 
-int hw19(int **arr, int k1, int k2){
-	int n1, n2, n3, n4, n5;
-	n1 = n2 = n3 = n4 = n5 = 0;
+int hw22(int **arr, int k1, int k2){
+	int maxD, count;
+	maxD = count = 0;
 
 	for (int i = 0; i < k1; i++)
 	{
+		count = 0;
 		for (int j = 0; j < k2; j++) {
-			switch (arr[i][j])
-			{
-			case 2:
-				n2++;
-				break;
-			case 3:
-				n3++;
-				break;
-
-			case 4:
-				n4++;
-				break;
-
-			case 5:
-				n5++;
-				break;
-
-			default:
-				n1++;
-				break;
+			if (arr[i][j] == 0) {
+				count++;
 			}
 		}
+		maxD = max(maxD, count);
+		
 	}
-	printf("%d %d %d %d %d ", n1, n2, n3, n4, n5);
+	printf("%d ", maxD);
 	return 0;
 }
-
 
 
 
