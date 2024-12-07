@@ -80,24 +80,29 @@ void Insert_sort(int A[], int n)
 	printf("\nчисло сравнений и перестановок равно %d\n", sr);
 }
 
-void counting_Sort(int n, int A[], int B[]) {
-	int k;
+void count(int mn, int mx, int n, int A[], int B[])
+{
+	int m;
 	int sr = 0;
-	printf("Сортирвка подсчетом");
-	for (int i = 0; i < n; i++) {
-		k = 0;
-		sr++;
-		for (int j = 0; j < n; j++) {
-			sr++;
-			if (A[i] > A[j])
-				k++;
-			sr++;
-		}
-		B[k] = A[i];
+	for (int i = 0;i < n;i++) {
+		m = A[i];
+		B[m]++;
 		sr++;
 	}
-	printf("\nчисло сравнений и перестановок равно %d\n", sr);
+	int i = 0;
+	for (int j = mn;j < (mx + 1);j++) {
+		sr++;
+		while (B[j] > 0) {
+			A[i] = j;
+			i++;
+			B[j]--;
+			sr = sr + 2;
+		}
+	}
+	printf("совершено %d перестановок и сравнений\n", sr);
+
 }
+
 // Функция сортировки выбором
 void selectionSort(int A[], int n) {
 	int i, j, min_idx;
@@ -233,6 +238,7 @@ int main()
 	int c, max, min;
 	int A[10000];
 	int B[10000];
+	int H[10000];
 	int n;
 	int status = 0;
 	printf("Выберите способ введения массива\n");
@@ -250,7 +256,6 @@ int main()
 		for (int i = 0; i < n; i++) {
 			printf("%d ", A[i]);
 		}
-		Copy_array(A, B, n);
 		status = 1;
 	}
 	if (c == 1) {
@@ -269,7 +274,6 @@ int main()
 		for (int j = 0; j < n; j++) {
 			printf("%d ", A[j]);
 		}
-		Copy_array(A, B, n);
 		status = 1;
 	}
 	printf("\nВыберите метод сортировки\n");
@@ -278,39 +282,57 @@ int main()
 	long int y = 0;
 	int p1[2] = { 0,0 };
 	if (c == 2) {
+		Copy_array(A, H, n);
 		int k = 0;
-		Bubble_sort(A, n);
+		Bubble_sort(H, n);
 		for (int j = 0; j < n; j++) {
-			printf("%d ", A[j]);
+			printf("%d ", H[j]);
 		}
 		status = 2;
 	}
 	if (c == 3) {
-		Insert_sort(A, n);
+		Copy_array(A, H, n);
+		Insert_sort(H, n);
 		for (int j = 0; j < n; j++) {
-			printf("%d ", A[j]);
+			printf("%d ", H[j]);
 		}
 		status = 2;
 	}
 	if (c == 4) {
+		Copy_array(A, H, n);
 		//сортировка методом подсчета
-		counting_Sort(n, A, B);
-		for (int j = 0; j < n; j++) {
-			printf("%d ", B[j]);
+		int mn, mx;
+		mx = H[0];
+		mn = H[0];
+
+		for (int i = 0; i < n;i++) {
+			if (H[i] < mn)
+				mn = H[i];
+			if (H[i] > mx)
+				mx = H[i];
+		}
+		for (int i = mn;i < (mx + 1);i++) {
+			B[i] = 0;
+		}
+		count(mn, mx, n, H, B);
+		for (int i = 0;i < n;i++) {
+			printf("%d ", H[i]);
 		}
 		status = 2;
 	}
 	if (c == 5) {
-		selectionSort(A, n);
+		Copy_array(A, H, n);
+		selectionSort(H, n);
 		for (int j = 0; j < n; j++) {
-			printf("%d ", A[j]);
+			printf("%d ", H[j]);
 		}
 		status = 2;
 	}
 	if (c == 6) {
+		Copy_array(A, H, n);
 		QS(A, 0, n - 1, y, p1);
 		for (int j = 0; j < n; j++) {
-			printf("%d ", A[j]);
+			printf("%d ", H[j]);
 		}
 		status = 2;
 	}
@@ -321,14 +343,14 @@ int main()
 		int val, k;
 		printf("введи значение, которое необходимо найти ");
 		scanf_s("%d", &val);
-		k=Linear_search(A, n, val);
+		k=Linear_search(H, n, val);
 		printf("%d", k + 1);
 	}
 	if (c == 8) {
 		int val, m;
 		printf("\nвведи значение, которое необходимо найти ");
 		scanf_s("%d", &val);
-		m=Binary_search(A, n, val);
+		m=Binary_search(H, n, val);
 		printf("%d", m + 1);
 	}
 
