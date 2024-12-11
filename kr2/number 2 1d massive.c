@@ -3,9 +3,9 @@
 
 
 
-int proverka(int a[], int n, int index) {
+int proverka(int a[], int n, int ind) {
     for (int i = 0; i < n; i++) {
-        if (a[i] == index) {
+        if (a[i] == ind) {
             return 0;
         }
     }
@@ -15,7 +15,8 @@ int proverka(int a[], int n, int index) {
 
 
 int main() {
-    int n, m, chislo;
+    int n, m, ind;
+    printf("Vvedu razmer 1 u 2 mssiva:\n");
     scanf_s("%d %d", &n, &m);
     int* a;
     int* b;
@@ -25,7 +26,8 @@ int main() {
     a = (int*)malloc(sizeof(int) * n);
     b = (int*)malloc(sizeof(int) * m);
     c = (int*)malloc(sizeof(int) * (n + m));
-    chislo = n;
+    ind = n;
+    printf("Vvedu 1 massive:\n");
     for (int i = 0; i < n; i++) {
         scanf_s("%d", &a[i]);
     }
@@ -38,13 +40,13 @@ int main() {
     }
     for (int i = 0; i < m; i++) {
         if (proverka(a, n, b[i])) {
-            c[chislo] = b[i];
-            chislo++;
+            c[ind] = b[i];
+            ind++;
         }
     }
-    printf("%d\n", chislo);
-    
-    for (int i = 0; i < chislo; i++) {
+    printf("%d\n", ind);
+
+    for (int i = 0; i < ind; i++) {
         printf("%d ", c[i]);
     }
     printf("\n");
