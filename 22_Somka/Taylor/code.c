@@ -7,7 +7,7 @@ double FirstSin(double x) {
 	return x;
 }
 
-int JumpSin(){  // шаг в цикле
+int JumpSin(){
 	return 2;
 }
 
