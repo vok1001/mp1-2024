@@ -160,25 +160,34 @@ int quicksort(int arr[], int low, int high,int sw) {
     }
     return s;
 }
-void countsort(int arr[], int n) {
-    int mx = 0;
-    for (int i = 0; i < n; i++)
-        if (arr[i] > mx)
-            mx = arr[i];
-    int* countArray = (int*)calloc(mx + 1, sizeof(int));
-    for (int i = 0; i < n; i++)
-        countArray[arr[i]]++;
-    for (int i = 1; i <= mx; i++)
-        countArray[i] += countArray[i - 1];
-    int* outputArray = (int*)malloc(n * sizeof(int));
-    for (int i = n - 1; i >= 0; i--) {
-        outputArray[countArray[arr[i]] - 1] = arr[i];
-        countArray[arr[i]]--;
+void countsort(int *arr, int n) {
+    int max = arr[0];
+    int min = arr[0];
+    int i;
+    int index = 0;
+    for ( i = 1; i < n; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+        if (arr[i] < min) {
+            min = arr[i];
+        }
     }
-    for (int i = 0; i < n; i++)
-        arr[i] = outputArray[i];
-    free(countArray);
-    free(outputArray);
+
+    int range = max - min + 1;
+    int *count = (int *)calloc(range, sizeof(int));
+
+    for (i = 0; i < n; i++) {
+        count[arr[i] - min]++;
+    }
+    for (i = 0; i < range; i++) {
+        while(count[i] > 0) {
+            arr[index] = i + min;
+            index++;
+            count[i]--;
+        }
+    }
+    free(count);
 }
 int binsearch(int A[],int n,int x) {
     int low,high,mid,i;
