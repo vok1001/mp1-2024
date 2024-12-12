@@ -6,6 +6,7 @@
 #include "windows.h"
 #include <inttypes.h>
 
+
 #define cm(a,b) ((a)>(b))
 
 
@@ -71,7 +72,7 @@ void merge(int arr[], int left, int mid, int right) {
         }
         k++;
     }
-    while (i < n1) {
+    while (i < n1) {4
         
         arr[k] = leftArr[i];
         i++;
@@ -208,44 +209,62 @@ void Bubble(int arr[], int k, long int c) {
 
 
 void CountSort(int arn[], int a, int n) {
-    int* ar;
-    
-    ar = ((int*)malloc((1000000) * sizeof(int)));
-    for (int i = 0; i < 1000000; i++) {
-        ar[i] = 0;
-    }
+    int* arp;
+    int* armi;
+    int m = 100100000;
     for (int i = 0; i < n; i++) {
-        ar[arn[i]]++;
-    }
-    int k = n;
-    long p = 0;
-    int* ar1;
-    ar1 = ((int*)malloc((k) * sizeof(int)));
-    int c = 0;
-    long x = 0;
-    for (int i = 0; i < n; i++) {
-        x = max(x, arn[i]);
-    }
-    for (int i = 0; i < 1000000; i++) {
-        p++;
-        if (i > x) {
-            break;
+        if (arn[i] < m) {
+            m = arn[i];
         }
-        if (ar[i] != 0) {
-            while (ar[i] != 0) {
-                ar1[c] = i;
-                c++;
-                p++;
-                ar[i]--;
+    }
+    int ma = -1000000000;
+    for (int i = 0; i < n; i++) {
+        if (arn[i] > ma) {
+            ma = arn[i];
+        }
+    }
+    m = fabs(m);
+    long int raz = ma - m + 1;
+    arp = ((int*)malloc((ma + 1) * sizeof(int)));
+    for (int i = 0; i < ma+1; i++) {
+        arp[i] = 0;
+    }
+    armi= ((int*)malloc((m) * sizeof(int)));
+    for (int i = 0; i < m; i++) {
+        armi[i] = 0;
+    }
+    for (int i = 0; i < n; i++) {
+        int p = arn[i];
+        if (p < 0) {
+            p = fabs(p);
+            armi[p]++;
+        }
+        else {
+            arp[p]++;
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        arn[i] = 0;
+    }
+    int ci = 0;
+    for (int i = m; i>0; i--) {
+        if (armi[i] != 0) {
+            while (armi[i] != 0) {
+                arn[ci] = -1*i;
+                ci++;
+                armi[i]--;
             }
         }
+        
     }
-    for (int i = 0; i < n; i++) {
-        arn[i] = ar1[i];
-    }
-    
-    printf("Итераций=%ld\n", p);
+    for (int i = 0; i <ma; i--) {
+        while (arp[i] != 0) {
+            arn[ci] = i;
+            ci++;
+            arp[i]--;
+        }
 
+    }
 }
 void menu() {
     printf("------------------------\n1.Ввести массив вручную\n2.Рандомный массив\n3.Сортировка пузырьком\n4.Сортировка вставками\n5.Сортировка подсчетом\n");
@@ -430,5 +449,5 @@ int main() {
     }
     
         
-    
+    return 1;
 }
