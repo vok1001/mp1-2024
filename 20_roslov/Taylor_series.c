@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#define _USE_MATH_DEFINES
 
 
 typedef double(*First)(double);
@@ -8,7 +9,7 @@ typedef double(*Next)(int, double);
 typedef double(*Check)(double, double , int , double );
 
 
-#define print(a) printf("%d\n", (a))
+#define print(a) printf("%lf\n", (a))
 #define forik(a) for(int i = 0; i < a; i++)
 
 void menu_print(int *action){
@@ -42,6 +43,15 @@ void input_n(int *n){
     printf("Введите значение N:\n");
     scanf("%d", n);
 }
+
+double true_trug(double x){
+    while (x > 2.0 * M_PI)
+    {
+        x -= 2.0 * M_PI;
+    }
+    return x;
+}
+
 
 double FirstSin(double x){
     return x;
@@ -92,7 +102,9 @@ double Teylor(double x, int n, First f, Next g, double eps, int type_func, Check
     double summ = f(x);
     double elem = x;
     double prew = f(x);
-
+    if (type_func != 3){
+        x = true_trug(x);
+    }
     for (int i = 1; i < n || z(x, summ, type_func, eps); i++){
         elem = prew * g(i, x);
         summ += elem;
