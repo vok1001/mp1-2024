@@ -19,7 +19,27 @@ double NoClamp(double x) {
 
 double ClampPI(double x) {
 	double v = x / (2 * M_PI);
-	return x - floor(v) * 2. * M_PI;
+	return (x - floor(v) * 2. * M_PI);
+}
+
+
+double FignaStart(double x) {
+	return x / 2;
+}
+
+
+double FignaStep(double x, int n) {
+	return -x * (2 * (double)n - 1) / 2 / n;
+}
+
+
+double ChosinStart(double x) {
+	return 1;
+}
+
+
+double ChosinStep(double x, int n) {
+	return x * x / (2 * (double)n) / (double)(2 * (double)n - 1);
 }
 
 
@@ -79,7 +99,7 @@ double TeylorAccuracy(int n, double accur, double trueVal, Start Clamp, Start fi
 		step = step * next(x, i);
 		res += step;
 	}
-	printf("Рядов рассчитано - %d\n", i);
+	printf("Рядов рассчитано - %d\n", i - 1);
 	return res;
 }
 
@@ -90,13 +110,13 @@ void Interface() {
 	printf("Выберете режим:\n");
 	printf("1) Одиночный вызов.\n");
 	//printf("2) Серийный вызов вызов.\n\n");
-	printf("3) Выйти.");
+	printf("2) Выйти.");
 
 	scanf_s("%d", &ans);
 
 	switch (ans) {
 	case(1): state = 1; break;
-	case(2): state = 1; break;
+	case(2): state = 255; break;
 	case(3): state = 255; break;
 	}
 }
@@ -131,6 +151,8 @@ void NormalMode() {
 	printf("2) Синус\n");
 	printf("3) Экспонента\n");
 	printf("4) Шинус (\"Гиперболический Синус\")\n");
+	printf("5) Чосинус (\"Гиперболический Косинус\")\n");
+	//printf("6) Квадратный корень из 1+х - (1+x)^1/2\n");
 	while ((ans < 1) || (ans > 5)) {
 		scanf_s("%d", &ans);
 	}
@@ -159,6 +181,9 @@ void NormalMode() {
 		break;
 	case(4): found = TeylorAccuracy(n, accurf, sinh(find), NoClamp, ShinusStart, ShinusStep, find);
 		printf("Правильное знач - %lf\nПо Тейлору - %lf\nРазница (неточность) - %e", sinh(find), found, fabs(sinh(find) - found));
+		break;
+	case(5): found = TeylorAccuracy(n, accurf, cosh(find), NoClamp, ChosinStart, ChosinStep, find);
+		printf("Правильное знач - %lf\nПо Тейлору - %lf\nРазница (неточность) - %e", cosh(find), found, fabs(cosh(find) - found));
 		break;
 	}
 	state = 0;
