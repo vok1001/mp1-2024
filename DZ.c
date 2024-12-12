@@ -67,13 +67,13 @@ void count_marks(int a[][3], int n)
 	printf("Ekzamen 2 total: \n");
 	for (i = 0; i < 5; i++)
 	{
-		printf("Ocenok %d za 2 ekz:%d ",i, ekz1[i]);
+		printf("Ocenok %d za 2 ekz:%d ",i, ekz2[i]);
 	}
 	printf("\n----------------\n");
 	printf("Ekzamen 3 total: \n");
 	for (i = 0; i < 5; i++)
 	{
-		printf("Ocenok %d za 3 ekz:%d ",i, ekz1[i]);
+		printf("Ocenok %d za 3 ekz:%d ",i, ekz3[i]);
 	}
 }
 
