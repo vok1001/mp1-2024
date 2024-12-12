@@ -141,7 +141,7 @@ int main(){
         double y = Teylor(x, n, FirstExp, NextExp, eps, type_func, check_eps, &count);
         printf("Эталонное значние Экспонента: %lf\n", exp(x));
         printf("Вычисленная оценка значения: %lf\n", y);
-        printf("Разница между оценкой и эталонным значением: %lf\n", y -  exp(x));
+        printf("Разница между оценкой и эталонным значением: %lf\n", fabs(y -  exp(x)));
         printf("Количество слагаемых, которое было вычислено: %d\n", count);
     }else if (type_func == 1){
         input_n(&n);
@@ -149,7 +149,7 @@ int main(){
         double y = Teylor(x, n, FirstCos, NextCos, eps, type_func, check_eps, &count);
         printf("Эталонное значние Косинуса: %lf\n", cos(x));
         printf("Вычисленная оценка значения: %lf\n", y);
-        printf("Разница между оценкой и эталонным значением: %lf\n", y -  cos(x));
+        printf("Разница между оценкой и эталонным значением: %lf\n",  fabs(y -  cos(x)));
         printf("Количество слагаемых, которое было вычислено: %d\n", count);
     }else if (type_func == 2){
         input_n(&n);
@@ -157,7 +157,7 @@ int main(){
         double y = Teylor(x, n, FirstSin, NextSin, eps, type_func, check_eps, &count);
         printf("Эталонное значние Синуса: %lf\n", sin(x));
         printf("Вычисленная оценка значения: %lf\n", y);
-        printf("Разница между оценкой и эталонным значением: %lf\n", y -  sin(x));
+        printf("Разница между оценкой и эталонным значением: %lf\n",  fabs(y -  sin(x)));
         printf("Количество слагаемых, которое было вычислено: %d\n", count);
     }else if ( type_func == 4){
         input_n(&n);
@@ -165,7 +165,7 @@ int main(){
         double y = Teylor(x, n, FirstHSin, NextHSin, eps, type_func, check_eps, &count);
         printf("Эталонное значние Гиб.син: %lf\n", sinh(x));
         printf("Вычисленная оценка значения: %lf\n", y);
-        printf("Разница между оценкой и эталонным значением: %lf\n", y -  sinh(x));
+        printf("Разница между оценкой и эталонным значением: %lf\n",  fabs(y -  sinh(x)));
         printf("Количество слагаемых, которое было вычислено: %d\n", count);
     }
 }
