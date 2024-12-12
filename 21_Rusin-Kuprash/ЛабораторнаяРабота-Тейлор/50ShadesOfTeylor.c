@@ -5,20 +5,31 @@
 int state = 0;
 
 
-typedef double (*Funk)(double x, int n);
+typedef double (*Start)(double x);
+typedef double (*Step)(double x, int n);
 
 
+double cosStart(double x) {
+	return 1;
+}
 
 
-// Считать n - раз
-double TeylorNum(int n, Funk next, double x) {
-
+double cosStep(double x, int n) {
+	return -x * x / (2 * (double)n * (2 * (double)n - 1));
 }
 
 
 // Считать до точности accur (или до n-раз)
-double TeylorAccuracy(int n, double accur, Funk next, double x) {
-
+double TeylorAccuracy(int n, double accur, Start first, Step next, double x) {
+	int i = 1;
+	double res = first(x);
+	double step = res * next(x, i);
+	res += step;
+	while ((i++ < n) && (accur < fabs(step))) {
+		step = step * next(x, i);
+		res += step;
+	}
+	return res;
 }
 
 
@@ -30,11 +41,11 @@ void Interface() {
 	printf("2) Серийный вызов вызов.\n\n");
 	printf("3) Выйти.");
 
-	scanf_s("%d", ans);
+	scanf_s("%d", &ans);
 
 	switch (ans) {
 	case(1): state = 1; break;
-	case(2): state = 2; break;
+	case(2): state = 1; break;
 	case(3): state = 255; break;
 	}
 }
@@ -42,14 +53,55 @@ void Interface() {
 
 // запросить n 
 int AskNum(char* string) {
+	int ans;
 	printf(string);
-	return 1;
+	scanf_s("%d", &ans);
+	return ans;
+}
+
+
+double AskDouble(char* string) {
+	double ans;
+	printf(string);
+	scanf_s("%lf", &ans);
+	return ans;
 }
 
 
 // state = 1
 void NormalMode() {
-	AskNum("Сколько рядов разсчитать?");
+	double found;
+	double find;
+	int ans = -1;
+	double accurf;
+
+	int n = AskNum("Сколько рядов разсчитать? (0 < n < 61)");
+	if (n < 1) {
+		n = 0;
+	}
+	else if (n > 60) {
+		n = 60;
+	}
+	accurf = 1 / pow(10, (double)AskNum("Введите точность ( 10 ^ (-n) )"));
+	printf("%lf\n", accurf);
+	printf("Выберете функцию:\n");
+	printf("1) Косинус\n");
+	//printf("2) Серийный вызов вызов.\n\n");
+	//printf("3) Выйти.");
+	while ((ans < 1) || (ans > 2)) {
+		scanf_s("%d", &ans);
+	}
+	
+	find = AskDouble("Какое значение хотите найти?\n");
+
+	switch (ans) {
+	case(1): found = TeylorAccuracy(n, accurf, cosStart, cosStep, find);
+		printf("Правильное знач - %lf\nПо Тейлору - %lf\nРазница (неточность) - %e", cos(find), found, fabs(cos(find) - found));
+		break;
+		//case(2): state = 1; break;
+		//case(3): state = 255; break;
+	}
+	state = 0;
 }
 
 
@@ -61,7 +113,6 @@ void SerialMode() {
 
 int main() {
 	setlocale(LC_ALL, "Russian");
-	AskNum("FFF");
 	while (state != 255) {
 		printf("\n=================================\n");
 		if (state > 2) {
