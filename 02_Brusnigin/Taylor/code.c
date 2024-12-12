@@ -72,20 +72,17 @@ double Taylor(double x, int N, double acc, double etalon, First f, Jump h, Next 
 
 	jump = h();
 
-	for (i=1; i<N; i+=jump){
-		if (fabs(summ - etalon) > acc) {
-			if (i == 1)
-				summ += prev;
+	summ += prev;
+	i = 1 + jump;
 
-			else {
-				next = prev * g(x, i);
-				summ += next;
-				prev = next;
-			}
-		}
+//	for (i = 1; (i < N) && (fabs(summ - etalon) > acc); i++)
 
-		else
-			break;
+	while ((i < N) && (fabs(summ - etalon) > acc)) {
+		next = prev * g(x, i);
+		summ += next;
+		prev = next;
+
+		i+=jump;
 	}
 	printf("Amount of terms: %d\n\n", i);
 
