@@ -123,27 +123,15 @@ double InsertionSort(int mass[], int n, int *p)
 
 	int k, x;
 
-	for (x = 1; x < n; x++) {
+	for (x = 1; x < n; x++) 
+	{
 		tmp = mass[x];
 		k = x;
 
-		while (k > 0 && mass[k - 1] > tmp) {
-			mass[k] = mass[k - 1];
-			k--;
-
-	int c, i;
-
-	for (i = 0; i < n; i++) 
-	{
-		tmp = mass[i];
-		c = i;
-		(*p)++;
-		while (c > 0 && mass[c - 1] > tmp) 
+		while (k > 0 && mass[k - 1] > tmp) 
 		{
-			mass[c] = mass[c - 1];
-			k--;
-			(*k)++;
-
+			mass[k] = mass[k - 1];
+			k--
 		}
 
 		mass[k] = tmp;
