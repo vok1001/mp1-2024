@@ -87,13 +87,13 @@ double NextCos(int i, double x){
 
 double check_eps(double x, double total, int type, double eps){
     if (type == 1){
-        return (total - cos(x)) > eps;
+        return fabs(total - cos(x)) < eps;
     } else if (type == 2){
-        return (total - sin(x)) > eps;
+        return fabs(total - sin(x)) < eps;
     } else if (type == 3){
-        return (total - exp(x)) > eps;
+        return fabs(total - exp(x)) < eps;
     } else if (type == 4){
-        return (total - sinh(x)) > eps;
+        return fabs(total - sinh(x)) < eps;
     }
 }
 
@@ -105,11 +105,14 @@ double Teylor(double x, int n, First f, Next g, double eps, int type_func, Check
     if (type_func != 3){
         x = true_trug(x);
     }
-    for (int i = 1; i < n || z(x, summ, type_func, eps); i++){
+    for (int i = 1; i < n; i++){
         elem = prew * g(i, x);
         summ += elem;
         prew = elem;
         *count += 1;
+        if (z(x, summ, type_func, eps)){
+            break;
+        }
     }
     return summ;
 }
