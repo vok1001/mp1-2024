@@ -247,7 +247,6 @@ void true_merge_sort(int arr[], int buffer[], int l, int r, int* it) {
 		}
 		for (i = l; i <= r; ++i) {
 			arr[i] = buffer[i];
-			*it++;
 		}
 	}
 
@@ -255,11 +254,17 @@ void true_merge_sort(int arr[], int buffer[], int l, int r, int* it) {
 }
 
 void merge_sort(int arr[], int n) {
-	int buffer[10000];
+	int buffer[100000];
 	int it = 0;
 	true_merge_sort(arr, buffer, 0, n - 1, &it);
 	printf("Iterations: %d\n", it);
 
+}
+
+void arraycopy(int arrcopy[],int arr[], int n) {
+	for (int i = 0; i < n; i++) {
+		arrcopy[i] = arr[i];
+	}
 }
 
 void arrayInp(int arr[], int n, int arrcopy[]) {
@@ -286,9 +291,7 @@ void arrayInp(int arr[], int n, int arrcopy[]) {
 			arr[i] = rand();
 		}
 	}
-	for (int i = 0; i < n; i++) {
-		arrcopy[i] = arr[i];
-	}
+	arraycopy(arrcopy, arr, n);
 }
 
 void menu()
@@ -314,7 +317,7 @@ int main() {
 	int x;
 	int cs = 3;
 	int len;
-	int arr[10000];
+	int arr[100000];
 	int c = 10000000;
 	int count = 0;
 	int* orarr;
@@ -356,43 +359,52 @@ int main() {
 			break;
 		}
 		case 3: {
+			arraycopy(arr, orarr, len);
 			bubble_sort(arr, len);
 			break;
 		}
 		case 4: {
+			arraycopy(arr, orarr, len);
 			countsort(arr, len);
 			break;
 		}
 		case 5: {
+			arraycopy(arr, orarr, len);
 			insertsort(arr, len);
 			break;
 		}
 		case 6: {
+			arraycopy(arr, orarr, len);
 			selectsort(arr, len);
 			break;
 		}
 		case 7: {
+			arraycopy(arr, orarr, len);
 			start = clock();
 			merge_sort(arr, len);
 			finish = clock();
 			time = (double)(finish - start) / CLOCKS_PER_SEC;
-			printf("Time: &f\n", time);
-			for (int i = 0; i < len; i++) {
+			printf("Time: %f\n", time);
+			if (!sortcheck(arr, len)) {
+				printf("false\n");
+			}
+			
+			/*for (int i = 0; i < len; i++) {
 				printf("%d ", arr[i]);
 			}
 			printf("\n");
-			break;
+			*/break;
 		}
 		case 8: {
+			arraycopy(arr, orarr, len);
 			start = clock();
 			quickSort(arr, 0, len -1);
 			finish = clock();
 			time = (double)(finish - start) / CLOCKS_PER_SEC;
-			printf("Time: &f\n", time);
-			for (int i = 0; i < len; i++) {
-				printf("%d ", arr[i]);
+			printf("Time: %f\n", time);
+			if (!sortcheck(arr, len)) {
+				printf("false\n");
 			}
-			printf("\n");
 			break;
 		}
 		case 9: {
