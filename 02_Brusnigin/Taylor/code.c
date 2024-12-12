@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -63,7 +64,7 @@ typedef int (Jump)();
 typedef double (Next)(double, int);
 
 
-double Taylor(double x, int N, First f, Jump h, Next g) {
+double Taylor(double x, int N, double acc, double etalon, First f, Jump h, Next g) {
 	double prev, next, summ;
 	int i, jump;
 
@@ -72,15 +73,21 @@ double Taylor(double x, int N, First f, Jump h, Next g) {
 	jump = h();
 
 	for (i=1; i<N; i+=jump){
-		if (i == 1)
-			summ += prev;
+		if (fabs(summ - etalon) > acc) {
+			if (i == 1)
+				summ += prev;
 
-		else {
-			next = prev*g(x, i);
-			summ += next;
-			prev = next;
+			else {
+				next = prev * g(x, i);
+				summ += next;
+				prev = next;
+			}
 		}
+
+		else
+			break;
 	}
+	printf("Amount of terms: %d\n\n", i);
 
 	return summ;
 }
@@ -88,25 +95,38 @@ double Taylor(double x, int N, First f, Jump h, Next g) {
 
 void First_Mode() {
 	int func, N;
-	double x, diff;
+	double tayl, x, diff, acc;
 
 	printf("\nSelect function\n1. sin(x)\n2. cos(x)\n3. exp(x)\n4. Ch(x)\nEnter: ");
-	scanf("%d", &func);
+	scanf_s("%d", &func);
 
 	printf("\nInput x: ");
-	scanf("%lf", &x);
+	scanf_s("%lf", &x);
+	
+	if (func == 1 || func == 2) {
+		if (fabs(x) == x)
+			while (fabs(x)>2*M_PI)
+				x = x-2*M_PI;
+		else
+			while (fabs(x)>2*M_PI)
+				x = x+2*M_PI;
+	}
 
 	printf("Input N: ");
-	scanf("%d", &N);
+	scanf_s("%d", &N);
+
+	printf("Input accuracy: ");
+	scanf_s("%lf", &acc);
 
 	printf("\n");
 
 	switch (func){
 		case 1:
-			printf("Taylor: sin(%lf) ~= %lf\n", x, Taylor(x, N, FirstSin, JumpSin, NextSin));
+			tayl = Taylor(x, N, acc, sin(x), FirstSin, JumpSin, NextSin);
+			printf("Taylor: sin(%lf) ~= %lf\n", x, tayl);
 			printf("math.h: sin(%lf) = %lf\n", x, sin(x));
 
-			diff = (sin(x)-Taylor(x, N, FirstSin, JumpSin, NextSin));
+			diff = (sin(x)-tayl);
 			if (diff < 0)
 				diff = -diff;
 				
@@ -114,10 +134,11 @@ void First_Mode() {
 			break;
 
 		case 2:
-			printf("Taylor: cos(%lf) ~= %lf\n", x, Taylor(x, N, FirstCos, JumpCos, NextCos));
+			tayl = Taylor(x, N, acc, cos(x), FirstCos, JumpCos, NextCos);
+			printf("Taylor: cos(%lf) ~= %lf\n", x, tayl);
 			printf("math.h: cos(%lf) = %lf\n", x, cos(x));
 
-			diff = (cos(x)-Taylor(x, N, FirstCos, JumpCos, NextCos));
+			diff = (cos(x)-tayl);
 			if (diff < 0)
 				diff = -diff;
 				
@@ -125,10 +146,11 @@ void First_Mode() {
 			break;
 
 		case 3:
-			printf("Taylor: exp(%lf) ~= %lf\n", x, Taylor(x, N, FirstExp, JumpExp, NextExp));
+			tayl = Taylor(x, N, acc, exp(x), FirstExp, JumpExp, NextExp);
+			printf("Taylor: exp(%lf) ~= %lf\n", x, tayl);
 			printf("math.h: exp(%lf) = %lf\n", x, exp(x));
 
-			diff = (exp(x)-Taylor(x, N, FirstExp, JumpExp, NextExp));
+			diff = (exp(x)-tayl);
 			if (diff < 0)
 				diff = -diff;
 				
@@ -136,10 +158,11 @@ void First_Mode() {
 			break;
 
 		case 4:
-			printf("Taylor: Ch(%lf) ~= %lf\n", x, Taylor(x, N, FirstCh, JumpCh, NextCh));
+			tayl = Taylor(x, N, acc, cosh(x), FirstCh, JumpCh, NextCh);
+			printf("Taylor: Ch(%lf) ~= %lf\n", x, tayl);
 			printf("math.h: Ch(%lf) = %lf\n", x, cosh(x));
 
-			diff = (cosh(x)-Taylor(x, N, FirstCh, JumpCh, NextCh));
+			diff = (cosh(x)-tayl);
 			if (diff < 0)
 				diff = -diff;
 				
@@ -156,17 +179,29 @@ void First_Mode() {
 
 void Second_Mode() {
 	int func, N_max;
-	double x, diff;
+	double x, diff, tayl, acc;
 	int i;
 
 	printf("\nSelect function\n1. sin(x)\n2. cos(x)\n3. exp(x)\n4. Ch(x)\nEnter: ");
-	scanf("%d", &func);
+	scanf_s("%d", &func);
 
 	printf("\nInput x: ");
-	scanf("%lf", &x);
+	scanf_s("%lf", &x);
+
+	if (func == 1 || func == 2) {
+		if (fabs(x) == x)
+			while (fabs(x) > 2 * M_PI)
+				x = x - 2 * M_PI;
+		else
+			while (fabs(x) > 2 * M_PI)
+				x = x + 2 * M_PI;
+	}
 
 	printf("Input max N (<= 25): ");
-	scanf("%d", &N_max);
+	scanf_s("%d", &N_max);
+
+	printf("Input accuracy: ");
+	scanf_s("%lf", &acc);
 
 	printf("\n");
 
@@ -174,44 +209,48 @@ void Second_Mode() {
 		case 1:
 			printf("sin(x):\n");
 			for (i=1; i<N_max+1; i++){
-				diff = (sin(x)-Taylor(x, i, FirstSin, JumpSin, NextSin));
+				tayl = Taylor(x, i, acc, sin(x), FirstSin, JumpSin, NextSin);
+				diff = (sin(x)-tayl);
 				if (diff < 0)
 					diff = -diff;
 
-				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, Taylor(x, i, FirstSin, JumpSin, NextSin), sin(x), diff);
+				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, tayl, sin(x), diff);
 			}
 			break;
 
 		case 2:
 			printf("cos(x):\n");
 			for (i=1; i<N_max+1; i++){
-				diff = (cos(x)-Taylor(x, i, FirstCos, JumpCos, NextCos));
+				tayl = Taylor(x, i, acc, cos(x), FirstCos, JumpCos, NextCos);
+				diff = (cos(x)-tayl);
 				if (diff < 0)
 					diff = -diff;
 
-				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, Taylor(x, i, FirstCos, JumpCos, NextCos), cos(x), diff);
+				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, tayl, cos(x), diff);
 			}
 			break;
 
 		case 3:
 			printf("exp(x):\n");
 			for (i=1; i<N_max+1; i++){
-				diff = (exp(x)-Taylor(x, i, FirstExp, JumpExp, NextExp));
+				tayl = Taylor(x, i, acc, exp(x), FirstExp, JumpExp, NextExp);
+				diff = (exp(x)-tayl);
 				if (diff < 0)
 					diff = -diff;
 
-				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, Taylor(x, i, FirstExp, JumpExp, NextExp), exp(x), diff);
+				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, tayl, exp(x), diff);
 			}
 			break;
 
 		case 4:
 			printf("Ch(x):\n");
 			for (i=1; i<N_max+1; i++){
-				diff = (cosh(x)-Taylor(x, i, FirstCh, JumpCh, NextCh));
+				tayl = Taylor(x, i, acc, cosh(x), FirstCh, JumpCh, NextCh);
+				diff = (cosh(x)-tayl);
 				if (diff < 0)
 					diff = -diff;
 
-				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, Taylor(x, i, FirstCh, JumpCh, NextCh), cosh(x), diff);
+				printf("(N = %d) Taylor: %lf, math.h: %lf, diff.: %lf\n", i, tayl, cosh(x), diff);
 			}
 			break;
 
@@ -228,7 +267,7 @@ void main(){
 	
 	while (mode != 0){
 		printf("===============\nSelect mode\n1. First mode\n2. Second mode\n0. Exit\nEnter: ");
-		scanf("%d", &mode);
+		scanf_s("%d", &mode);
 
 		switch (mode) {
 			case 1:
