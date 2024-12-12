@@ -1,28 +1,38 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<locale.h>
+#define _USE_MATH_DEFINES
 #include <math.h> 
 typedef double(*TFunc)(double x, int y, double z);
 typedef void(*TCase)(TFunc func);
 TFunc menu1();
-double sin(double x, int i, double element)
+
+// M_PI 
+// if (x > 2*M_PI) --> x < 2*M_PI
+struct SUMMA
+{
+	int k1;
+	double k2;
+};
+struct SUMMA MATH(double User_Error, double x, int n, TFunc function);
+double sin1(double x, int i, double element)
 {
 	double tmp = (-1) * (element * x * x );
 	double tmp2 = (2 * i * (2 * i + 1));
 	tmp = tmp / tmp2;
 	return(tmp);
 }
-double cos(double x, int i, double element)
+double cos1(double x, int i, double element)
 {
 	double tmp = (-1) * element * x * x/(( 2 * i )  *( 2 * i - 1));
 	return(tmp);
 }
-double e(double x, int i, double element)
+double e1(double x, int i, double element)
 {
 	double tmp = element * x/i;
 	return(tmp);
 }
-double arctg(double x, int i, double element)
+double arctg1(double x, int i, double element)
 {
 	i++;
 	double tmp = (-1) * element * (x * x * (2 * i - 3)) / (2 * i - 1);
@@ -31,45 +41,62 @@ double arctg(double x, int i, double element)
 double first(TFunc function, double x)
 {
 	double first_el;
-	if (function == &sin)
+	if (function == &sin1)
 	{
 		first_el = x;
 		return(first_el);
 	}
-	else if (function == &cos)
+	else if (function == &cos1)
 	{
 		first_el = 1;
 		return(first_el);
 	}
-	else if (function == &e)
+	else if (function == &e1)
 	{
 		first_el = 1;
 		return(first_el);
 	}
-	else if (function == &arctg)
+	else if (function == &arctg1)
 	{
 		first_el = x;
 		return(first_el);
 	}
 }
-double reference_value(double x, TFunc function)
+double reference_value(double x,TFunc function)
 {
-	double  next_el, element, reference_sum = 0;
-	element = first(function, x);
-	reference_sum += element;
-	for (int i = 0; i < 100; i++)
+	double reference_sum = 0;
+	if (function == &sin1)
 	{
-		next_el = function(x, i + 1, element);
-		element = next_el;
-		reference_sum += next_el;
+		reference_sum = sin(x);
+	}
+	else if(function == &cos1)
+	{
+		reference_sum = cos(x);
+	}
+	else if (function == &e1)
+	{
+		reference_sum = e(x);
+	}
+	else if (function == &arctg1)
+	{
+		reference_sum = arctg(x);
 	}
 	return(reference_sum);
 }
+
 void choice1( TFunc function)
 {
 	double x, next_el, sum = 0, User_Error, element, reference_sum = 0;
 	int n, i = 0, chislo_slagaemix = 0;
+	struct SUMMA ANS;
 	printf("Введите точку\n");
+	if (function == &sin1 || function == &cos1)
+	{
+		while (x > 2 * M_PI)
+		{
+			x -= 2 * M_1_PI;
+		}
+	}
 	scanf_s("%lf", &x);
 	printf("Введите число элементов ряда\n");
 	scanf_s("%d", &n);
@@ -85,31 +112,19 @@ void choice1( TFunc function)
 		printf("Введите погрешность  повторно\n");
 		scanf_s("%lf", &User_Error);
 	}
-	element = first(function,x);
-	sum += element;
-	next_el = function(x, i + 1, element);
-	while ((i < n-1) && (fabs(next_el) - fabs(element) < User_Error))
-	{
-		next_el = function(x, i + 1, element);
-		element = next_el;
-		printf("%lf\n",element);
-		sum += next_el;
-		i++;
-		chislo_slagaemix++;
-	}
-	if (function == &arctg)
-	{
-		chislo_slagaemix++;
-	}
+	//
+	ANS = MATH(User_Error, x, n, function);
+	//
 	reference_sum = reference_value(x, function);
-	double z = fabs(fabs(reference_sum) - fabs(sum));
-	printf("Значение = %lf\n", sum);
+	double z = fabs(reference_sum - sum);
+	printf("Значение = %lf\n", ANS.k2);
 	printf("Разница = %lf\n", z);
-	printf("Эталонное значение = %lf\n", reference_sum);
-	printf("Число слагаемых = %d\n", chislo_slagaemix);
+	printf("Эталонное значение = %lf\n", reference_sum);//
+	printf("Число слагаемых = %d\n", ANS.k1);
 }
 void choice2(TFunc function)
 {
+	struct SUMMA ANS;
 	double x, next_el, sum = 0, User_Error, element, reference_sum = 0;
 	int n, i = 0, chislo_slagaemix = 0, Nmax = 0, m =0;
 	printf("Введите число экспериментов\n");
@@ -124,6 +139,13 @@ void choice2(TFunc function)
 	{
 		printf("Введите точку\n");
 		scanf_s("%lf", &x);
+		if (function == &sin1 || function == &cos1)
+		{
+			while (x > 2 * M_PI)
+			{
+				x -= 2 * M_1_PI;
+			}
+		}
 		printf("Введите погрешность\n");
 		scanf_s("%lf", &User_Error);
 		printf("Введите число элементов ряда\n");
@@ -142,25 +164,13 @@ void choice2(TFunc function)
 		{
 			function = menu1();
 		}
-		element = first(function, x);
-		sum += element;
-		next_el = function(x, i + 1, element);
-		while ((i < n - 1) && (fabs(next_el) - fabs(element) < User_Error))
-		{
-			next_el = function(x, i + 1, element);
-			element = next_el;
-			sum += next_el;
-			i++;
-			chislo_slagaemix++;
-		}
-		if (function == &arctg)
-		{
-			chislo_slagaemix++;
-		}
+		//
+		ANS = MATH(User_Error, x, n, function);
+		//
 		reference_sum = reference_value(x, function);
 		double z = fabs(fabs(reference_sum) - fabs(sum));
-		a[m] = chislo_slagaemix;
-		a[m + 1] = sum;
+		a[m] = ANS.k1;
+		a[m + 1] = ANS.k2;
 		a[m + 2] = z;
 		a[m + 3] = x;
 		m += 4;
@@ -203,26 +213,53 @@ TFunc menu1()
 	{
 		case(1):
 		{
-			func = sin;
+			func = sin1;
 			break;
 		}
 		case(2):
 		{
-			func = cos;
+			func = cos1;
 			break;
 		}
 		case(3):
 		{
-			func = e;
+			func = e1;
 			break;
 		}
 		case(4):
 		{
-			func = arctg;
+			func = arctg1;
 			break;
 		}
 	}
 	return (func);
+}
+struct SUMMA MATH(double User_Error, double x, int n, TFunc function)
+{
+	struct SUMMA ANS;
+	ANS.k1 = 0;
+	ANS.k2 = 0;
+	double element = 0, sum = 0, next_el = 0;
+	int chislo_slagaemix = 0, i = 0;
+	element = first(function, x);
+	sum += element;
+	next_el = function(x, i + 1, element);
+	while ((i < n - 1) && (fabs(next_el) - fabs(element) < User_Error))
+	{
+		next_el = function(x, i + 1, element);
+		element = next_el;
+		//printf("%lf\n",element);
+		sum += next_el;
+		i++;
+		chislo_slagaemix++;
+	}
+	if (function == &arctg1)
+	{
+		chislo_slagaemix++;
+	}
+	ANS.k1 = chislo_slagaemix;
+	ANS.k2 = sum;
+	return(ANS);
 }
 TCase menu()
 {
