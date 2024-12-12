@@ -1,5 +1,7 @@
+
 #include <stdio.h>
 #include <windows.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 double FirstSin(double x) 
@@ -50,35 +52,20 @@ typedef double (Next)(double, int);
 
 double Teyl(double x, int N, int mode, double etal, double acc, First f, Next n) 
 {
-	double prev, next, summ, chek;
+	double prev, next, summ, chek = 1.0;
 	int i;
 	prev = f(x); 
-	summ = 0.0;
-	for (i = 0; i < N; i += 1) 
+	summ = prev;
+	for (i = 1; (i < N ) && !(chek < acc); i ++)
 	{
-		if (i == 0)
-		{
-			summ += prev;
-		}
-		else 
-		{
-			next = prev * n(x, i);
-			summ += next;
-			prev = next;
-		}
-		chek = summ - etal;
-		if (chek < 0)
-		{
-			chek = -1 * chek;
-		}
-		if (chek < acc)
-		{
-			break;
-		}
+		next = prev * n(x, i);
+		summ += next;
+		prev = next;
+		chek = fabs(summ - etal);
 	}
 	if (mode == 1)
 	{
-		printf("Terms used: %d\n", i);
+		printf("Terms used: %d\n", i+1);
 	}
 	return summ;
 }
@@ -101,6 +88,17 @@ void Once()
 		switch (fun)
 		{
 		case 1:
+			while (fabs(x) > 2 * M_PI)
+			{
+				if (fabs(x) != x)
+				{
+					x = x + 2 * M_PI;
+				}
+				else
+				{
+					x = x - 2 * M_PI;
+				}
+			}
 			etal = sin(x);
 			printf("Etalon is:%lf\n", etal);
 			sch=Teyl(x, N, 1, etal, acc, FirstSin, NextSin);
@@ -113,6 +111,17 @@ void Once()
 			printf("Difference is:%lf\n", diff);
 			break;
 		case 2:
+			while (fabs(x) > 2 * M_PI)
+			{
+				if (fabs(x) != x)
+				{
+					x = x + 2 * M_PI;
+				}
+				else
+				{
+					x = x - 2 * M_PI;
+				}
+			}
 			etal = cos(x);
 			printf("Etalon is:%lf\n", etal);
 			sch = Teyl(x, N, 1, etal, acc, FirstCos, NextCos);
@@ -174,6 +183,17 @@ void Serial()
 		switch (fun)
 		{
 		case 1:
+			while (fabs(x) > 2 * M_PI)
+			{
+				if (fabs(x) != x)
+				{
+					x = x + 2 * M_PI;
+				}
+				else
+				{
+					x = x - 2 * M_PI;
+				}
+			}
 			printf("sin(x):\n");
 			for (i = 1; i < N_max + 1; i++)
 			{
@@ -188,6 +208,17 @@ void Serial()
 			break;
 
 		case 2:
+			while (fabs(x) > 2 * M_PI)
+			{
+				if (fabs(x) != x)
+				{
+					x = x + 2 * M_PI;
+				}
+				else
+				{
+					x = x - 2 * M_PI;
+				}
+			}
 			printf("cos(x):\n");
 			for (i = 1; i < N_max + 1; i++)
 			{
