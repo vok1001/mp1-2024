@@ -75,11 +75,11 @@ double reference_value(double x,TFunc function)
 	}
 	else if (function == &e1)
 	{
-		reference_sum = e(x);
+		reference_sum = exp(x);
 	}
 	else if (function == &arctg1)
 	{
-		reference_sum = arctg(x);
+		reference_sum = atan(x);
 	}
 	return(reference_sum);
 }
@@ -90,6 +90,7 @@ void choice1( TFunc function)
 	int n, i = 0, chislo_slagaemix = 0;
 	struct SUMMA ANS;
 	printf("Введите точку\n");
+	scanf_s("%lf", &x);
 	if (function == &sin1 || function == &cos1)
 	{
 		while (x > 2 * M_PI)
@@ -97,7 +98,6 @@ void choice1( TFunc function)
 			x -= 2 * M_1_PI;
 		}
 	}
-	scanf_s("%lf", &x);
 	printf("Введите число элементов ряда\n");
 	scanf_s("%d", &n);
 	while (n < 1 || n>1000)
@@ -116,7 +116,7 @@ void choice1( TFunc function)
 	ANS = MATH(User_Error, x, n, function);
 	//
 	reference_sum = reference_value(x, function);
-	double z = fabs(reference_sum - sum);
+	double z = fabs(reference_sum - ANS.k2);
 	printf("Значение = %lf\n", ANS.k2);
 	printf("Разница = %lf\n", z);
 	printf("Эталонное значение = %lf\n", reference_sum);//
@@ -168,7 +168,7 @@ void choice2(TFunc function)
 		ANS = MATH(User_Error, x, n, function);
 		//
 		reference_sum = reference_value(x, function);
-		double z = fabs(fabs(reference_sum) - fabs(sum));
+		double z = fabs(reference_sum - ANS.k2);
 		a[m] = ANS.k1;
 		a[m + 1] = ANS.k2;
 		a[m + 2] = z;
@@ -243,15 +243,16 @@ struct SUMMA MATH(double User_Error, double x, int n, TFunc function)
 	int chislo_slagaemix = 0, i = 0;
 	element = first(function, x);
 	sum += element;
+	chislo_slagaemix++;
 	next_el = function(x, i + 1, element);
 	while ((i < n - 1) && (fabs(next_el) - fabs(element) < User_Error))
 	{
-		next_el = function(x, i + 1, element);
 		element = next_el;
-		//printf("%lf\n",element);
 		sum += next_el;
+		//printf("%lf\n",element);
 		i++;
 		chislo_slagaemix++;
+		next_el = function(x, i + 1, element);
 	}
 	if (function == &arctg1)
 	{
