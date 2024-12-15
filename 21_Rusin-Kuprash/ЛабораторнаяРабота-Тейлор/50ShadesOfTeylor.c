@@ -23,16 +23,6 @@ double ClampPI(double x) {
 }
 
 
-double FignaStart(double x) {
-	return x / 2;
-}
-
-
-double FignaStep(double x, int n) {
-	return -x * (2 * (double)n - 1) / 2 / n;
-}
-
-
 double ChosinStart(double x) {
 	return 1;
 }
@@ -90,6 +80,7 @@ double TeylorAccuracy(int n, double accur, double trueVal, Start Clamp, Start fi
 	double step;
 
 	x = Clamp(x);
+	//printf("%lf\n", x);
 
 	res = first(x);
 	step = res * next(x, i);
@@ -103,7 +94,7 @@ double TeylorAccuracy(int n, double accur, double trueVal, Start Clamp, Start fi
 	return res;
 }
 
-
+/*
 // state = 0
 void Interface() {
 	int ans = 0;
@@ -120,7 +111,7 @@ void Interface() {
 	case(3): state = 255; break;
 	}
 }
-
+*/
 
 // запросить n 
 int AskNum(char* string) {
@@ -151,10 +142,15 @@ void NormalMode() {
 	printf("2) Синус\n");
 	printf("3) Экспонента\n");
 	printf("4) Шинус (\"Гиперболический Синус\")\n");
-	printf("5) Чосинус (\"Гиперболический Косинус\")\n");
-	//printf("6) Квадратный корень из 1+х - (1+x)^1/2\n");
-	while ((ans < 1) || (ans > 5)) {
+	printf("5) Чосинус (\"Гиперболический Косинус\")\n\n");
+	printf("6) Выйти\n");
+	while ((ans < 1) || (ans > 6)) {
 		scanf_s("%d", &ans);
+	}
+
+	if (ans == 6) {
+		state = 255;
+		return NULL;
 	}
 	
 	accurf = 1 / pow(10, (double)AskNum("Введите точность ( 10 ^ (-n) )"));
@@ -201,12 +197,11 @@ int main() {
 
 	while (state != 255) {
 		printf("\n=================================\n");
-		if (state > 2) {
+		if (state > 1) {
 			state = 0;
 		}
 		switch (state) {
-		case(0): Interface(); break;
-		case(1): NormalMode(); break;
+		case(0): NormalMode(); break;
 		//case(2): SerialMode(); break;
 		}
 	}
