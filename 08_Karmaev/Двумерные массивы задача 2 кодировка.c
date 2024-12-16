@@ -10,9 +10,9 @@ int main() {
 	int** arr;
 	int n, m, h;
 	double middle;
-	printf("Введите кол-во столбцов m=");
+	printf("Р’РІРµРґРёС‚Рµ РєРѕР»-РІРѕ СЃС‚РѕР»Р±С†РѕРІ m=");
 	scanf_s("%d", &m);
-	printf("\nВведите кол-во строк n=");
+	printf("\nР’РІРµРґРёС‚Рµ РєРѕР»-РІРѕ СЃС‚СЂРѕРє n=");
 	scanf_s("%d", &n);
 	arr = (int **)malloc(sizeof(int*)*n);
 	for (int i = 0; i < n; i++) {
@@ -33,7 +33,7 @@ int main() {
 	int max_count = 0;
 	int dynamic_count = 0;
 	int coord = 0;
-	printf("\nСреднее значение middle=%.2lf\n", middle);
+	printf("\nРЎСЂРµРґРЅРµРµ Р·РЅР°С‡РµРЅРёРµ middle=%.2lf\n", middle);
 	for (int i = 0; i < m; i++) {
 		dynamic_count = 0;
 		for (int j = 0; j < n;j++) {
@@ -46,8 +46,8 @@ int main() {
 			coord = i+1;
 		}
 	}
-	printf("\nСтолбец %d, чисел %d\n", coord, max_count);
-	printf("\nМатрица:\n");
+	printf("\nРЎС‚РѕР»Р±РµС† %d, С‡РёСЃРµР» %d\n", coord, max_count);
+	printf("\nРњР°С‚СЂРёС†Р°:\n");
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			printf(" %9.d ", arr[i][j]);
