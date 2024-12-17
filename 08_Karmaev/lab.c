@@ -6,8 +6,31 @@
 #include "windows.h"
 #include <inttypes.h>
 
-
 #define cm(a,b) ((a)>(b))
+#define _USE_MATH_DEFINES_
+
+int get_min(int a[], int n) {
+    int i;
+    int minim = 10000000;
+    for (i = 0; i < n; i++) {
+        if (minim > a[i]) {
+            minim = a[i];
+        }
+
+    }
+    return minim;
+}
+
+int get_max(int a[], int n) {
+    int i;
+    int maxim = -10000000;
+    for (i = 0; i < n; i++) {
+        if (maxim < a[i]) {
+            maxim = a[i];
+        }
+    }
+    return maxim;
+}
 
 
 void qs(int* s_arr, int first, int last,long int p,int p1[])
@@ -72,7 +95,7 @@ void merge(int arr[], int left, int mid, int right) {
         }
         k++;
     }
-    while (i < n1) {4
+    while (i < n1) {
         
         arr[k] = leftArr[i];
         i++;
@@ -128,7 +151,7 @@ void Insert(int arr[], int k) {
         }
         arr[j] = x;
     }
-    printf("»ÚÂ‡ˆËÈ=%ld\n", p);
+    printf("–ò—Ç–µ—Ä–∞—Ü–∏–π=%ld\n", p);
 }
 
 void linear_search(int arr[], int n, int x) {
@@ -140,12 +163,12 @@ void linear_search(int arr[], int n, int x) {
         }
     }
     if (pos != -1) {
-        printf("ÀËÌÂÈÌ˚È ÔÓËÒÍ Ì‡¯ÂÎ ˜ËÒÎÓ\n");
-        printf("»Ì‰ÂÍÒ ˜ËÒÎ‡: %d \n", pos);
+        printf("–õ–∏–Ω–µ–π–Ω—ã–π –ø–æ–∏—Å–∫ –Ω–∞—à–µ–ª —á–∏—Å–ª–æ\n");
+        printf("–ò–Ω–¥–µ–∫—Å —á–∏—Å–ª–∞: %d \n", pos);
 
     }
     else {
-        printf("◊ËÒÎ‡ ÌÂÚ ‚ Ï‡ÒÒË‚Â\n");
+        printf("–ß–∏—Å–ª–∞ –Ω–µ—Ç –≤ –º–∞—Å—Å–∏–≤–µ\n");
     }
 }
 
@@ -166,121 +189,140 @@ void binary_search(int arr[], int n, int x) {
         }
     }
     if (pos != -1) {
-        printf("¡ËÌ‡Ì˚È ÔÓËÒÍ Ì‡¯ÂÎ ˜ËÒÎÓ\n");
-        printf("»Ì‰ÂÍÒ ˜ËÒÎ‡: %d \n", pos);
+        printf("–ë–∏–Ω–∞—Ä–Ω—ã–π –ø–æ–∏—Å–∫ –Ω–∞—à–µ–ª —á–∏—Å–ª–æ\n");
+        printf("–ò–Ω–¥–µ–∫—Å —á–∏—Å–ª–∞: %d \n", pos);
 
     }
     else {
-        printf("◊ËÒÎ‡ ÌÂÚ ‚ Ï‡ÒÒË‚Â\n");
+        printf("–ß–∏—Å–ª–∞ –Ω–µ—Ç –≤ –º–∞—Å—Å–∏–≤–µ\n");
     }
 }
 void polosa() {
     printf("------------------------\n");
 }
-void Bubble(int arr[], int k, long int c) {
-    int left = 0, right = k - 1, i, temp;
-    
-    while (left <= right) {
-        for (i = right; i > left; i--) {
-            if (arr[i - 1] > arr[i]) {
-                temp = arr[i - 1];
-                arr[i - 1] = arr[i];
-                arr[i] = temp;
-                c++;
-            }
-        }
-        ++left;
-        for (i = left; i < right; i++) {
-            if (arr[i] > arr[i + 1]) {
-                temp = arr[i + 1];
-                arr[i + 1] = arr[i];
-                arr[i] = temp;
-                c++;
-            }
-        }
-        --right;
-
-    }
-    
-    printf("»ÚÂ‡ˆËÈ=%ld\n", c);
-    
-    
-}
+// 2 1 3 5 4 6 7 8 
+// 1 2 3 4 5 6 7 8 
 
 
-void CountSort(int arn[], int a, int n) {
-    int* arp;
-    int* armi;
-    int m = 100100000;
-    for (int i = 0; i < n; i++) {
-        if (arn[i] < m) {
-            m = arn[i];
+    void bubble_sort(int arr[], int n) {
+    int left = 0, right = n - 1, i, temp, count = 0;
+    clock_t start, finish;
+    start = clock();
+    int flag = 1;
+    while (left <= right && flag) {
+    int flag = 1;
+    for (i = right; i > left; i--) {
+        if (arr[i - 1] > arr[i]) {
+            temp = arr[i - 1];
+            arr[i - 1] = arr[i];
+            arr[i] = temp;
+            flag = 0;
         }
+        count++;
     }
-    int ma = -1000000000;
-    for (int i = 0; i < n; i++) {
-        if (arn[i] > ma) {
-            ma = arn[i];
+    ++left;
+    count++;
+    for (i = left; i < right; i++) {
+        if (arr[i] > arr[i + 1]) {
+            temp = arr[i + 1];
+            arr[i + 1] = arr[i];
+            arr[i] = temp;
+            flag = 0;
         }
+        count++;
     }
-    m = fabs(m);
-    long int raz = ma - m + 1;
-    arp = ((int*)malloc((ma + 1) * sizeof(int)));
-    for (int i = 0; i < ma+1; i++) {
-        arp[i] = 0;
+    --right;
+    count++;
     }
-    armi= ((int*)malloc((m) * sizeof(int)));
-    for (int i = 0; i < m; i++) {
-        armi[i] = 0;
+    finish = clock();
+    double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+    printf("------------------------\n");
+    printf("–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –≤—ã–ø–æ–ª–Ω–µ–Ω–∞\n");
+    printf("–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ –æ–ø–µ—Ä–∞—Ü–∏–π: %d\n", count);
+
     }
-    for (int i = 0; i < n; i++) {
-        int p = arn[i];
-        if (p < 0) {
-            p = fabs(p);
-            armi[p]++;
+
+
+// 1 2 -1 -2 -1 2
+// ar[0] - —Ö—Ä–∞–Ω–∏—Ç, —Å–∫–æ–ª—å–∫–æ —Ä–∞–∑ –±—ã–ª–æ -2
+// ar[1] —Ö—Ä–∞–Ω–∏—Ç, —Å–∫–æ–ª—å–∫–æ —Ä–∞–∑ –±—ã–ª–æ -1
+// ar[2] —Ö—Ä–∞–Ω–∏—Ç, —Å–∫–æ–ª—å–∫–æ —Ä–∞–∑ –±—ã–ª–æ  0
+// ar[3] —Ö—Ä–∞–Ω–∏—Ç, —Å–∫–æ–ª—å–∫–æ —Ä–∞–∑ –±—ã–ª–æ 1
+// ar[4] —Ö—Ä–∞–Ω–∏—Ç, —Å–∫–æ–ª—å–∫–æ —Ä–∞–∑ –±—ã–ª–æ 2
+// ar 1 2 0 1 2 --> —ç—Ç–æ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ
+// ar1[.] = i + min
+
+void counting_sort(int arr[], int n) {
+    int k, sdvig;
+    int flag = 0;
+    if (get_min(arr, n) < 0) {
+        k = (get_min(arr, n) * -1);
+        sdvig = (get_min(arr, n) * -1) + get_max(arr, n) + 1;
+        flag = 1;
+    }
+    else {
+        k = get_max(arr, n);
+        sdvig = get_max(arr, n) + 1;
+    }
+
+    int* a=(int*)malloc((sdvig)*sizeof(int));
+    int count = 0;
+    int i;
+    clock_t start, finish;
+    start = clock();
+    for (i = 0; i < sdvig; i++) {
+        a[i] = 0;
+        count++;
+    }
+    for (i = 0; i < n; i++) {
+        if (get_min(arr, n) < 0) {
+            a[arr[i] + k] += 1;
         }
         else {
-            arp[p]++;
+            a[arr[i]] += 1;
         }
+        count++;
     }
-    for (int i = 0; i < n; i++) {
-        arn[i] = 0;
-    }
-    int ci = 0;
-    for (int i = m; i>0; i--) {
-        if (armi[i] != 0) {
-            while (armi[i] != 0) {
-                arn[ci] = -1*i;
-                ci++;
-                armi[i]--;
+    int index = 0;
+    for (i = 0; i < sdvig; i++) {
+        while (a[i] != 0) {
+            if (flag) {
+                arr[index] = i - (-1 * get_min(arr, n));
             }
+            else {
+                arr[index] = i;
+            }
+            a[i]--;
+            index++;
+            count++;
         }
-        
     }
-    for (int i = 0; i <ma; i--) {
-        while (arp[i] != 0) {
-            arn[ci] = i;
-            ci++;
-            arp[i]--;
-        }
-
+    for (i = index; i < n; i++) {
+        arr[index] = 0;
+        count++;
     }
+    finish = clock();
+    double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+    printf("------------------------\n");
+    printf("–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –≤—ã–ø–æ–ª–Ω–µ–Ω–∞\n");
+    printf("–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ –æ–ø–µ—Ä–∞—Ü–∏–π: %d\n", count);
 }
+
 void menu() {
-    printf("------------------------\n1.¬‚ÂÒÚË Ï‡ÒÒË‚ ‚Û˜ÌÛ˛\n2.–‡Ì‰ÓÏÌ˚È Ï‡ÒÒË‚\n3.—ÓÚËÓ‚Í‡ ÔÛÁ˚¸ÍÓÏ\n4.—ÓÚËÓ‚Í‡ ‚ÒÚ‡‚Í‡ÏË\n5.—ÓÚËÓ‚Í‡ ÔÓ‰Ò˜ÂÚÓÏ\n");
-    printf("6.—ÓÚËÓ‚Í‡ ’Ó‡‡\n7.—ÓÚËÓ‚Í‡ ÒÎËˇÌËÂÏ\n8.¬˚‚ÂÒÚË Ï‡ÒÒË‚\n9.ÀËÌÂÈÌ˚È ÔÓËÒÍ\n10.¡ËÌ‡Ì˚È ÔÓËÒÍ\n11.Œ˜ËÒÚËÚ¸ Ï‡ÒÒË‚\n12.¬˚‚Ó‰ ÏÂÌ˛\n0.¬˚ıÓ‰\n------------------------\n");
+    printf("------------------------\n1.–í–≤–µ—Å—Ç–∏ –º–∞—Å—Å–∏–≤ –≤—Ä—É—á–Ω—É—é\n2.–†–∞–Ω–¥–æ–º–Ω—ã–π –º–∞—Å—Å–∏–≤\n3.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –ø—É–∑—ã—Ä—å–∫–æ–º\n4.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –≤—Å—Ç–∞–≤–∫–∞–º–∏\n5.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –ø–æ–¥—Å—á–µ—Ç–æ–º\n");
+    printf("6.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –•–æ–∞—Ä–∞\n7.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ —Å–ª–∏—è–Ω–∏–µ–º\n8.–í—ã–≤–µ—Å—Ç–∏ –º–∞—Å—Å–∏–≤\n9.–õ–∏–Ω–µ–π–Ω—ã–π –ø–æ–∏—Å–∫\n10.–ë–∏–Ω–∞—Ä–Ω—ã–π –ø–æ–∏—Å–∫\n11.–û—á–∏—Å—Ç–∏—Ç—å –º–∞—Å—Å–∏–≤\n12.–í—ã–≤–æ–¥ –º–µ–Ω—é\n0.–í—ã—Ö–æ–¥\n------------------------\n");
 }
 void st() {
-    printf("Ã‡ÒÒË‚ ÛÊÂ ÓÚÒÓÚËÓ‚‡Ì");
+    printf("–ú–∞—Å—Å–∏–≤ —É–∂–µ –æ—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω");
 }
 
 
 int main() {
     setlocale(LC_ALL, "Rus");
-    printf("«‡‰‡ÈÚÂ ‡ÁÏÂ Ï‡ÒÒË‚‡: "); int l; scanf_s("%d", &l);
+    printf("–ó–∞–¥–∞–π—Ç–µ —Ä–∞–∑–º–µ—Ä –º–∞—Å—Å–∏–≤–∞: "); int l; scanf_s("%d", &l);
     int* arn = ((int*)malloc(l * sizeof(int)));
-    printf("------------------------\n1.¬‚ÂÒÚË Ï‡ÒÒË‚ ‚Û˜ÌÛ˛\n2.–‡Ì‰ÓÏÌ˚È Ï‡ÒÒË‚\n3.—ÓÚËÓ‚Í‡ ÔÛÁ˚¸ÍÓÏ\n4.—ÓÚËÓ‚Í‡ ‚ÒÚ‡‚Í‡ÏË\n5.—ÓÚËÓ‚Í‡ ÔÓ‰Ò˜ÂÚÓÏ\n");
-    printf("6.—ÓÚËÓ‚Í‡ ’Ó‡‡\n7.—ÓÚËÓ‚Í‡ ÒÎËˇÌËÂÏ\n8.¬˚‚ÂÒÚË Ï‡ÒÒË‚\n9.ÀËÌÂÈÌ˚È ÔÓËÒÍ\n10.¡ËÌ‡Ì˚È ÔÓËÒÍ\n11.Œ˜ËÒÚËÚ¸ Ï‡ÒÒË‚\n12.¬˚‚Ó‰ ÏÂÌ˛\n0.¬˚ıÓ‰\n------------------------\n");
+    printf("------------------------\n1.–í–≤–µ—Å—Ç–∏ –º–∞—Å—Å–∏–≤ –≤—Ä—É—á–Ω—É—é\n2.–†–∞–Ω–¥–æ–º–Ω—ã–π –º–∞—Å—Å–∏–≤\n3.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –ø—É–∑—ã—Ä—å–∫–æ–º\n4.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –≤—Å—Ç–∞–≤–∫–∞–º–∏\n5.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –ø–æ–¥—Å—á–µ—Ç–æ–º\n");
+    printf("6.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ –•–æ–∞—Ä–∞\n7.–°–æ—Ä—Ç–∏—Ä–æ–≤–∫–∞ —Å–ª–∏—è–Ω–∏–µ–º\n8.–í—ã–≤–µ—Å—Ç–∏ –º–∞—Å—Å–∏–≤\n9.–õ–∏–Ω–µ–π–Ω—ã–π –ø–æ–∏—Å–∫\n10.–ë–∏–Ω–∞—Ä–Ω—ã–π –ø–æ–∏—Å–∫\n11.–û—á–∏—Å—Ç–∏—Ç—å –º–∞—Å—Å–∏–≤\n12.–í—ã–≤–æ–¥ –º–µ–Ω—é\n0.–í—ã—Ö–æ–¥\n------------------------\n");
     int x = 10;int v;
     LARGE_INTEGER freq, start, finish;
     double time;
@@ -290,16 +332,16 @@ int main() {
         long int y = 0;
         clock_t start1, end1;
         int p1[2] = { 0,0 };
-        printf("¬‚Â‰ËÚÂ: ");
+        printf("–í–≤–µ–¥–∏—Ç–µ: ");
         scanf_s("%d", &x);
         switch (x) {
         case(1):
             polosa();
-            printf("¬‚Ó‰ËÚÂ: ");
+            printf("–í–≤–æ–¥–∏—Ç–µ: ");
             for (int i = 0; i < l; i++) {
                 scanf_s("%d", &arn[i]);
             }
-            printf("\n”ÒÔÂ¯ÌÓ!\n"); polosa(); 
+            printf("\n–£—Å–ø–µ—à–Ω–æ!\n"); polosa(); 
             menu();
             break;
         case(2):
@@ -307,18 +349,18 @@ int main() {
             for (int i = 0; i < l; i++) {
                 arn[i] = rand();
             }
-            printf("”ÒÔÂ¯ÌÓ!\n"); polosa(); 
+            printf("–£—Å–ø–µ—à–Ω–æ!\n"); polosa(); 
             menu();
             break;
         case(3):
             polosa(); //vivodit vremya i it
             if (check(arn,l)){
                 QueryPerformanceCounter(&start);
-                Bubble(arn, l,k1);printf("Ã‡ÒÒË‚ ÓÚÒÓÚËÓ‚‡Ì\n");
+                bubble_sort(arn, l);printf("–ú–∞—Å—Å–∏–≤ –æ—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω\n");
                 QueryPerformanceCounter(&finish);
                 time = (double)(finish.QuadPart -
                     start.QuadPart) / (double)freq.QuadPart;
-                printf("¬ÂÏˇ ‡·ÓÚ˚ ÔÓ„‡ÏÏ˚ = %.5f\n", time);
+                printf("–í—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã –ø—Ä–æ–≥—Ä–∞–º–º—ã = %.5f\n", time);
             }
             else {
                 st(); printf("\n");
@@ -331,11 +373,11 @@ int main() {
             if (check(arn, l)) {
                 QueryPerformanceCounter(&start);
             
-                Insert(arn, l);printf("Ã‡ÒÒË‚ ÓÚÒÓÚËÓ‚‡Ì\n");//vivodit
+                Insert(arn, l);printf("–ú–∞—Å—Å–∏–≤ –æ—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω\n");//vivodit
                 QueryPerformanceCounter(&finish);
                 time = (double)(finish.QuadPart -
                     start.QuadPart) / (double)freq.QuadPart;
-                printf("¬ÂÏˇ ‡·ÓÚ˚ ÔÓ„‡ÏÏ˚=%.5f(cÂÍ)\n", time);
+                printf("–í—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã –ø—Ä–æ–≥—Ä–∞–º–º—ã=%.5f(c–µ–∫)\n", time);
             }
             else {
                 st(); printf("\n");
@@ -347,11 +389,11 @@ int main() {
             polosa();
             if (check(arn, l)) {
                 QueryPerformanceCounter(&start);
-                CountSort(arn, 0, l);
+                counting_sort(arn, l);
                 QueryPerformanceCounter(&finish);
                 time = (double)(finish.QuadPart -
                     start.QuadPart) / (double)freq.QuadPart;
-                printf("¬ÂÏˇ ‚˚ÔÓÎÌÂÌËˇ ‡·ÓÚ˚=%.5f\nÃ‡ÒÒË‚ ÓÚÒÓÚËÓ‚‡Ì\n");}
+                printf("–í—Ä–µ–º—è –≤—ã–ø–æ–ª–Ω–µ–Ω–∏—è —Ä–∞–±–æ—Ç—ã=%.5f\n–ú–∞—Å—Å–∏–≤ –æ—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω\n");}
             else {
                 st(); printf("\n");
             }
@@ -362,11 +404,11 @@ int main() {
             polosa();
             if (check(arn, l)) {
                 QueryPerformanceCounter(&start);
-                qs(arn, 0, l-1,y,p1);printf("Ã‡ÒÒË‚ ÓÚÒÓÚËÓ‚‡Ì\n");//vivodit
+                qs(arn, 0, l-1,y,p1);printf("–ú–∞—Å—Å–∏–≤ –æ—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω\n");//vivodit
                 QueryPerformanceCounter(&finish);
                 time = (double)(finish.QuadPart -
                     start.QuadPart) / (double)freq.QuadPart;
-                printf("¬ÂÏˇ ‡·ÓÚ˚ ÔÓ„‡ÏÏ˚=%.5f(cÂÍ)\n»ÚÂ‡ˆËÈ=%ld\n", time, p1[0]);
+                printf("–í—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã –ø—Ä–æ–≥—Ä–∞–º–º—ã=%.5f(c–µ–∫)\n–ò—Ç–µ—Ä–∞—Ü–∏–π=%ld\n", time, p1[0]);
             }
             else {
                 st(); printf("\n");                
@@ -378,17 +420,17 @@ int main() {
             polosa();
             if (check(arn, l)){
                 QueryPerformanceCounter(&start);
-                mergeSort(arn, 0, l - 1);printf("Ã‡ÒÒË‚ ÓÚÒÓÚËÓ‚‡Ì\n");
+                mergeSort(arn, 0, l - 1);printf("–ú–∞—Å—Å–∏–≤ –æ—Ç—Å–æ—Ä—Ç–∏—Ä–æ–≤–∞–Ω\n");
                 QueryPerformanceCounter(&finish);
                 time = (double)(finish.QuadPart -
                     start.QuadPart) / (double)freq.QuadPart;
-                printf("¬ÂÏˇ ‚˚ÔÓÎÌÂÌËˇ ÔÓ„‡ÏÏ˚=%.5f(cÂÍ)\n", time);            
+                printf("–í—Ä–µ–º—è –≤—ã–ø–æ–ª–Ω–µ–Ω–∏—è –ø—Ä–æ–≥—Ä–∞–º–º—ã=%.5f(c–µ–∫)\n", time);            
             }
             else {
                 st(); printf("\n");
             }
             polosa();
-            menu();//“ÓÎ¸ÍÓ ‚ÂÏˇ ‚˚ÔÓÎÌÂÌËˇ 
+            menu();//–¢–æ–ª—å–∫–æ –≤—Ä–µ–º—è –≤—ã–ø–æ–ª–Ω–µ–Ω–∏—è 
             break;
         case(8):
             polosa();
@@ -400,7 +442,7 @@ int main() {
             break;
         case(9):
             polosa();
-            printf("◊ËÒÎÓ ‰Îˇ ÔÓËÒÍ‡: ");
+            printf("–ß–∏—Å–ª–æ –¥–ª—è –ø–æ–∏—Å–∫–∞: ");
             scanf_s("%d", &v);
             polosa();
             QueryPerformanceCounter(&start);
@@ -408,13 +450,13 @@ int main() {
             QueryPerformanceCounter(&finish);
             time = (double)(finish.QuadPart -
                 start.QuadPart) / (double)freq.QuadPart;
-            printf("¬ÂÏˇ ‚˚ÔÓÎÌÂÌËˇ ÔÓ„‡ÏÏ˚=%.5f(cÂÍ)\n------------------------\n", time);
+            printf("–í—Ä–µ–º—è –≤—ã–ø–æ–ª–Ω–µ–Ω–∏—è –ø—Ä–æ–≥—Ä–∞–º–º—ã=%.5f(c–µ–∫)\n------------------------\n", time);
             menu();
             break;
         case(10):
             polosa();
             if(check(arn,l)==0){
-            printf("◊ËÒÎÓ ‰Îˇ ÔÓËÒÍ‡: ");
+            printf("–ß–∏—Å–ª–æ –¥–ª—è –ø–æ–∏—Å–∫–∞: ");
             scanf_s("%d", &v);
             polosa();
             QueryPerformanceCounter(&start);
@@ -422,10 +464,10 @@ int main() {
             QueryPerformanceCounter(&finish);
             time = (double)(finish.QuadPart -
                 start.QuadPart) / (double)freq.QuadPart;
-            printf("¬ÂÏˇ ‚˚ÔÓÎÌÂÌËˇ ÔÓ„‡ÏÏ˚=%lf(cÂÍ)\n------------------------\n",time);
+            printf("–í—Ä–µ–º—è –≤—ã–ø–æ–ª–Ω–µ–Ω–∏—è –ø—Ä–æ–≥—Ä–∞–º–º—ã=%lf(c–µ–∫)\n------------------------\n",time);
             }
             else {
-                printf("ŒÚÒÓÚËÛÈÚÂ Ï‡ÒÒË‚\n------------------------\n");                
+                printf("–û—Ç—Å–æ—Ä—Ç–∏—Ä—É–π—Ç–µ –º–∞—Å—Å–∏–≤\n------------------------\n");                
             }
             menu();
             break;
@@ -434,7 +476,7 @@ int main() {
                 arn[i] = 0;
             }
             polosa();
-            printf("Ã‡ÒÒË‚ Ó˜Ë˘ÂÌ!\n");
+            printf("–ú–∞—Å—Å–∏–≤ –æ—á–∏—â–µ–Ω!\n");
             polosa();
             menu();
             break;
@@ -449,5 +491,5 @@ int main() {
     }
     
         
-    return 1;
+    
 }
