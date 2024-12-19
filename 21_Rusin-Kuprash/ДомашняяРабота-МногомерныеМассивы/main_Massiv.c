@@ -4,6 +4,20 @@
 #include <stdlib.h>
 
 
+void generateArray(float*** array, float** arrayMem, int m, int n) {
+	float val;
+	*arrayMem = (float*)malloc(sizeof(float) * 5 * n);
+	*array = (float**)malloc(sizeof(float*) * n);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < 5; j++) {
+			val = (float)(rand()) / (float)RAND_MAX * 255;
+			(*arrayMem)[i * 5 + j] = val;
+		}
+		(*array)[i] = arrayMem[i * 5];
+	}
+}
+
+
 void printLine(float* line) {
 	for (int j = 0; j < 5; j++) {
 		printf("%.2f ", line[j]);
@@ -156,17 +170,31 @@ int prog1() {
 	printf("%d - %f - ", addNum3, addfl1);
 	printLine(insects[addNum3]);
 	
+	//free(insectsMem);
+	
+	printArray(insects, insectsMem, n);
+	printf("Программа окончила работу:");
+	scanf_s("%d", &n);
 	return 1;
 }
 
 
 int prog2() {
+	float* arrayMem;
+	float** array;
+	int n, m;
+	scanf_s("%d %d", &m, &n);
+	generateArray(&array, &arrayMem, m, n);
+
+
+	free(arrayMem);
 	return 1;
 }
 
 
 int main() {
 	setlocale(LC_ALL, "Russian");
+	system("chcp 1251");
 	int ans;
 	printf("Выберите задачу (1/2): ");
 	scanf_s("%d", &ans);
