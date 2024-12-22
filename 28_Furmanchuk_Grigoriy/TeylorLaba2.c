@@ -46,17 +46,12 @@ void f(int y, int epi, int cd, int x){
     if(cd == 2){
         a = fabs(y - sin(x)) ;
         res = sin(x);
-<<<<<<< HEAD
         printf("Reference value: %lf\n", res);
-=======
-        printf("Reference value: %lf", res);
->>>>>>> da37635adbd1e295805d840bba34958cc8c2edbe
 
     }
     if(cd == 3){
         a = fabs(y - cos(x));
         res = cos(x);
-<<<<<<< HEAD
         printf("Reference value: %lf\n", res);
     }
     if(cd == 4){
@@ -68,19 +63,6 @@ void f(int y, int epi, int cd, int x){
         res = M_PI/2 - atan(x);
         a = fabs(y - M_PI/2 + atan(x));
         printf("Reference value: %lf\n", res);
-=======
-        printf("Reference value: \n", res);
-    }
-    if(cd == 4){
-        a = fabs(y - exp(x)) < epi;
-        res = exp(x);
-        printf("Reference value: ", res);
-    }
-    if(cd == 5){
-        res = M_PI/2 - atan(x);
-        a = fabs(y - M_PI/2 + atan(x)) < epi;
-        printf("Reference value: %lf", res);
->>>>>>> da37635adbd1e295805d840bba34958cc8c2edbe
     }
     printf("inaccuracy: %lf\n", a);
 }
@@ -116,7 +98,6 @@ double NextArcCtg(double x, int i){
 }
 
 double Teylor(double x, int n, First first, Next next, int com, double e, double trueVal){
-<<<<<<< HEAD
     double summ = first(x), prev = first(x), cur;
     int i = 1;
     if(com == 2 || com  == 3){
@@ -128,11 +109,6 @@ double Teylor(double x, int n, First first, Next next, int com, double e, double
         i++;
     }
     /*for(i = 1; (i < n) && (fabs(summ - trueVal) > e); i ++){
-=======
-    double summ = 0, prev = first(x), cur;
-    int i;
-    for(i = 1; (i < n) && (fabs(summ - trueVal) > e); i ++){
->>>>>>> da37635adbd1e295805d840bba34958cc8c2edbe
         cur = prev * next(x,i);
         summ+=cur;
         prev = cur;
@@ -202,18 +178,10 @@ int main(void) {
                 break;
             }
         }
-<<<<<<< HEAD
 
         f(res, eps, com, x);
         printf("Experimental value: %lf\n", res);
         printf("Number of steps: %d\n", step);
 
-=======
-        
-            f(res, eps, com, x);
-            printf("Experimental value: %lf\n", res);
-            printf("Number of steps: %d\n", step);
-        
->>>>>>> da37635adbd1e295805d840bba34958cc8c2edbe
     }
 }
