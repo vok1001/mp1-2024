@@ -1,8 +1,8 @@
 #include "stdio.h"
-#include "math.h"
 #include "stdlib.h"
 #include "stdbool.h"
 #define _USE_MATH_DEFINES
+#include "math.h"
 
 
 
@@ -17,6 +17,12 @@ typedef bool(*check)(double);
 void setvar(double x){
     printf("Input x: ");
     input(x);
+}
+
+void true_var(double x){
+    while(x > 2.0 * M_PI){
+        x-=2.0 * M_PI;
+    }
 }
 void accuracy(double epi, check f){
     while(f(epi)) {
@@ -39,26 +45,30 @@ void f(int y, int epi, int cd, int x){
     double res;
     if(cd == 2){
         a = fabs(y - sin(x)) ;
-        printf("Reference value: ", sin(x));
+        res = sin(x);
+        printf("Reference value: %lf\n", res);
 
     }
     if(cd == 3){
         a = fabs(y - cos(x));
-        printf("Reference value: \n", cos(x));
+        res = cos(x);
+        printf("Reference value: %lf\n", res);
     }
     if(cd == 4){
-        a = fabs(y - exp(x)) < epi;
-        printf("Reference value: ", exp(x));
+        a = fabs(y - exp(x));
+        res = exp(x);
+        printf("Reference value: %lf\n", res);
     }
     if(cd == 5){
-        a = fabs(y - M_PI/2 + atan(x)) < epi;
-        printf("Reference value: ", M_PI - atan(x));
+        res = M_PI/2 - atan(x);
+        a = fabs(y - M_PI/2 + atan(x));
+        printf("Reference value: %lf\n", res);
     }
     printf("inaccuracy: %lf\n", a);
 }
 
 
-        double FirstSin(double x){
+double FirstSin(double x){
     return x;
 }
 
@@ -87,14 +97,22 @@ double NextArcCtg(double x, int i){
     return x * x * (2 * i - 1)/2 * i + 1;
 }
 
-double Teylor(double x, int n, First first, Next next, int com){
-    double summ = 0, prev = first(x), cur;
-    int i;
-    for(i = 1; i < n; i ++){
+double Teylor(double x, int n, First first, Next next, int com, double e, double trueVal){
+    double summ = first(x), prev = first(x), cur;
+    int i = 1;
+    if(com == 2 || com  == 3){
+        true_var(x);
+    }
+    while((i < n) && (fabs(trueVal - summ ) > e)){
+        cur = prev * next(x, i);
+        summ += cur;
+        i++;
+    }
+    /*for(i = 1; (i < n) && (fabs(summ - trueVal) > e); i ++){
         cur = prev * next(x,i);
         summ+=cur;
         prev = cur;
-    }
+    }*/
     if(com != 5) {
         return summ;
     }
@@ -110,8 +128,8 @@ void menu(){
 }
 
 int main(void) {
-    int com;
-    double x, eps = 0.0;
+    int com = 0;
+    double x = 0.0, eps = 0.0;
     int step;
     double res, reverence;
     printf("To start you need to enter variable, accuracy and number of steps\n");
@@ -134,15 +152,16 @@ int main(void) {
                 break;
             }
             case 2:{ //sin
-                res = Teylor(x, step, FirstSin, NextSin, com);
+                //x -> 0 2*Pi
+                res = Teylor(x, step, FirstSin, NextSin, com, eps, sin(x));
                 break;
             }
             case 3:{ // cos
-                res = Teylor(x, step, FirstCos, NextCos, com);
+                res = Teylor(x, step, FirstCos, NextCos, com, eps, cos(x));
                 break;
             }
             case 4:{ //exp
-                res = Teylor(x, step, FirstExp, NextExp, com);
+                res = Teylor(x, step, FirstExp, NextExp, com, eps, exp(x));
                 break;
             }
             case 5:{ // arcctg
@@ -150,7 +169,7 @@ int main(void) {
                     printf("Invalid value: x must in range[-1;1]");
                     setvar(x);
                 }
-                res = Teylor(x, step, FirstArcCtg, NextArcCtg, com);
+                res = Teylor(x, step, FirstArcCtg, NextArcCtg, com, eps, M_PI/2 - atan(x));
                 break;
             }
             case 6:{
@@ -159,8 +178,10 @@ int main(void) {
                 break;
             }
         }
+
         f(res, eps, com, x);
         printf("Experimental value: %lf\n", res);
         printf("Number of steps: %d\n", step);
+
     }
 }
