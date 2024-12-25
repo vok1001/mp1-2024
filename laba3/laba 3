@@ -1,0 +1,109 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+struct Tovar {
+    char* Nazvanie;
+    double Cena;
+    double kol_vo;
+};
+int lenstring(char* s) {
+    int len = 0;
+    while (s[len] != '\0') {
+        len++;
+    }
+    return len;
+
+}
+int lenchis(double n) {
+    int len = 3;
+    while (n > 1.0) {
+        n /= 10;
+        len++;
+    }
+    if (n > 0.01) {
+        return len;
+    }
+    else return len + 1;
+}
+typedef struct Tovar Tovar;
+Tovar newtovar(char* Nazvanie, double Cena, double kol_vo) {
+    Tovar tovar;
+    tovar.Nazvanie = Nazvanie;
+    tovar.Cena = Cena;
+    tovar.kol_vo = kol_vo;
+    return tovar;
+}
+Tovar sklad[] = {
+    {"potetoes", 15.0, 55.0},
+    {"cucumber" ,20.0, 50.0},
+    {"jus", 40.0 ,200.0}
+};
+Tovar search(Tovar* tovar) {
+    char* Nazvanie = tovar->Nazvanie;
+    double count = tovar->kol_vo;
+    double pri;
+    double quant;
+    int i; Tovar res;
+    //printf("")
+    for (i = 0; i < 3; i++) {
+        if (strcmp(Nazvanie, sklad[i].Nazvanie) == 0) {
+            if (count <= sklad[i].kol_vo) {
+                res = newtovar(Nazvanie, sklad[i].Cena * count, count);
+            }
+            else {
+
+                res = newtovar(Nazvanie, sklad[i].Cena * (sklad[i].kol_vo), sklad[i].kol_vo);
+            }
+            break;
+        }
+        else {
+            res = newtovar(Nazvanie, 0.0, 0.0);
+
+        }
+    }
+    return res;
+}
+
+int main() {
+    int kol[10];
+    int i = 0, j = 0;
+    int n;
+    char buf[256]; int count = 0; char c[10][100];
+    double summa = 0.0;
+    Tovar spisok[1000];
+    Tovar chek[1000];
+    printf("Vvedite dliny spiska\n");
+    scanf("%d", &n);
+    printf("Vvedite nazvanie i kol-vo\n");
+    for (i = 0; i < n + 1; i++) {
+        fgets(buf, 256, stdin);
+        if (sscanf(buf, "%d %s", &kol[i], c[i]) != 2) {
+            sscanf(buf, "%s %d", c[i], &kol[i]);
+        }
+        spisok[i].Nazvanie = strdup(c[i]);
+        spisok[i].kol_vo = kol[i];
+        for (j = 0; j < sizeof(spisok[i].Nazvanie); j++) {
+            spisok[i].Nazvanie[j] = tolower(spisok[i].Nazvanie[j]);
+        }
+        chek[i] = search(&spisok[i]);
+    }
+    printf("\nNazvanie         cena         kol_vo\n");
+    for (i = 0; i < n + 1; i++) {
+        if (chek[i].kol_vo > 0.0) {
+            printf("%s", spisok[i].Nazvanie);
+            for (j = 0; j < 15 - lenstring(chek[i].Nazvanie); j++) {
+                printf(" ");
+            }
+            printf("%.2lf", chek[i].Cena);
+            for (j = 0; j < 15 - lenchis(chek[i].Cena); j++) {
+                printf(" ");
+            }
+            printf("%.2lf\n", chek[i].kol_vo);
+            summa += chek[i].Cena;
+        }
+
+    }
+    printf("--------------------------------------\n");
+    printf("Summa tovarov - %.2lf", summa);
+}
