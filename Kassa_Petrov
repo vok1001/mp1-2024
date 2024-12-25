@@ -8,7 +8,7 @@ struct Item
     double price;
     double count;
 };
-
+    
 struct Item Sklad[10] = {
   {"apple", 10.0, 20.0},
   {"banana", 11.0, 21.0},
@@ -23,8 +23,7 @@ struct Item Sklad[10] = {
 };
 typedef struct Item Item;
 Item Check[10];
-
-
+double flag_get_max = 0;
 
 double find_price_and_count_on_sklad(char user_title[20], double user_count)
 {
@@ -35,6 +34,12 @@ double find_price_and_count_on_sklad(char user_title[20], double user_count)
         {
             Sklad[i].count -= user_count;
             return Sklad[i].price;
+        }
+        else if ((((strcmp(Sklad[i].title, user_title)) == 0) && ((Sklad[i].count - user_count) < 0) && (Sklad[i].count > 0)))
+        {
+            flag_get_max = Sklad[i].count;
+            Sklad[i].count = 0;
+            return Sklad[i].price; //ЖОДЕЛАть
         }
     }
     return -1;
@@ -54,6 +59,7 @@ int main()
     scanf_s("%d", &s);
     for (_ = 0; _ < s; _++)
     {
+        flag_get_max = 0;
         scanf_s("%s", &user, 20);
         if (isalpha(user[0]))
         {
@@ -72,8 +78,12 @@ int main()
         }
         else
         {
+            if (flag_get_max != 0)
+            {
+                user_count = flag_get_max;
+            }
             strcpy(Check[i].title, user_title);
-            Check[i].count = user_count;
+            Check[i].count = user_count; 
             Check[i].price = mega_help;
             i++;
         }
