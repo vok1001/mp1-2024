@@ -53,13 +53,15 @@ int main() {
 
     printf("Enter products and their quantity (empty input ends):\n");
 
-    while (1) {
+    int flag = 1;
+    while (flag) {
         char input[MAX_LINE_LENGTH];
         printf("> ");
         fgets(input, sizeof(input), stdin);
 
         if (input[0] == '\n') {
-            break;
+            flag = 0;
+            continue;
         }
 
         input[strcspn(input, "\n")] = '\0';
