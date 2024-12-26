@@ -7,7 +7,7 @@ struct Tovar {
     double Cena;
     double kol_vo;
 };
-int lenstring(char* s) {
+int ch(char* s) {
     int len = 0;
     while (s[len] != '\0') {
         len++;
@@ -15,7 +15,7 @@ int lenstring(char* s) {
     return len;
 
 }
-int lenchis(double n) {
+int ln(double n) {
     int len = 3;
     while (n > 1.0) {
         n /= 10;
@@ -42,27 +42,25 @@ Tovar sklad[] = {
 Tovar search(Tovar* tovar) {
     char* Nazvanie = tovar->Nazvanie;
     double count = tovar->kol_vo;
-    double pri;
-    double quant;
-    int i; Tovar res;
-    //printf("")
+    
+    int i; Tovar result;
     for (i = 0; i < 3; i++) {
         if (strcmp(Nazvanie, sklad[i].Nazvanie) == 0) {
             if (count <= sklad[i].kol_vo) {
-                res = newtovar(Nazvanie, sklad[i].Cena * count, count);
+                result = newtovar(Nazvanie, sklad[i].Cena * count, count);
             }
             else {
 
-                res = newtovar(Nazvanie, sklad[i].Cena * (sklad[i].kol_vo), sklad[i].kol_vo);
+                result = newtovar(Nazvanie, sklad[i].Cena * (sklad[i].kol_vo), sklad[i].kol_vo);
             }
             break;
         }
         else {
-            res = newtovar(Nazvanie, 0.0, 0.0);
+            result = newtovar(Nazvanie, 0.0, 0.0);
 
         }
     }
-    return res;
+    return result;
 }
 
 int main() {
@@ -75,7 +73,7 @@ int main() {
     Tovar chek[1000];
     printf("Vvedite dliny spiska\n");
     scanf("%d", &n);
-    printf("Vvedite nazvanie i kol-vo\n");
+    printf("Vvedite nazvanie(kak na sklade) and  kol-vo\n");
     for (i = 0; i < n + 1; i++) {
         fgets(buf, 256, stdin);
         if (sscanf(buf, "%d %s", &kol[i], c[i]) != 2) {
@@ -88,15 +86,17 @@ int main() {
         }
         chek[i] = search(&spisok[i]);
     }
-    printf("\nNazvanie         cena         kol_vo\n");
+    printf("\nVash chek:\n");
+     printf("--------------------------------------\n");
+    printf("Nazvanie         cena         kol_vo\n");
     for (i = 0; i < n + 1; i++) {
         if (chek[i].kol_vo > 0.0) {
             printf("%s", spisok[i].Nazvanie);
-            for (j = 0; j < 15 - lenstring(chek[i].Nazvanie); j++) {
+            for (j = 0; j < 15 - ch(chek[i].Nazvanie); j++) {
                 printf(" ");
             }
             printf("%.2lf", chek[i].Cena);
-            for (j = 0; j < 15 - lenchis(chek[i].Cena); j++) {
+            for (j = 0; j < 15 - ln(chek[i].Cena); j++) {
                 printf(" ");
             }
             printf("%.2lf\n", chek[i].kol_vo);
