@@ -13,7 +13,7 @@ void printLine(float* line, int n) {
 
 
 void printOrig(float* array, int n, int m) {
-	printf("Ориг\n");
+	printf("����\n");
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			printf("%.2f ", array[m * i + j]);
@@ -24,7 +24,7 @@ void printOrig(float* array, int n, int m) {
 
 
 void printArray(float** array, int n, int m) {	
-	//printf("\nНеориг\n");
+	//printf("\n������\n");
 	for (int i = 0; i < n; i++) {
 		printf("%d - ", i);
 		printLine(array[i], m);
@@ -77,10 +77,10 @@ int prog1() {
 	int addNum3 = 0;
 
 	printf("Задача по многомерным массивам 21:\n");
-	printf("Случайный генератор:\n");
+	printf("��������� ���������:\n");
 	scanf_s("%u", &seed);
 	srand(seed);
-	printf("Сколько элементов:\n");
+	printf("������� ���������:\n");
 	scanf_s("%d", &n);
 	
 	insectsMem = (float*)malloc(sizeof(float) * 5 * n);
@@ -109,41 +109,41 @@ int prog1() {
 	printArray(insects, n, 5);
 
 	
-	printf("\n наибольшие хар-и и их насекомое:\n");
+	printf("\n ���������� ���-� � �� ���������:\n");
 	for (int i = 0; i < 5; i++) {
 		printf("%f %d |", maxLine[i], maxLineId[i]);
 	}
-	printf("\n наименьшие хар-и и их насекомое:\n");
+	printf("\n ���������� ���-� � �� ���������:\n");
 	for (int i = 0; i < 5; i++) {
 		printf("%f %d |", minLine[i], minLineId[i]);
 	}
 	printf("\n");
 	
-	printf("Уникальные жучары:\n");
+	printf("���������� ������:\n");
 	for (int i = 0; i < n; i++) {
 		addNum3 = checkLine(i, maxLineId, minLineId);
 		if (addNum3 == 1) {
-			printf("Самый лучший!! (имеющий более двух характеристик с максимальными значениями) - \n");
+			printf("����� ������!! (������� ����� ���� ������������� � ������������� ����������) - \n");
 			addNum1 = 1;
 			printf("%d - ", i);
 			printLine(insects[i], 5);
 		}
 		if (addNum3 == 2) {
-			printf("Самый худший!! (имеющий более двух характеристик с минимальными значениями) - \n");
+			printf("����� ������!! (������� ����� ���� ������������� � ������������ ����������) - \n");
 			addNum2 = 1;
 			printf("%d - ", i);
 			printLine(insects[i], 5);
 		}
 	}
 	if (!addNum1) {
-		printf("Нету лучших!!\n");
+		printf("���� ������!!\n");
 	}
 	if (!addNum2) {
-		printf("Нету худших!!\n");
+		printf("���� ������!!\n");
 	}
-	printf("\nсредние зн-ия характеристик: ");
+	printf("\n������� ��-�� �������������: ");
 	printLine(averLine, 5);
-	printf("Посредственный жучара:\n");
+	printf("�������������� ������:\n");
 	
 	addNum3 = 0;
 
@@ -278,8 +278,9 @@ int prog2() {
 
 int main() {
 	setlocale(LC_ALL, "Russian");
+	system("chcp 1251");
 	int ans;
-	printf("Выберите задачу (1/2): ");
+	printf("�������� ������ (1/2): ");
 	scanf_s("%d", &ans);
 	printf("\n");
 	if (ans < 2) return prog1();
