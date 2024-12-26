@@ -56,7 +56,8 @@ double NextSec(double x, int i)
 {
     if (i % 2 == 0) {
         return (x * x / (i - 1) / i);
-    } else {
+    }
+    else {
         return 0; // Только чётные члены
     }
 }
@@ -65,7 +66,7 @@ typedef double(*First)(double);
 typedef double(*Next)(double, int);
 
 // Тейлор режим 1
-double Teylor(double x, int N, First f, Next g, int h, double eps, double rez)
+double Teylor(double x, int N, First f, Next g, int h, double eps, double rez, int max_iter)
 {
     double prev;
     double next;
@@ -75,7 +76,9 @@ double Teylor(double x, int N, First f, Next g, int h, double eps, double rez)
     sums = 0.0;
     next = 0;
     shag = h;
-    while (fabs(sums - rez) > eps)
+    int iter = 0;
+
+    while (fabs(sums - rez) > eps && iter < max_iter) // Остановка по точности и количеству итераций
     {
         if (i == 1)
             sums += prev;
@@ -86,11 +89,22 @@ double Teylor(double x, int N, First f, Next g, int h, double eps, double rez)
             prev = next;
         }
         i += shag;
+        iter++; // Увеличиваем счетчик итераций
     }
+
     printf("Исходное значение - %lf \n", rez);
     printf("Посчитанное значение - %lf \n", sums);
     printf("Разница в значениях - %lf \n", fabsl(rez - sums));
     printf("Количество слагаемых, которое было вычислено равно %d \n", i);
+
+    // Проверка, по какому условию завершена работа
+    if (iter >= max_iter) {
+        printf("Достигнут максимальный лимит итераций (%d).\n", max_iter);
+    }
+    else {
+        printf("Достигнута требуемая точность.\n");
+    }
+
     return sums;
 }
 
@@ -100,6 +114,8 @@ int main()
     double eps;
     double x, y;
     int c1 = 0;
+    int max_iter;
+
     setlocale(LC_ALL, "Russian");
 
     printf("Выбери функцию из перечня \n");
@@ -112,6 +128,8 @@ int main()
     scanf_s("%d", &N);
     printf("Введи точность вычисления (eps) \n");
     scanf_s("%lf", &eps);
+    printf("Введи максимальное количество итераций (max_iter) \n");
+    scanf_s("%d", &max_iter);
 
     while (x > M_PI_2)
     {
@@ -121,16 +139,16 @@ int main()
     switch (c1)
     {
     case 0:
-        y = Teylor(x, N, FirstSin, NextSin, 2, eps, sin(x));
+        y = Teylor(x, N, FirstSin, NextSin, 2, eps, sin(x), max_iter);
         break;
     case 1:
-        y = Teylor(x, N, FirstCos, NextCos, 2, eps, cos(x));
+        y = Teylor(x, N, FirstCos, NextCos, 2, eps, cos(x), max_iter);
         break;
     case 2:
-        y = Teylor(x, N, FirstExp, NextExp, 1, eps, exp(x));
+        y = Teylor(x, N, FirstExp, NextExp, 1, eps, exp(x), max_iter);
         break;
     case 3:
-        y = Teylor(x, N, FirstSec, NextSec, 2, eps, 1 / cos(x));
+        y = Teylor(x, N, FirstSec, NextSec, 2, eps, 1 / cos(x), max_iter);
         break;
     case 4:
         printf("Выход из программы\n");
