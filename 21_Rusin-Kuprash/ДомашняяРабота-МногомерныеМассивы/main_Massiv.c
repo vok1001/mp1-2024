@@ -77,10 +77,10 @@ int prog1() {
 	int addNum3 = 0;
 
 	printf("Задача по многомерным массивам 21:\n");
-	printf("��������� ���������:\n");
+	printf("Введите seed генератора:\n");
 	scanf_s("%u", &seed);
 	srand(seed);
-	printf("������� ���������:\n");
+	printf("Кол-во элементов (жучар):\n");
 	scanf_s("%d", &n);
 	
 	insectsMem = (float*)malloc(sizeof(float) * 5 * n);
@@ -109,41 +109,41 @@ int prog1() {
 	printArray(insects, n, 5);
 
 	
-	printf("\n ���������� ���-� � �� ���������:\n");
+	printf("\nЛучшие характеристики и номера их жучар:\n");
 	for (int i = 0; i < 5; i++) {
 		printf("%f %d |", maxLine[i], maxLineId[i]);
 	}
-	printf("\n ���������� ���-� � �� ���������:\n");
+	printf("\nХудшие характеристики и номера их жучар:\n");
 	for (int i = 0; i < 5; i++) {
 		printf("%f %d |", minLine[i], minLineId[i]);
 	}
 	printf("\n");
 	
-	printf("���������� ������:\n");
+	printf("Уникальные жучары:\n");
 	for (int i = 0; i < n; i++) {
 		addNum3 = checkLine(i, maxLineId, minLineId);
 		if (addNum3 == 1) {
-			printf("����� ������!! (������� ����� ���� ������������� � ������������� ����������) - \n");
+			printf("Лучший жучара!! (с двумя и более лучшими характеристиками) - \n");
 			addNum1 = 1;
 			printf("%d - ", i);
 			printLine(insects[i], 5);
 		}
 		if (addNum3 == 2) {
-			printf("����� ������!! (������� ����� ���� ������������� � ������������ ����������) - \n");
+			printf("Худший жучара!! (с двумя и более худшими характеристиками) - \n");
 			addNum2 = 1;
 			printf("%d - ", i);
 			printLine(insects[i], 5);
 		}
 	}
 	if (!addNum1) {
-		printf("���� ������!!\n");
+		printf("Нет лучших!!\n");
 	}
 	if (!addNum2) {
-		printf("���� ������!!\n");
+		printf("Нет худших!!\n");
 	}
-	printf("\n������� ��-�� �������������: ");
+	printf("\nСредние характеристики: ");
 	printLine(averLine, 5);
-	printf("�������������� ������:\n");
+	printf("Усреднённый жучара:\n");
 	
 	addNum3 = 0;
 
@@ -280,7 +280,7 @@ int main() {
 	setlocale(LC_ALL, "Russian");
 	system("chcp 1251");
 	int ans;
-	printf("�������� ������ (1/2): ");
+	printf("Выберите программу (1/2): ");
 	scanf_s("%d", &ans);
 	printf("\n");
 	if (ans < 2) return prog1();
