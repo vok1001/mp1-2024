@@ -37,14 +37,16 @@ Tovar newtovar(char* Nazvanie, double Cena, double kol_vo) {
 Tovar sklad[] = {
     {"potetoes", 15.0, 55.0},
     {"cucumber" ,20.0, 50.0},
-    {"jus", 40.0 ,200.0}
+    {"jus", 100.0 ,200.0},
+    {"apple", 15.0 ,300.0},
+    {"strawbery", 16.0 ,100.0},
 };
 Tovar search(Tovar* tovar) {
     char* Nazvanie = tovar->Nazvanie;
     double count = tovar->kol_vo;
     
     int i; Tovar result;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 5; i++) {
         if (strcmp(Nazvanie, sklad[i].Nazvanie) == 0) {
             if (count <= sklad[i].kol_vo) {
                 result = newtovar(Nazvanie, sklad[i].Cena * count, count);
