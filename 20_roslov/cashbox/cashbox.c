@@ -27,6 +27,7 @@ char warehouse[][100] = {"банан", "яблоко", "огурцы", "поми
 int size_cklad = sizeof( warehouse ) / sizeof(warehouse[0]);
 product test[] = {{2.0, "банан"}, {2.5, "помидор"}, {3, "киви"}};
 shop *entity;
+product *notes;
 
 //  #define _CRT_SECURE__NO_WARNING
 /*
@@ -61,8 +62,8 @@ void set_shop(shop entity[], int size){
     int i, id_barcode = 1;
     double pri, cou;
     for (i = 0; i < size; i++){
-        pri = fabs(rand() % 200 - 100 + 1);
-        cou = fabs(rand() % 200 - 100 + 1);
+        pri = rand() % 100;
+        cou = rand() % 100;
         strcpy(entity[i].name, warehouse[i]);
         entity[i].price = pri;
         entity[i].count = cou;
@@ -116,15 +117,39 @@ int get_id_product(char *str){
     return -1;
 }
 
+int check_tmp(product arr[], int n, char *prod){
+    for (int i = 0; i < n; i++){
+        if (!strcmp(arr[i].name, prod)){
+            return i;
+        }
+    }
+    return -1;
+
+}
+
 void print_check(product all[], int size){
     double final = 0.0;
+    notes = (product*)malloc(sizeof(product)*size_cklad);
+    int n = 0;
     for (int i = 0; i < size; i++){
         if (check_product(all[i].name)){
-            int id = get_id_product(all[i].name);
-            if (entity[id - 1].count >= all[i].count){
-                entity[id - 1].count -= all[i].count;
-                printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, all[i].count, entity[id - 1].price, entity[id - 1].price * all[i].count);
-                final += entity[id - 1].price * all[i].count;
+            int id = check_tmp(notes, n, all[i].name);
+            if( id != -1){
+                notes[id].count += all[i].count;
+            }else{
+                strcpy(notes[n].name, all[i].name);
+                notes[n].count = all[i].count;
+                n++;
+            }
+        }
+    }
+    for (int i = 0; i < size; i++){
+        if (check_product(notes[i].name)){
+            int id = get_id_product(notes[i].name);
+            if (entity[id - 1].count >= notes[i].count){
+                entity[id - 1].count -= notes[i].count;
+                printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, notes[i].count, entity[id - 1].price, entity[id - 1].price * notes[i].count);
+                final += entity[id - 1].price * notes[i].count;
             }else if(entity[id - 1].count > 0){
                 printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, entity[id - 1].count, entity[id - 1].price, entity[id - 1].price * entity[id - 1].count);
                 final += entity[id - 1].price * entity[id - 1].count;
@@ -132,6 +157,20 @@ void print_check(product all[], int size){
             }
         }
     }
+    // for (int i = 0; i < size; i++){
+    //     if (check_product(all[i].name)){
+    //         int id = get_id_product(all[i].name);
+    //         if (entity[id - 1].count >= all[i].count){
+    //             entity[id - 1].count -= all[i].count;
+    //             printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, all[i].count, entity[id - 1].price, entity[id - 1].price * all[i].count);
+    //             final += entity[id - 1].price * all[i].count;
+    //         }else if(entity[id - 1].count > 0){
+    //             printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, entity[id - 1].count, entity[id - 1].price, entity[id - 1].price * entity[id - 1].count);
+    //             final += entity[id - 1].price * entity[id - 1].count;
+    //             entity[id - 1].count = 0.0;
+    //         }
+    //     }
+    // }
     printf("Сумма....................%.2lf\n", final);
 }
 
