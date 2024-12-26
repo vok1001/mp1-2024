@@ -1,30 +1,33 @@
-#include <locale.h>
+п»ї#include <locale.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 
-void printLine(float* line) {
-	for (int j = 0; j < 5; j++) {
+void printLine(float* line, int n) {
+	for (int j = 0; j < n; j++) {
 		printf("%.2f ", line[j]);
 	}
 	printf("\n");
 }
 
 
-void printArray(float** arrayMem, float* array, int n) {
-	/*
-	printf("Ориг\n");
+void printOrig(float* array, int n, int m) {
+	printf("РћСЂРёРі\n");
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < 5; j++) {
-			printf("%.2f ", array[5 * i + j]);
+		for (int j = 0; j < m; j++) {
+			printf("%.2f ", array[m * i + j]);
 		}
 		printf("\n");
 	}
-	*/
-	//printf("\nНеориг\n");
+}
+
+
+void printArray(float** array, int n, int m) {	
+	//printf("\nРќРµРѕСЂРёРі\n");
 	for (int i = 0; i < n; i++) {
-		printLine(arrayMem[i]);
+		printf("%d - ", i);
+		printLine(array[i], m);
 		//printf("\n");
 	}
 }
@@ -52,6 +55,7 @@ int checkLine(int lineId, int maxLineId[5], int minLineId[5]) {
 }
 
 
+
 int prog1() {
 	int n;
 	unsigned int seed;
@@ -72,11 +76,11 @@ int prog1() {
 	int addNum2 = 0;
 	int addNum3 = 0;
 
-	printf("Задача по многомерным массивам 21:\nВведите кол-во элементов.\n");
-	printf("Случайный генератор:\n");
+	printf("Р—Р°РґР°С‡Р° РїРѕ РјРЅРѕРіРѕРјРµСЂРЅС‹Рј РјР°СЃСЃРёРІР°Рј 21:\n");
+	printf("РЎР»СѓС‡Р°Р№РЅС‹Р№ РіРµРЅРµСЂР°С‚РѕСЂ:\n");
 	scanf_s("%u", &seed);
 	srand(seed);
-	printf("Сколько элементов:\n");
+	printf("РЎРєРѕР»СЊРєРѕ СЌР»РµРјРµРЅС‚РѕРІ:\n");
 	scanf_s("%d", &n);
 	
 	insectsMem = (float*)malloc(sizeof(float) * 5 * n);
@@ -102,44 +106,44 @@ int prog1() {
 		averLine[j] /= n;
 	}
 
-	printArray(insects, insectsMem, n);
+	printArray(insects, n, 5);
 
 	
-	printf("\n наибольшие хар-и и их насекомое:\n");
+	printf("\n РЅР°РёР±РѕР»СЊС€РёРµ С…Р°СЂ-Рё Рё РёС… РЅР°СЃРµРєРѕРјРѕРµ:\n");
 	for (int i = 0; i < 5; i++) {
 		printf("%f %d |", maxLine[i], maxLineId[i]);
 	}
-	printf("\n наименьшие хар-и и их насекомое:\n");
+	printf("\n РЅР°РёРјРµРЅСЊС€РёРµ С…Р°СЂ-Рё Рё РёС… РЅР°СЃРµРєРѕРјРѕРµ:\n");
 	for (int i = 0; i < 5; i++) {
 		printf("%f %d |", minLine[i], minLineId[i]);
 	}
 	printf("\n");
 	
-	printf("Уникальные жучары:\n");
+	printf("РЈРЅРёРєР°Р»СЊРЅС‹Рµ Р¶СѓС‡Р°СЂС‹:\n");
 	for (int i = 0; i < n; i++) {
 		addNum3 = checkLine(i, maxLineId, minLineId);
 		if (addNum3 == 1) {
-			printf("Самый лучший!! (имеющий более двух характеристик с максимальными значениями) - \n");
+			printf("РЎР°РјС‹Р№ Р»СѓС‡С€РёР№!! (РёРјРµСЋС‰РёР№ Р±РѕР»РµРµ РґРІСѓС… С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё) - \n");
 			addNum1 = 1;
 			printf("%d - ", i);
-			printLine(insects[i]);
+			printLine(insects[i], 5);
 		}
 		if (addNum3 == 2) {
-			printf("Самый худший!! (имеющий более двух характеристик с минимальными значениями) - \n");
+			printf("РЎР°РјС‹Р№ С…СѓРґС€РёР№!! (РёРјРµСЋС‰РёР№ Р±РѕР»РµРµ РґРІСѓС… С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє СЃ РјРёРЅРёРјР°Р»СЊРЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё) - \n");
 			addNum2 = 1;
 			printf("%d - ", i);
-			printLine(insects[i]);
+			printLine(insects[i], 5);
 		}
 	}
 	if (!addNum1) {
-		printf("Нету лучших!!\n");
+		printf("РќРµС‚Сѓ Р»СѓС‡С€РёС…!!\n");
 	}
 	if (!addNum2) {
-		printf("Нету худших!!\n");
+		printf("РќРµС‚Сѓ С…СѓРґС€РёС…!!\n");
 	}
-	printf("\nсредние зн-ия характеристик: ");
-	printLine(averLine);
-	printf("Посредственный жучара:\n");
+	printf("\nСЃСЂРµРґРЅРёРµ Р·РЅ-РёСЏ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє: ");
+	printLine(averLine, 5);
+	printf("РџРѕСЃСЂРµРґСЃС‚РІРµРЅРЅС‹Р№ Р¶СѓС‡Р°СЂР°:\n");
 	
 	addNum3 = 0;
 
@@ -154,13 +158,120 @@ int prog1() {
 		};
 	}
 	printf("%d - %f - ", addNum3, addfl1);
-	printLine(insects[addNum3]);
+	printLine(insects[addNum3], 5);
 	
 	return 1;
 }
 
 
+float* arrMemAllocRow(float*** arr, int m, int n, int k) {
+	float* newArrMem;
+	float** newArr;
+	int i = 0;
+	newArrMem = (float*)malloc(sizeof(float) * m * (n + 1));
+	if (newArrMem != NULL) {
+		while (i < k + 1) {
+			for (int j = 0; j < m; j++) newArrMem[i * m + j] = (*arr)[i][j];
+			i++;
+		}
+		for (int j = 0; j < m; j++) newArrMem[i * m + j] = 0;
+		while (i < n) {
+			for (int j = 0; j < m; j++) newArrMem[(i + 1) * m + j] = arr[0][i][j];
+			i++;
+		}
+		newArr = (float**)realloc(*arr, sizeof(float*) * (n + 1));
+		for (int i = 0; i < (n + 1); i++) newArr[i] = &newArrMem[i * m];
+		*arr = newArr;
+	}
+	return newArrMem;
+}
+
+
+float* arrMemAllocCol(float*** arr, int m, int n, int k) {
+	float* newArrMem;
+	float** newArr;
+	int j;
+	m++;
+	newArrMem = (float*)malloc(sizeof(float) * m * n);
+
+	if (newArrMem != NULL) {
+		for (int i = 0; i < n; i++) {
+			j = 0;
+			while (j < k + 1) {
+				newArrMem[i * m + j] = (*arr)[i][j];
+				j++;
+			}
+			newArrMem[i * m + j] = 0;
+			while (j < m) {
+				newArrMem[i * m + j + 1] = (*arr)[i][j];
+				j++;
+			}
+		}
+		for (int i = 0; i < n; i++) (*arr)[i] = &newArrMem[i * m];
+	}
+	return newArrMem;
+}
+
+
+
 int prog2() {
+	unsigned int seed;
+	int m, n;
+	int k;
+	float* memCh;
+	float* arrMem;
+	float** arr;
+
+	printf("Р—Р°РґР°С‡Р° РїРѕ РјРЅРѕРіРѕРјРµСЂРЅС‹Рј РјР°СЃСЃРёРІР°Рј 16:\n");
+	printf("РЎР»СѓС‡Р°Р№РЅС‹Р№ РіРµРЅРµСЂР°С‚РѕСЂ:\n");
+	scanf_s("%u", &seed);
+	srand(seed);
+	printf("Р Р°Р·РјРµСЂ РјР°С‚СЂРёС†С‹: (m n)\n");
+	scanf_s("%d %d", &m, &n);
+
+	arrMem = (float*)malloc(sizeof(float) * m * n);
+	arr = (float**)malloc(sizeof(float*) * n);
+	if (arrMem && arr) {
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				arrMem[i * m + j] = floorf((float)(rand()) / (float)RAND_MAX * 255);
+			}
+			arr[i] = &arrMem[i * m];
+		}
+		printf("РІР°С€ РјР°СЃСЃРёРІ:\n");
+		printArray(arr, n, m);
+		//printOrig(arrMem, n, m);
+
+		//printf("%f\n", arr[0][2]);
+		//printf("%f\n", arr[1][3]);
+
+
+		printf("Р’РІРµРґРёС‚Рµ РєСѓРґР° РІСЃС‚Р°РІРёС‚СЊ РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ: (-1 <= k <= %d)\n", n - 1);
+		scanf_s("%d", &k);
+		if (k < -1)	k = -1;
+		else if (k > n - 1) k = n - 1;
+
+		
+		memCh = arrMemAllocRow(&arr, m, n, k);
+		free(arrMem);
+		arrMem = memCh;
+		n++;
+
+		//printOrig(arrMem, n, m);
+		printArray(arr, n, m);
+
+		printf("Р’РІРµРґРёС‚Рµ РєСѓРґР° РІСЃС‚Р°РІРёС‚СЊ РЅРѕРІС‹Р№ СЃС‚РѕР»Р±РµС†: (-1 <= k <= %d)\n", m - 1);
+		scanf_s("%d", &k);
+		if (k < -1)	k = -1;
+		else if (k > m - 1) k = m - 1;
+		memCh = arrMemAllocCol(&arr, m, n, k);
+
+		free(arrMem);
+		arrMem = memCh;
+		m++;
+		printArray(arr, n, m);
+	}
+	
 	return 1;
 }
 
@@ -168,7 +279,7 @@ int prog2() {
 int main() {
 	setlocale(LC_ALL, "Russian");
 	int ans;
-	printf("Выберите задачу (1/2): ");
+	printf("Р’С‹Р±РµСЂРёС‚Рµ Р·Р°РґР°С‡Сѓ (1/2): ");
 	scanf_s("%d", &ans);
 	printf("\n");
 	if (ans < 2) return prog1();
