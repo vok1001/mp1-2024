@@ -45,6 +45,21 @@ double find_price_and_count_on_sklad(char user_title[20], double user_count)
     return -1;
 }
 
+int it_was_already_in_check(char user_title[20])
+{
+    int i;
+    int result = -1;
+    for (i = 0; i < 10; i++)
+    {
+        if ((strcmp(Check[i].title, user_title)) == 0)
+        {
+            result = i;
+            return result;
+        }
+    }
+    return result;
+}
+
 int main()
 {
     int s;
@@ -82,12 +97,18 @@ int main()
             {
                 user_count = flag_get_max;
             }
+            if (it_was_already_in_check(user_title) != -1)
+            {
+                Check[it_was_already_in_check(user_title)].count += user_count;
+                continue;
+            }
             strcpy(Check[i].title, user_title);
             Check[i].count = user_count; 
             Check[i].price = mega_help;
             i++;
         }
     }
+    printf("----------\n");
     for (j = 0; j < i; j++)
     {
         printf("%s...%0.3lf*%0.3lf...%0.3lf\n", Check[j].title, Check[j].count, Check[j].price, Check[j].count * Check[j].price);
