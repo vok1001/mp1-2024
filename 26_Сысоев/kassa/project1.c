@@ -16,24 +16,20 @@ typedef struct {
 void printReceipt(const Product* products, int productCount, FILE* output) {
     double total = 0.0;
 
-    if (output == stdout) {
-        wprintf(L"\nЧек:\n");
-    }
-
-    fwprintf(output, L"%-20ls %-10ls %-10ls %-10ls\n", L"Название", L"Цена", L"Кол-во", L"Сумма");
-    fwprintf(output, L"----------------------------------------------------\n");
+    fprintf(output, "\nReceipt:\n");
+    fprintf(output, "%-20s %-10s %-10s %-10s\n", "Product", "Price", "Qty", "Total");
+    fprintf(output, "----------------------------------------------------\n");
 
     for (int i = 0; i < productCount; i++) {
         double sum = products[i].price * products[i].quantity;
         total += sum;
-        fwprintf(output, L"%-20hs %-10.2f %-10.2f %-10.2f\n", products[i].name, products[i].price, products[i].quantity, sum);
+        fprintf(output, "%-20s %-10.2f %-10.2f %-10.2f\n", products[i].name, products[i].price, products[i].quantity, sum);
     }
 
-    fwprintf(output, L"----------------------------------------------------\n");
-    fwprintf(output, L"Итого: %.2f\n", total);
+    fprintf(output, "----------------------------------------------------\n");
+    fprintf(output, "Total: %.2f\n", total);
 }
 
-// Функция помогаюшая с проблемой регистра
 int caseInsensitiveCompare(const char* str1, const char* str2) {
 #ifdef _WIN32
     return _stricmp(str1, str2);
@@ -43,7 +39,7 @@ int caseInsensitiveCompare(const char* str1, const char* str2) {
 }
 
 int main() {
-    setlocale(LC_ALL, "ru_RU.UTF-8");
+    setlocale(LC_ALL, "C");
 
     Product products[MAX_PRODUCTS] = {
         {"Apple", 45.0, 0.0},
@@ -55,11 +51,11 @@ int main() {
     Product receipt[MAX_PRODUCTS];
     int receiptCount = 0;
 
-    wprintf(L"Введите товары и их количество (пустая строка завершает ввод):\n");
+    printf("Enter products and their quantity (empty input ends):\n");
 
     while (1) {
         char input[MAX_LINE_LENGTH];
-        wprintf(L"> ");
+        printf("> ");
         fgets(input, sizeof(input), stdin);
 
         if (input[0] == '\n') {
@@ -78,44 +74,55 @@ int main() {
         }
 
         if (parsed < 2 || quantity <= 0) {
-            wprintf(L"Некорректный ввод.\n");
+            printf("Invalid input.\n");
             continue;
         }
 
         int found = 0;
         for (int i = 0; i < 5; i++) {
             if (caseInsensitiveCompare(products[i].name, productName) == 0) {
-                receipt[receiptCount] = products[i];
-                receipt[receiptCount].quantity = quantity;
-                receiptCount++;
                 found = 1;
+
+                int alreadyInReceipt = 0;
+                for (int j = 0; j < receiptCount; j++) {
+                    if (caseInsensitiveCompare(receipt[j].name, productName) == 0) {
+                        receipt[j].quantity += quantity;
+                        alreadyInReceipt = 1;
+                        break;
+                    }
+                }
+
+                if (!alreadyInReceipt) {
+                    receipt[receiptCount] = products[i];
+                    receipt[receiptCount].quantity = quantity;
+                    receiptCount++;
+                }
+
                 break;
             }
         }
         if (!found) {
-            wprintf(L"Товар '%hs' не найден на складе.\n", productName);
+            printf("Product '%s' not found in stock.\n", productName);
         }
     }
 
-
-    wprintf(L"\nВыберите действие:\n");
-    wprintf(L"1. Печатать чек в консоль\n");
-    wprintf(L"2. Записать чек в файл\n");
+    printf("\nChoose an action:\n");
+    printf("1. Print receipt to console\n");
+    printf("2. Save receipt to file\n");
 
     int choice;
-    wscanf(L"%d", &choice);
+    scanf("%d", &choice);
 
     FILE* output;
     if (choice == 2) {
-
-        output = fopen("receipt.txt", "w, ccs=UTF-8");
+        output = fopen("receipt.txt", "w");
         if (output == NULL) {
-            wprintf(L"Ошибка при открытии файла.\n");
+            printf("Error opening file.\n");
             return 1;
         }
     }
     else {
-        output = stdout;  
+        output = stdout;
     }
 
     printReceipt(receipt, receiptCount, output);
