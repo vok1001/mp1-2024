@@ -63,9 +63,9 @@ int prog1() {
 	float* insectsMem;
 
 	float maxLine[5] = {-1, -1, -1, -1, -1};
-	int maxLineId[5];
+	int maxLineId[5] = {0};
 	float minLine[5] = { 256, 256, 256, 256, 256 };
-	int minLineId[5];
+	int minLineId[5] = { 0 };
 	float averLine[5] = {0, 0, 0, 0, 0};
 
 	float val;
@@ -146,20 +146,25 @@ int prog1() {
 	printf("Усреднённый жучара:\n");
 	
 	addNum3 = 0;
-
-	for (int j = 0; j < 5; j++) addfl1 += fabs(insects[0][j] - averLine[j]);
-
-	for (int i = 1; i < n; i++) {
-		addfl2 = 0;
-		for (int j = 0; j < 5; j++) addfl2 += fabs(insects[0][j] - averLine[j]);
-		if (addfl2 < addfl1) {
-			addfl1 = addfl2;
-			addNum3 = i;
-		};
-	}
-	printf("%d - %f - ", addNum3, addfl1);
-	printLine(insects[addNum3], 5);
 	
+	for (int j = 0; j < 5; j++) addfl1 += powf(fabs(insects[0][j] - averLine[j]), 2);
+	addfl2 = powf(addfl1, 0.5);
+	//printf("%lf\n", addfl2);
+	for (int i = 1; i < n; i++) {
+		addfl1 = 0;
+		for (int j = 0; j < 5; j++) addfl1 += powf(fabs(insects[i][j] - averLine[j]), 2);
+		addfl1 = powf(addfl1, 0.5);
+		//printf("%lf\n", addfl1);
+		if (addfl2 > addfl1) {
+			addNum3 = i;
+			addfl2 = addfl1;
+		}
+	}
+
+	
+	printf("%d - %f - ", addNum3, addfl2);
+	printLine(insects[addNum3], 5);
+	scanf_s("%d", &n);
 	return 1;
 }
 
@@ -207,7 +212,8 @@ float* arrMemAllocCol(float*** arr, int m, int n, int k) {
 				j++;
 			}
 		}
-		for (int i = 0; i < n; i++) (*arr)[i] = &newArrMem[i * m];
+		for (int i = 0; i < n; i++) 
+			(*arr)[i] = newArrMem + i * m;
 	}
 	return newArrMem;
 }
@@ -270,13 +276,15 @@ int prog2() {
 		arrMem = memCh;
 		m++;
 		printArray(arr, n, m);
+		free(arr);
 	}
-	
+	scanf_s("%d", &n);
 	return 1;
 }
 
 
 int main() {
+	int a;
 	setlocale(LC_ALL, "Russian");
 	system("chcp 1251");
 	int ans;
