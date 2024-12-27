@@ -46,13 +46,13 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 	char buf[100];
 	char lowerName[100];
 
-	Tovar* receipt = (Tovar*)malloc(sizeof(Tovar));
-	Tovar* chReceipt;
+	Tovar* receipt = (Tovar*)malloc(sizeof(Tovar) * 20);
 	int n = 0;
 	int bl = 0;
 	int in;
 
 	fileOpen(&cashF, "список", "data/Заказы/");
+	
 	fgets(buf, 100, cashF);
 	if (isdigit(buf[0])) {
 		sscanf_s(buf, "%lf %s", &(ch.count), &(ch.name), (unsigned)_countof(ch.name));
@@ -66,6 +66,7 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 	receipt[n] = ch;
 	n++;
 	while (!feof(cashF)) {
+
 		//fgets(buf, 256, f);
 
 		/*
@@ -84,8 +85,6 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 		for (int i = 0; ch.name[i]; i++) ch.name[i] = tolower(ch.name[i]);
 		bl = 0;
 		for (int j = 0; j < n; j++) {
-			//for (in = 0; receipt[j].name[in]; in++) lowerName[in] = tolower(receipt[j].name[in]);
-			//lowerName[++in] = "\0";
 			if (strcmp(ch.name, receipt[j].name) == 0) {
 				receipt[j].count += ch.count;
 				bl = 1;
@@ -94,12 +93,32 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 		}
 		if (!bl) {
 			n++;
-			chReceipt = realloc(receipt, sizeof(Tovar) * n);
-			receipt = chReceipt;
-			receipt[n] = ch;
+			//receipt = (Tovar*)realloc(receipt, sizeof(Tovar) * n);
+			//receipt = chReceipt;
+			receipt[n - 1] = ch;
 		}
 		
+
+		
+		
+
 		//printf(" % d % s % lf % lf\n", (ch.id), (ch.name), (ch.price), (ch.count));
+		}
+
+
+	// поиск id и цены по имени
+	for (int j = 0; j < *sklN; j++){
+		
+		for (in = 0; (*skl)[j].name[in]; in++) lowerName[in] = tolower((*skl)[j].name[in]);
+		for (int i = 0; i < n; i++) {
+			if (strcmp(receipt[i].name, lowerName) == 0) {
+				receipt[i].id = (*skl)[j].id;
+				receipt[i].price = (*skl)[j].price;
+				strcpy(receipt[i].name, (*skl)[j].name);
+				break;
+		}
+		
+		}
 	}
 
 	for (int i = 0; i < n; i++) {
