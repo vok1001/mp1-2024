@@ -40,6 +40,82 @@ void fileOpen(FILE** cashF, char obj[100], char dest[100]) {
 }
 
 
+void SaveCheck(Tovar** skl, int* sklN, Tovar* receipt, int n) {
+	FILE* file;
+	char dir[200] = "data/Чеки/";
+	char name[100];
+
+	Tovar receiptT;
+	Tovar* scladT;
+
+	//char* foundR[2000] = "";
+	char* ErrR[2000] = {"\0"};
+	char* bufT[400] = {"\0"};
+
+	double sm = 0;
+	double tsm = 0;
+
+	strcpy(ErrR, "");
+
+	printf("Как назвать чек?\n");
+	scanf_s("%s", &name, 100);
+	strcat(dir, name);
+	strcat(dir, ".txt");
+	file = fopen(dir, "r");
+	while (file != NULL) {
+		fclose(file);
+		strcpy(dir, "data/Чеки/");
+		printf("Файл с таким именем уже существует, выберите другой.\n");
+		scanf_s("%s", &name, 100);
+		strcat(dir, name);
+		strcat(dir, ".txt");
+		file = fopen(dir, "r");
+	}
+	file = fopen(dir, "w");
+	for (int i = 0; i < n; i++) {
+		receiptT = receipt[i];
+		if (receiptT.id == 0) {
+			//strcpy(bufT, "Нет на складе - %s\n");
+			sprintf(bufT, "Нет на складе - %s\n", receiptT.name);
+
+			strcat(ErrR, bufT);
+		}
+		else {
+			for (int j = 0; j < *sklN; j++) {
+				if ((*skl)[j].id == receiptT.id) {
+					scladT = &((*skl)[j]);
+					break;
+				}
+			}
+			if ((*scladT).count < receiptT.count) {
+				receiptT.count = (*scladT).count;
+				sprintf(bufT, "На складе закончился - %s\n", receiptT.name);
+				
+				//strcat(ErrR, "На складе закончился - ");
+				strcat(ErrR, bufT);
+			}
+			if (receiptT.count != 0) {
+				(*scladT).count -= receiptT.count;
+				tsm = receiptT.price * receiptT.count;
+				sm += tsm;
+				sprintf(bufT, "%s -- кол-во: %lf -- цена за ед: %lf -- всего: %lf\n", receiptT.name, receiptT.count, receiptT.price, tsm);
+				fwrite(bufT, 1, strlen(bufT), file);
+			}
+			
+		
+		}
+	}
+
+	fwrite("----------\n", 1, 11, file);
+	sprintf(bufT, "Итого -- %lf\n----------\nЗамечания к чеку:\n", sm);
+	fwrite(bufT, 1, strlen(bufT), file);
+	fwrite(ErrR, 1, strlen(ErrR), file);
+
+	printf("Чек сохранён в %s\n", dir);
+	fclose(file);
+}
+
+
 void ReadCheckList(Tovar** skl, int* sklN) {
 	FILE* cashF;
 	Tovar ch;
@@ -52,6 +128,9 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 	int in;
 
 	fileOpen(&cashF, "список", "data/Заказы/");
+
+	ch.id = 0;
+	ch.price = 0;
 	
 	fgets(buf, 100, cashF);
 	if (isdigit(buf[0])) {
@@ -75,6 +154,8 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 		ch.price = 15.5;
 		ch.count = 5.6;
 		*/
+
+		// Чтение строки
 		fgets(buf, 100, cashF);
 		if (isdigit(buf[0])) {
 			sscanf_s(buf, "%lf %s", &(ch.count), &(ch.name), (unsigned)_countof(ch.name));
@@ -82,7 +163,11 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 		else {
 			sscanf_s(buf, "%s %lf", &(ch.name), (unsigned)_countof(ch.name), &(ch.count));
 		}
+		
+		// Приведение букв в строчные
 		for (int i = 0; ch.name[i]; i++) ch.name[i] = tolower(ch.name[i]);
+
+		// Запись в чек
 		bl = 0;
 		for (int j = 0; j < n; j++) {
 			if (strcmp(ch.name, receipt[j].name) == 0) {
@@ -93,13 +178,8 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 		}
 		if (!bl) {
 			n++;
-			//receipt = (Tovar*)realloc(receipt, sizeof(Tovar) * n);
-			//receipt = chReceipt;
 			receipt[n - 1] = ch;
 		}
-		
-
-		
 		
 
 		//printf(" % d % s % lf % lf\n", (ch.id), (ch.name), (ch.price), (ch.count));
@@ -110,6 +190,7 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 	for (int j = 0; j < *sklN; j++){
 		
 		for (in = 0; (*skl)[j].name[in]; in++) lowerName[in] = tolower((*skl)[j].name[in]);
+		lowerName[in] = tolower((*skl)[j].name[in]);
 		for (int i = 0; i < n; i++) {
 			if (strcmp(receipt[i].name, lowerName) == 0) {
 				receipt[i].id = (*skl)[j].id;
@@ -121,9 +202,12 @@ void ReadCheckList(Tovar** skl, int* sklN) {
 		}
 	}
 
+	// Вывод
 	for (int i = 0; i < n; i++) {
 		printf(" %lf %s\n", (receipt[i].count), (receipt[i].name));
 	}
+	
+	SaveCheck(skl, sklN, receipt, n);
 
 	fclose(cashF);
 }
