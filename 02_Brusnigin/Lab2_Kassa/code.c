@@ -11,6 +11,8 @@ struct Product {
 	double amount;
 };
 
+typedef struct Product Product;
+
 struct Product Warehouse[] = {
 	{"99919", "Banana", 199.0, 25.0},
 	{"34583", "Apple", 149.99, 135.0},
@@ -42,15 +44,30 @@ int get_list(char List[][100]) {
 }
 
 
-void add_in_check(char code[5], char name[50], double kg_price, double amount, int i) {
-	strcpy(Check[i].code, code);
-	strcpy(Check[i].name,name);
-	Check[i].kg_price = kg_price*amount;
-	Check[i].amount = amount;
+int add_in_check(char code[5], char name[50], double kg_price, double amount, int i) {
+	int flag = -1;
+	
+	for (int j=0; j < sizeof(Check)/sizeof(Check[0]); j++)
+		if (strcmp(code, Check[j].code) == 0)
+			flag = j;
+	
+	if (flag != -1){
+		Check[flag].kg_price += kg_price*amount;
+		Check[flag].amount += amount;
+		return 0;
+	}
+		
+	else {
+		strcpy(Check[i].code, code);
+		strcpy(Check[i].name,name);
+		Check[i].kg_price = kg_price*amount;
+		Check[i].amount = amount;
+		return 1;
+	}
 }
 
 void print_check(int n) {
-	int i; double sum;
+	int i; double sum = 0.0;
 
 	FILE *file = fopen("check.txt", "w");
 	
@@ -89,8 +106,8 @@ int main() {
 	int items = sizeof(Warehouse)/sizeof(Warehouse[0]);
 
 	char* token;
-	char* name;
-	char* amount;
+	char* name = "";
+	char* amount = "";
 
 	int name_flag, amount_flag;
 
@@ -151,8 +168,7 @@ int main() {
 						printf("%.2f", Warehouse[j].kg_price);
 						printf("\n");
 					
-						add_in_check(Warehouse[j].code, Warehouse[j].name, Warehouse[j].kg_price, strtod(amount, NULL), buyed);
-						buyed++;	
+						buyed += add_in_check(Warehouse[j].code, Warehouse[j].name, Warehouse[j].kg_price, strtod(amount, NULL), buyed);	
 					}
 					
 					else {
