@@ -1,111 +1,173 @@
-#include <stdio.h>
+#include "stdio.h"
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-struct Tovar {
-    char* Nazvanie;
-    double Cena;
-    double kol_vo;
-};
-int ch(char* s) {
-    int len = 0;
-    while (s[len] != '\0') {
-        len++;
-    }
-    return len;
+#include "ctype.h"
+#include <math.h>
 
-}
-int ln(double n) {
-    int len = 3;
-    while (n > 1.0) {
-        n /= 10;
-        len++;
-    }
-    if (n > 0.01) {
-        return len;
-    }
-    else return len + 1;
-}
-typedef struct Tovar Tovar;
-Tovar newtovar(char* Nazvanie, double Cena, double kol_vo) {
-    Tovar tovar;
-    tovar.Nazvanie = Nazvanie;
-    tovar.Cena = Cena;
-    tovar.kol_vo = kol_vo;
-    return tovar;
-}
-Tovar sklad[] = {
-    {"potetoes", 15.0, 55.0},
-    {"cucumber" ,20.0, 50.0},
-    {"jus", 100.0 ,200.0},
-    {"apple", 15.0 ,300.0},
-    {"strawbery", 16.0 ,100.0},
-};
-Tovar search(Tovar* tovar) {
-    char* Nazvanie = tovar->Nazvanie;
-    double count = tovar->kol_vo;
-    
-    int i; Tovar result;
-    for (i = 0; i < 5; i++) {
-        if (strcmp(Nazvanie, sklad[i].Nazvanie) == 0) {
-            if (count <= sklad[i].kol_vo) {
-                result = newtovar(Nazvanie, sklad[i].Cena * count, count);
-            }
-            else {
+typedef struct shop
+{
+    int barcode;
+    char nazvanie[101];
+    double cena;
+    double kolvo;
+} shop;
 
-                result = newtovar(Nazvanie, sklad[i].Cena * (sklad[i].kol_vo), sklad[i].kol_vo);
-            }
-            break;
+typedef struct tovar
+{
+    double kolvo;
+    char nazvanie[100];
+
+} tovar;
+
+char sk[][100] = { "jus", "cucumber", "apple", "milk", "orange" };
+int size_cklad = sizeof(sk) / sizeof(sk[0]);
+
+shop* e;
+tovar* zap;
+
+
+
+int get_n() {
+    int n;
+    printf("Введите количество товаров\n");
+    scanf("%d", &n);
+    return n;
+}
+
+void set_shop(shop e[], int size) {
+
+    srand(100);
+    srand(time(NULL));
+    int i;
+    double pri, cou;
+    for (i = 0; i < size; i++) {
+        pri = rand() % 100;
+        cou = rand() % 100;
+        strcpy(e[i].nazvanie, sk[i]);
+        e[i].cena = pri;
+        e[i].kolvo = cou;
+    }
+}
+
+void parse_str(char str[], int position, tovar a[]) {
+    double kolvo;
+    char nazvanie[100];
+    char sep[10] = " ,.!;";
+    char* istr;
+    istr = strtok(str, sep);
+    while (istr != NULL)
+    {
+        if (isdigit(*istr)) {
+            kolvo = atol(istr);
         }
         else {
-            result = newtovar(Nazvanie, 0.0, 0.0);
-
+            strcpy(nazvanie, istr);
         }
+        istr = strtok(NULL, sep);
     }
-    return result;
+    strcpy(a[position - 1].nazvanie, nazvanie);
+    a[position - 1].kolvo = kolvo;
 }
 
-int main() {
-    int kol[10];
-    int i = 0, j = 0;
-    int n;
-    char buf[256]; int count = 0; char c[10][100];
-    double summa = 0.0;
-    Tovar spisok[1000];
-    Tovar chek[1000];
-    printf("Vvedite dliny spiska\n");
-    scanf("%d", &n);
-    printf("Vvedite nazvanie(kak na sklade) and  kol-vo\n");
-    for (i = 0; i < n + 1; i++) {
-        fgets(buf, 256, stdin);
-        if (sscanf(buf, "%d %s", &kol[i], c[i]) != 2) {
-            sscanf(buf, "%s %d", c[i], &kol[i]);
-        }
-        spisok[i].Nazvanie = strdup(c[i]);
-        spisok[i].kol_vo = kol[i];
-        for (j = 0; j < sizeof(spisok[i].Nazvanie); j++) {
-            spisok[i].Nazvanie[j] = tolower(spisok[i].Nazvanie[j]);
-        }
-        chek[i] = search(&spisok[i]);
+void print_struct(tovar e[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%s %lf\n", e[i].nazvanie, e[i].kolvo);
     }
-    printf("\nVash chek:\n");
-     printf("--------------------------------------\n");
-    printf("Nazvanie         cena         kol_vo\n");
-    for (i = 0; i < n + 1; i++) {
-        if (chek[i].kol_vo > 0.0) {
-            printf("%s", spisok[i].Nazvanie);
-            for (j = 0; j < 15 - ch(chek[i].Nazvanie); j++) {
-                printf(" ");
-            }
-            printf("%.2lf", chek[i].Cena);
-            for (j = 0; j < 15 - ln(chek[i].Cena); j++) {
-                printf(" ");
-            }
-            printf("%.2lf\n", chek[i].kol_vo);
-            summa += chek[i].Cena;
-        }
+}
 
+int chek(char* str) {
+
+    for (int i = 0; i < size_cklad; i++) {
+        if (!strcmp(sk[i], str)) {
+            return 1;
+        }
     }
-    printf("--------------------------------------\n");
-    printf("Summa tovarov - %.2lf", summa);
+    return 0;
+}
+
+int get_id_tovar(char* str) {
+    for (int i = 0; i < size_cklad; i++) {
+        if (!strcmp(str, e[i].nazvanie)) {
+            return e[i].barcode;
+        }
+    }
+    return -1;
+}
+
+int check_tmp(tovar a[], int n, char* prod) {
+    for (int i = 0; i < n; i++) {
+        if (!strcmp(a[i].nazvanie, prod)) {
+            return i;
+        }
+    }
+    return -1;
+
+}
+
+void itog(tovar all[], int size) {
+    double final = 0.0;
+    zap = (tovar*)malloc(sizeof(tovar) * size_cklad);
+    int n = 0;
+    for (int i = 0; i < size; i++) {
+        if (chek(all[i].nazvanie)) {
+            int id = check_tmp(zap, n, all[i].nazvanie);
+            if (id != -1) {
+                zap[id].kolvo += all[i].kolvo;
+            }
+            else {
+                strcpy(zap[n].nazvanie, all[i].nazvanie);
+                zap[n].kolvo = all[i].kolvo;
+                n++;
+            }
+        }
+    }
+    printf("Nazvanie     cena     itog\n");
+    for (int i = 0; i < size; i++) {
+        if (chek(zap[i].nazvanie)) {
+            int id = get_id_tovar(zap[i].nazvanie);
+            if (e[id - 1].kolvo >= zap[i].kolvo) {
+                e[id - 1].kolvo -= zap[i].kolvo;
+                printf("%s     %.2lf*%.2lf     %.2lf\n", e[id - 1].nazvanie, zap[i].kolvo, e[id - 1].cena, e[id - 1].cena * zap[i].kolvo);
+                final += e[id - 1].cena * zap[i].kolvo;
+            }
+            else if (e[id - 1].kolvo > 0) {
+                printf("%s     %.2lf*%.2lf     %.2lf\n", e[id - 1].nazvanie, e[id - 1].kolvo, e[id - 1].cena, e[id - 1].cena * e[id - 1].kolvo);
+                final += e[id - 1].cena * e[id - 1].kolvo;
+                e[id - 1].kolvo = 0.0;
+            }
+        }
+    }
+
+    printf("Itogova summa:         %.2lf\n", final);
+}
+
+
+void print_cklad(shop e[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf(" %s %.2lf  %.2lf\n", e[i].nazvanie, e[i].kolvo, e[i].cena);
+    }
+}
+
+
+
+int main() {
+    e = (shop*)malloc(sizeof(shop) * size_cklad);
+    set_shop(e, size_cklad);
+    print_cklad(e, size_cklad);
+    printf("-----------------------------\n");
+    int n;
+    printf("Vvedite kolvo tovarov\n");
+    scanf("%d", &n);
+    printf("Vvedite nazvanie(kak na sklade)     and     kolvo tovara\n");
+    tovar* a;
+    a = (tovar*)malloc(sizeof(tovar) * n);
+    for (int i = 0; i < n + 1; i++) {
+        char test[100];
+        gets(test);
+        parse_str(test, i, a);
+    }
+    itog(a, n);
+
+    return 0;
+
 }
