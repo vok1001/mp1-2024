@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -13,15 +13,15 @@ class Weighter {
 private:
 	void KilToPound(double weight) {
 		double p = weight / 453.59;
-		cout << "\nÈñõîäíûé âåñ â êèëîãðàììàõ: " << weight << "\nÏîëó÷åííûé âåñ â ôóíòàõ: " << p;
+		cout << "\nÐ˜ÑÑ…Ð¾Ð´Ð½Ñ‹Ð¹ Ð²ÐµÑ Ð² ÐºÐ¸Ð»Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°Ñ…: " << weight << "\nÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ñ‹Ð¹ Ð²ÐµÑ Ð² Ñ„ÑƒÐ½Ñ‚Ð°Ñ…: " << p;
 	};
 	void KilToOunce(double weight) {
 		double o = weight / 28.35;
-		cout << "\nÈñõîäíûé âåñ â êèëîãðàììàõ: " << weight << "\nÏîëó÷åííûé âåñ â óíöèÿõ: " << o;
+		cout << "\nÐ˜ÑÑ…Ð¾Ð´Ð½Ñ‹Ð¹ Ð²ÐµÑ Ð² ÐºÐ¸Ð»Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°Ñ…: " << weight << "\nÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ñ‹Ð¹ Ð²ÐµÑ Ð² ÑƒÐ½Ñ†Ð¸ÑÑ…: " << o;
 	};
 	void KilToDrachma(double weight) {
 		double d = weight / 3.89;
-		cout << "\nÈñõîäíûé âåñ â êèëîãðàììàõ: " << weight << "\nÏîëó÷åííûé âåñ â äðàõìàõ: " << d;
+		cout << "\nÐ˜ÑÑ…Ð¾Ð´Ð½Ñ‹Ð¹ Ð²ÐµÑ Ð² ÐºÐ¸Ð»Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°Ñ…: " << weight << "\nÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ñ‹Ð¹ Ð²ÐµÑ Ð² Ð´Ñ€Ð°Ñ…Ð¼Ð°Ñ…: " << d;
 	};
 
 public:
