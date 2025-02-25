@@ -62,8 +62,8 @@ void set_shop(shop entity[], int size){
     int i, id_barcode = 1;
     double pri, cou;
     for (i = 0; i < size; i++){
-        pri = rand() % 100;
-        cou = rand() % 100;
+        pri = rand() % 100 + 1;
+        cou = rand() % 100 + 1;
         strcpy(entity[i].name, warehouse[i]);
         entity[i].price = pri;
         entity[i].count = cou;
