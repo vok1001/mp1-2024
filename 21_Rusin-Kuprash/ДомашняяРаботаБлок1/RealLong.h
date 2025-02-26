@@ -16,8 +16,18 @@ public:
 	LongestInt operator +(LongestInt other) {
 		LongestInt v;
 		if (isneg == other.isneg) {
-			v
-			return 
+			v.pos = pos + other.pos;
 		}
+		else {
+			if (other.pos > pos) {
+				v.pos = other.pos - pos;
+				v.isneg = other.isneg;
+			}
+			else {
+				v.pos = pos - other.pos;
+				v.isneg = isneg;
+			}
+		}
+		return v;
 	}
 };
