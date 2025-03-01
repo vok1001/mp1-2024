@@ -2,11 +2,11 @@
 using namespace std;
 
 matrix::matrix(int r, int c, int** id) {
-	r = n;
-	c = m;
-	id = arr;
+	n = r;
+	m = c;
+	arr = id;
 	//id = new int* [r];
-	id = new int* [r];
+	//id = new int* [r];
 	for (int i = 0; i < r; i++) {
 		id[i] =new int[c];
 	}
