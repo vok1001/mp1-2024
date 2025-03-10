@@ -7,6 +7,7 @@ matrix::matrix(int r, int c) {
 	arr = new int* [r];
 	for (int i = 0; i < r; i++) {
 		arr[i] =new int[c];
+		for (int j = 0; j < c; j++) arr[i][j] = 0;
 	}
 }
 
@@ -15,7 +16,8 @@ matrix::matrix(const matrix& m2)
 }
 
 // !! bug
-void matrix::setel(int r, int c, int x) const{
+void matrix::setel(int r, int c, int x){
+	//arr[1][1] = 3;
 	arr[r][c] = x;
 }
 
@@ -32,8 +34,8 @@ void matrix::resize(int r, int c){
 	arr = m.arr;
 }
 
-// no fix
-matrix matrix::sumx(matrix& m2) {
+// good
+matrix matrix::sumx(const matrix& m2) const{
 	matrix res(n, m);
 	if (n != m2.n || m != m2.m) {
 		res.arr = nullptr;
@@ -50,23 +52,21 @@ matrix matrix::sumx(matrix& m2) {
 	}
 }
 
-// !!!! bug
-// matrix res = x.mply(x1);
-matrix& matrix::mply(const matrix& m2) {
-	matrix res(n, n);
 
+matrix matrix::mply(const matrix& m2) {
+	matrix res(n, n);
 	if (m != m2.n) {
 		res.arr = nullptr;
 		return res;
 	}
 	else {
 		for (int i = 0; i < n; i++) {
-			res.arr[i] = new int[m];
 			for (int j = 0; j < n; j++) {
-				res.arr[i][j] = 0;
+				int t = 0;
 				for (int k = 0; k < m; k++) {
-					res.arr[i][j] += (arr[n][k] * m2.arr[k][j]);
+					t+= (arr[i][k] * m2.arr[k][j]);
 				}
+				res.arr[i][j] = t;
 			}
 		}
 		
@@ -110,13 +110,13 @@ istream& operator>>(istream& f, const matrix& v)
 	return f;
 }
 
-//HELPA
 
+// good!
 matrix& matrix::operator=(const matrix& m2) {
 	if (n != m2.n  || m != m2.m) {
 		if (arr != nullptr) delete[]arr;
 		arr = new int* [m2.n];
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < m2.n; i++) {
 			arr[i] = new int[m2.m];
 			for (int j = 0; j < m2.m; j++) arr[i][j] = m2.arr[i][j];
 		}
@@ -128,11 +128,48 @@ matrix& matrix::operator=(const matrix& m2) {
 			}
 		}
 	}
+	n = m2.n;
+	m = m2.m;
 	return *this;
 }
 
-//matrix matrix::operator+(const matrix& m2) const
-//{
-//	return matrix();
-//}
+
+//good
+matrix matrix::operator+(const matrix& m2) const{
+	matrix res(n, m);
+	if (n != m2.n || m != m2.m) {
+		res.arr = nullptr;
+		return res;
+	}
+	else {
+		for (int i = 0; i < n; i++) {
+			res.arr[i] = new int[m];
+			for (int j = 0; j < m; j++) {
+				res.arr[i][j] = arr[i][j] + m2.arr[i][j];
+			}
+		}
+		return res;
+	}
+}
+
+matrix matrix::operator*(const matrix& m2){
+	matrix res(n, n);
+	if (m != m2.n) {
+		res.arr = nullptr;
+		return res;
+	}
+	else {
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				int t = 0;
+				for (int k = 0; k < m; k++) {
+					t += (arr[i][k] * m2.arr[k][j]);
+				}
+				res.arr[i][j] = t;
+			}
+		}
+
+	}
+	return res;
+}
 
