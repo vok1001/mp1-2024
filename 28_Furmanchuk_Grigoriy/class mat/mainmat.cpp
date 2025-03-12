@@ -15,16 +15,22 @@ void main() {
 		}
 	}*/
 	cin >> x;
-	matrix x1(m,n);
-	cin >> x1;
-	matrix res = x * x1;
+	matrix x1(x);
+	//matrix x1(n,m);
+	//cin >> x1;
+	//matrix res = x * x1;
+	//matrix res = x + x1;
 	 
-	//int re = x.getel(1, 1);
+	x = x * 7;
+	x += x1;
 	//x.setel(1, 1, 3);
 
 	//cout << endl << x;
 	//cout << x(1, 1);
 	//cout << x << endl << endl << x1 << endl << endl << res;
-	cout << endl << res;
+	
+	//cout << endl << res;
+
+	cout << x;
 
 }

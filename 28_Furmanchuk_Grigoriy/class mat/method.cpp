@@ -13,11 +13,19 @@ matrix::matrix(int r, int c) {
 
 matrix::matrix(const matrix& m2)
 {
+	n = m2.n;
+	m = m2.m;
+	arr = new int* [n];
+	for (int i = 0; i < n; i++) {
+		arr[i] = new int[m];
+		for (int j = 0; j < m; j++) {
+			arr[i][j] = m2(i, j);
+		}
+	}
+
 }
 
-// !! bug
 void matrix::setel(int r, int c, int x){
-	//arr[1][1] = 3;
 	arr[r][c] = x;
 }
 
@@ -34,7 +42,6 @@ void matrix::resize(int r, int c){
 	arr = m.arr;
 }
 
-// good
 matrix matrix::sumx(const matrix& m2) const{
 	matrix res(n, m);
 	if (n != m2.n || m != m2.m) {
@@ -111,6 +118,7 @@ istream& operator>>(istream& f, const matrix& v)
 }
 
 
+
 // good!
 matrix& matrix::operator=(const matrix& m2) {
 	if (n != m2.n  || m != m2.m) {
@@ -172,4 +180,48 @@ matrix matrix::operator*(const matrix& m2){
 	}
 	return res;
 }
+
+bool matrix::operator==(const matrix& m2)const {
+	if (n == m2.n && m == m2.m) return true;
+	return false;
+}
+
+bool matrix::operator>(const matrix& m2) const {
+	if (n * m > m2.n * m2.m) return true;
+	return false;
+}
+
+bool matrix::operator<(const matrix& m2) const {
+	if (n * m < m2.n * m2.m) return true;
+	return false;
+}
+
+matrix matrix::operator*(int x){
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			arr[i][j] *= x;
+		}
+	}
+	return *this; 
+}
+
+matrix operator*(int x, matrix& v){
+	matrix res(v);
+	for (int i = 0; i < v.n; i++) {
+		for (int j = 0; j < v.m; j++) res(i, j) = res(i,j) * x;
+	}
+	return res;
+}
+
+matrix& matrix::operator+=(const matrix& m2) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			arr[i][j] += m2(i, j);
+		}
+	}
+	return *this;
+}
+
+
+
 
