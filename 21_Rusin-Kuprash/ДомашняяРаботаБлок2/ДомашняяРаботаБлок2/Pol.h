@@ -44,9 +44,6 @@ public:
 
 			return *this; }
 
-		cout << "surprise!!!";
-		fflush(stdout);
-
 		deg = other.deg;
 		float* nCoef = (float*)realloc(coef, sizeof(float) * deg);
 		if (nCoef != NULL) {
