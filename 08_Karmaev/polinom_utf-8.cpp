@@ -13,7 +13,7 @@ private:
 public:
 	Polinom(int s) {
 		if (s > 100 || s < 0) {
-			throw invalid_argument("Íåïîäõîäÿùàÿ ñòåïåíü");
+			throw invalid_argument("ĞĞµĞ¿Ğ¾Ğ´Ñ…Ğ¾Ğ´ÑÑ‰Ğ°Ñ ÑÑ‚ĞµĞ¿ĞµĞ½ÑŒ");
 		}
 		coeff = new double[s + 1];
 		for (int i = 0; i < s + 1; i++) {
@@ -206,7 +206,7 @@ public:
 	}
 	Polinom operator/(double scalar) const {
 		if (scalar == 0) {
-			throw invalid_argument("Äåëåíèå íà íîëü");
+			throw invalid_argument("Ğ”ĞµĞ»ĞµĞ½Ğ¸Ğµ Ğ½Ğ° Ğ½Ğ¾Ğ»ÑŒ");
 		}
 		Polinom res(degree - 1);
 		for (int i = 0; i < degree; i++) {
@@ -228,59 +228,59 @@ int main() {
 	Polinom p2(2); 
 
 	
-	cout << "Ââåäèòå êîıôôèöèåíòû äëÿ ïîëèíîìà p1 (3 ÷èñëà): ";
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚Ñ‹ Ğ´Ğ»Ñ Ğ¿Ğ¾Ğ»Ğ¸Ğ½Ğ¾Ğ¼Ğ° p1 (3 Ñ‡Ğ¸ÑĞ»Ğ°): ";
 	cin >> p1;
-	cout << "Ââåäèòå êîıôôèöèåíòû äëÿ ïîëèíîìà p2 (3 ÷èñëà): ";
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚Ñ‹ Ğ´Ğ»Ñ Ğ¿Ğ¾Ğ»Ğ¸Ğ½Ğ¾Ğ¼Ğ° p2 (3 Ñ‡Ğ¸ÑĞ»Ğ°): ";
 	cin >> p2;
 
 	
-	cout << "Ïîëèíîì p1: " << p1 << endl;
-	cout << "Ïîëèíîì p2: " << p2 << endl;
+	cout << "ĞŸĞ¾Ğ»Ğ¸Ğ½Ğ¾Ğ¼ p1: " << p1 << endl;
+	cout << "ĞŸĞ¾Ğ»Ğ¸Ğ½Ğ¾Ğ¼ p2: " << p2 << endl;
 
 	
 	Polinom p3 = p1 + p2;
-	cout << "Ñóììà p1 è p2: " << p3 << endl;
+	cout << "Ğ¡ÑƒĞ¼Ğ¼Ğ° p1 Ğ¸ p2: " << p3 << endl;
 
 	
 	Polinom p4 = p1 - p2;
-	cout << "Ğàçíîñòü p1 è p2: " << p4 << endl;
+	cout << "Ğ Ğ°Ğ·Ğ½Ğ¾ÑÑ‚ÑŒ p1 Ğ¸ p2: " << p4 << endl;
 
 	
 	Polinom p5 = p1 * p2;
-	cout << "Ïğîèçâåäåíèå p1 è p2: " << p5 << endl;
+	cout << "ĞŸÑ€Ğ¾Ğ¸Ğ·Ğ²ĞµĞ´ĞµĞ½Ğ¸Ğµ p1 Ğ¸ p2: " << p5 << endl;
 
 	
 	Polinom p6 = p1 / 0.5;
-	cout << "Ïîëèíîì p1 óìíîæåííûé íà 2: " << p6 << endl;
+	cout << "ĞŸĞ¾Ğ»Ğ¸Ğ½Ğ¾Ğ¼ p1 ÑƒĞ¼Ğ½Ğ¾Ğ¶ĞµĞ½Ğ½Ñ‹Ğ¹ Ğ½Ğ° 2: " << p6 << endl;
 
 	
 	Polinom p7 = p1 / 2.0;
-	cout << "Ïîëèíîì p1 äåëåííûé íà 2: " << p7 << endl;
+	cout << "ĞŸĞ¾Ğ»Ğ¸Ğ½Ğ¾Ğ¼ p1 Ğ´ĞµĞ»ĞµĞ½Ğ½Ñ‹Ğ¹ Ğ½Ğ° 2: " << p7 << endl;
 
 	
 	Polinom p8 = p1.proizv();
-	cout << "Ïğîèçâîäíàÿ p1: " << p8 << endl;
+	cout << "ĞŸÑ€Ğ¾Ğ¸Ğ·Ğ²Ğ¾Ğ´Ğ½Ğ°Ñ p1: " << p8 << endl;
 
 	
 	double x = 2.0;
-	cout << "Çíà÷åíèå p1 â òî÷êå " << x << ": " << p1.inPoint(x) << endl;
+	cout << "Ğ—Ğ½Ğ°Ñ‡ĞµĞ½Ğ¸Ğµ p1 Ğ² Ñ‚Ğ¾Ñ‡ĞºĞµ " << x << ": " << p1.inPoint(x) << endl;
 
 	
 	if (p1 == p2) {
-		cout << "p1 è p2 ğàâíû" << endl;
+		cout << "p1 Ğ¸ p2 Ñ€Ğ°Ğ²Ğ½Ñ‹" << endl;
 	}
 	else {
-		cout << "p1 è p2 íå ğàâíû" << endl;
+		cout << "p1 Ğ¸ p2 Ğ½Ğµ Ñ€Ğ°Ğ²Ğ½Ñ‹" << endl;
 	}
 
 	if (p1 > p2) {
-		cout << "p1 áîëüøå p2" << endl;
+		cout << "p1 Ğ±Ğ¾Ğ»ÑŒÑˆĞµ p2" << endl;
 	}
 	else {
-		cout << "p1 íå áîëüøå p2" << endl;
+		cout << "p1 Ğ½Ğµ Ğ±Ğ¾Ğ»ÑŒÑˆĞµ p2" << endl;
 	}
 
-	cout << "Êîıôôèöèåíò ïğè x^1 â p1: " << p1[1] << endl;
+	cout << "ĞšĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ Ğ¿Ñ€Ğ¸ x^1 Ğ² p1: " << p1[1] << endl;
 
 	return 1;
 }
