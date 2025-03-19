@@ -1,6 +1,5 @@
 #pragma once
-//#include <stdio.h>
-//#include <stdlib.h>
+#include <exception>
 #include <iostream>
 #include <memory>
 
@@ -23,10 +22,10 @@ private:
 public:
 	Pol(int deg_ = 0, float stValue = 1.f) {
 		if (deg_ > 100) {
-			deg_ = 100;
+			throw std::invalid_argument("No more than 100 degree. - Polynom class");
 		}
 		else if (deg_ < 0) {
-			deg_ = 0;
+			throw std::invalid_argument("No less than 0 degree. - Polynom class");
 		}
 		deg = deg_;
 		coef = new float[deg + 1];
@@ -38,6 +37,9 @@ public:
 		if (coef != NULL) {
 			memcpy(coef, other.coef, sizeof(float) * (deg + 1));
 		}
+		else {
+			throw std::runtime_error("We are too poor on memory;((");
+		}
 	}
 	~Pol() {
 		delete[] coef;
@@ -46,8 +48,7 @@ public:
 	Pol& operator=(const Pol& other) {
 		if (this == &other) { 
 
-			cout << "surprise!!!";
-			fflush(stdout);
+			cout << "Same function!?";
 
 			return *this; }
 
@@ -58,7 +59,7 @@ public:
 			memcpy(coef, other.coef, sizeof(float) * (deg + 1));
 		}
 		else {
-			cout << "Error!!! in = func!";
+			throw std::runtime_error("We are too poor on memory;((");
 		}
 		return *this;
 	}
@@ -86,7 +87,10 @@ public:
 			delete[] coef;
 			coef = nCoef;
 			deg = nDeg;
-			}		
+		}
+		else {
+			throw std::runtime_error("We are too poor on memory((");
+		}
 	}
 
 
@@ -95,15 +99,18 @@ public:
 		if (coefNum < deg + 1) {
 			coef[coefNum] = val;
 		}
+		else {
+			throw std::invalid_argument("Polynom's degree is smaller than the coefNum");
+		}
 	}
 
 
-	float getCoef(int coefNum) { // 4) узнать значение коэффициента	
+	float operator[](int coefNum) { // 4) узнать значение коэффициента	
 		//coefNum += 1;
 		if (coefNum < deg + 1) {
 			return coef[coefNum];
 		}
-		return 0;
+		throw std::invalid_argument("Polynom's degree is smaller than the coefNum");
 	}
 
 
@@ -112,7 +119,7 @@ public:
 	}
 
 
-	float Value(float x) { // 5) значение полинома в точке x
+	float operator()(float x) { // 5) значение полинома в точке x
 		float val = coef[0];
 		for (int i = 1; i < deg + 1; i++) {
 			val += coef[i] * powf(x, (float)i);
@@ -122,6 +129,9 @@ public:
 
 
 	float DerValue(float x) { // 6) значение производной полинома в точке x
+		if (deg == 0) {
+			return 0;
+		}
 		float val = coef[1];
 		for (int i = 2; i < deg + 1; i++) {
 			val += coef[i] * i * powf(x, (float)(i - 1));
@@ -157,11 +167,21 @@ public:
 		return k;
 	}
 
+
+	Pol operator-() {
+		Pol k = *this;
+		for (int i = 0; i < deg + 1; i++) {
+			k.coef[i] *= -1;
+		}
+		return k;
+	}
+
+
 	Pol operator-(const Pol& other) {
 		Pol k;
 		if (other.deg > deg) {
 			k = other;
-			for (int i = deg + 1; i < other.deg + 1; i++) {
+			for (int i = 0; i < other.deg + 1; i++) {
 				k.coef[i] *= -1;
 			}
 			for (int i = 0; i < deg + 1; i++) {
@@ -172,7 +192,7 @@ public:
 		else {
 			k = *this;
 			for (int i = 0; i < other.deg + 1; i++) {
-				cout << i << " ";
+				//cout << i << " ";
 				k.coef[i] -= other.coef[i];
 			}
 			cout << endl;
@@ -190,4 +210,16 @@ public:
 		}
 		return k;
 	}
+	
+	Pol operator/(const float a) {
+		if (a == 0) {
+			throw std::invalid_argument("division by 0;");
+		}
+		Pol k = *this;
+		for (int i = 0; i < deg + 1; i++) {
+			k.coef[i] /= a;
+		}
+		return k;
+	}
+	
 };
