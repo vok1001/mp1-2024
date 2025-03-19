@@ -54,11 +54,12 @@ public:
 		deg = other.deg;
 		float* nCoef = (float*)realloc(coef, sizeof(float) * (deg + 1));
 		if (nCoef != NULL) {
-			delete[] coef;
 			coef = nCoef;
+			memcpy(coef, other.coef, sizeof(float) * (deg + 1));
 		}
-		memcpy(coef, other.coef, sizeof(float) * (deg + 1));
-
+		else {
+			cout << "Error!!! in = func!";
+		}
 		return *this;
 	}
 
@@ -160,18 +161,21 @@ public:
 		Pol k;
 		if (other.deg > deg) {
 			k = other;
-			for (int i = 0; i < deg + 1; i++) {
-				k.coef[i] = coef[i] - k.coef[i];
-			}
-			for (int i = deg + 1; i < deg + other.deg + 2; i++) {
+			for (int i = deg + 1; i < other.deg + 1; i++) {
 				k.coef[i] *= -1;
 			}
+			for (int i = 0; i < deg + 1; i++) {
+				k.coef[i] += coef[i];
+			}
+			
 		}
 		else {
 			k = *this;
 			for (int i = 0; i < other.deg + 1; i++) {
+				cout << i << " ";
 				k.coef[i] -= other.coef[i];
 			}
+			cout << endl;
 		}
 		return k;
 	}

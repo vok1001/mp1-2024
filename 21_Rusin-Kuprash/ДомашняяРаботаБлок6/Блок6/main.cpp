@@ -1,4 +1,8 @@
-#include <conio.h>
+#include <iostream>
+#include "Windows.h"
+
+
+using namespace std;
 
 
 class Block {
@@ -24,25 +28,27 @@ public:
 
 
 int main() {
+    static int deltaTime = 300;
+
     Map map = Map();
-    //ƒа, € скопировал этот код с overflow, зато он работает.
-    if (_getch() == '\033') { // if the first value is esc
-        _getch(); // skip the [
-        switch (_getch()) { // the real value
-        case 'A':
-            // code for arrow up
-            break;
-        case 'B':
-            // code for arrow down
-            break;
-        case 'C':
-            // code for arrow right
-            break;
-        case 'D':
-            // code for arrow left
-            break;
+    while (!(GetKeyState(VK_ESCAPE) & 0x8000)) {
+        if (GetKeyState(VK_LEFT) & 0x8000) {
+            cout << "left" << endl;
         }
+        else if (GetKeyState(VK_RIGHT) & 0x8000) {
+            cout << "right" << endl;
+        }
+        else if (GetKeyState(VK_UP) & 0x8000) {
+            cout << "up" << endl;
+        }
+        else if (GetKeyState(VK_DOWN) & 0x8000) {
+            cout << "left" << endl;
+        }
+        Sleep(300);
+        system("cls");
     }
+    
+    
 
 
 	return 1;
