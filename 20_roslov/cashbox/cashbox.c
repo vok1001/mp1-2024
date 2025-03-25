@@ -148,29 +148,17 @@ void print_check(product all[], int size){
             int id = get_id_product(notes[i].name);
             if (entity[id - 1].count >= notes[i].count){
                 entity[id - 1].count -= notes[i].count;
-                printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, notes[i].count, entity[id - 1].price, entity[id - 1].price * notes[i].count);
+                printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, 
+                notes[i].count, entity[id - 1].price, entity[id - 1].price * notes[i].count);
                 final += entity[id - 1].price * notes[i].count;
             }else if(entity[id - 1].count > 0){
-                printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, entity[id - 1].count, entity[id - 1].price, entity[id - 1].price * entity[id - 1].count);
+                printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, entity[id - 1].count, 
+                entity[id - 1].price, entity[id - 1].price * entity[id - 1].count);
                 final += entity[id - 1].price * entity[id - 1].count;
                 entity[id - 1].count = 0.0;
             }
         }
     }
-    // for (int i = 0; i < size; i++){
-    //     if (check_product(all[i].name)){
-    //         int id = get_id_product(all[i].name);
-    //         if (entity[id - 1].count >= all[i].count){
-    //             entity[id - 1].count -= all[i].count;
-    //             printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, all[i].count, entity[id - 1].price, entity[id - 1].price * all[i].count);
-    //             final += entity[id - 1].price * all[i].count;
-    //         }else if(entity[id - 1].count > 0){
-    //             printf("%s.....%.2lf*%.2lf.....%.2lf\n", entity[id - 1].name, entity[id - 1].count, entity[id - 1].price, entity[id - 1].price * entity[id - 1].count);
-    //             final += entity[id - 1].price * entity[id - 1].count;
-    //             entity[id - 1].count = 0.0;
-    //         }
-    //     }
-    // }
     printf("Сумма....................%.2lf\n", final);
 }
 
@@ -220,16 +208,3 @@ int main(){
     return 0;
     
 }
-
-
-/*
-2 банана
-Помидоры 2,5
-три киви
-*/
-
-/*
-5 картошка
-6 яблоко
-2 киви 
-*/
