@@ -63,20 +63,17 @@ void proverka(int a[], int n) {
 }
 void Selection_sort(int a[], int n) {
 	clock_t start = clock();
-	long long iteration = 0; 
 	for (int i = 0; i < n - 1; i++) {
 		int min_idx = i;
 		for (int j = i + 1; j < n; j++) {
 			if (a[j] < a[min_idx]) {
 				min_idx = j;
-				iteration++;
 			}
 		}
 		if (min_idx != i) {
 			int t = a[i];
 			a[i] = a[min_idx];
 			a[min_idx] = t;
-			iteration++;
 		}
 	}
 	clock_t end = clock();
@@ -86,7 +83,6 @@ void Selection_sort(int a[], int n) {
 	}
 
 	printf("Time spent your programm: %f \n", time_spent);
-	printf("kolichestvo iteracii: %d \n", iteration);
 
 	printf("\n");
 }
@@ -97,7 +93,6 @@ void Buble_sort(int a[], int n) {
 	int l = 1;
 	int r = n - 1;
 	int k;
-	long long iteration = 0; 
 	int f = 1;
 	clock_t start = clock();
 	while (l < r and f == 1) {
@@ -108,7 +103,6 @@ void Buble_sort(int a[], int n) {
 				a[i] = a[i - 1];
 				a[i - 1] = k;
 				f = 1;
-				iteration++;
 			}
 		}
 		l++;
@@ -118,7 +112,6 @@ void Buble_sort(int a[], int n) {
 				a[i] = a[i - 1];
 				a[i - 1] = k;
 				f = 1;
-				iteration++;
 			}
 		}
 		r--;
@@ -132,24 +125,19 @@ void Buble_sort(int a[], int n) {
 	printf("\n");
 	printf("~~~~~~~~~~~~~~~~~~ \n");
 	printf("Time spent your programm: %f \n", time_spent);
-	printf("kolichestvo iteracii: %d \n", iteration);
-
 	printf("\n");
 }
 
 void Insertion_sort(int a[], int n) {
 	clock_t start = clock();
-	long long iteration = 0; 
 	for (int i = 1; i < n; i++) {
 		int k = a[i];
 		int j = i - 1;
 		while (j >= 0 and a[j] > k) {
 			a[j + 1] = a[j];
 			j--;
-			iteration++;
 		}
 		a[j + 1] = k;
-		iteration++;
 	}
 	clock_t end = clock();
 	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
@@ -159,7 +147,6 @@ void Insertion_sort(int a[], int n) {
 
 	printf("\n");
 	printf("Time spent your programm: %f \n", time_spent);
-	printf("kolichestvo iteracii: %d \n", iteration);
 
 	printf("\n");
 
@@ -198,19 +185,16 @@ void merge(int arr[], int l, int mid, int r) {
 		j++;
 		k++;
 	}
+	
+
 }
 void Merge_sort(int arr[], int l, int r) {
-	clock_t start = clock();
 	if (l < r) {
 		int mid = l + (r - l) / 2;
 		Merge_sort(arr, l, mid);
 		Merge_sort(arr, mid + 1, r);
 		merge(arr, l, mid, r);
 	}
-	clock_t end = clock();
-	double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-	printf("Time spent your programm: %f \n", time_spent);
-	printf("\n");
 }
 
 void Counting_sort(int a[], int n) {
@@ -270,6 +254,7 @@ void Quick_sort(int a[], int l, int r) {
 		Quick_sort(a, l, pi - 1);
 		Quick_sort(a, pi, r);
 	}
+	
 }
 
 
@@ -304,6 +289,7 @@ int Binary_search(int arr[], int n, int e) {
 	clock_t start = clock();
 	while (l <= r) {
 		mid = (l + r) / 2;
+		iteration++; 
 		if (arr[mid] < e) {
 			l = mid + 1;
 		}
@@ -359,14 +345,17 @@ void printa(int a[], int n) {
 	printf("\n");
 }
 
-
+void fuckthis(clock_t a, clock_t b) {
+	double time_spent = (double)(b - a) / CLOCKS_PER_SEC; 
+	printf("Time spent your programm: %f \n", time_spent);
+}
 int main() {
 	setlocale(LC_ALL, "Russian");
 	srand(time(NULL));
-	int a[1000];
+	int a[40010];
 	int n, e, g = 1;
 	int c;
-	int ac[1000];
+	int ac[20010];
 	int iter;
 	LARGE_INTEGER freq, start, finish;
 	double time;
@@ -397,9 +386,9 @@ int main() {
 		case 1: copy_massive(a, ac, n); Buble_sort(ac, n); break;
 		case 2: copy_massive(a, ac, n); Insertion_sort(ac, n); break;
 		case 3: copy_massive(a, ac, n); Selection_sort(ac, n); break;
-		case 4: copy_massive(a, ac, n); Merge_sort(ac, 0, n - 1); printa(ac, n); break;
+		case 4: copy_massive(a, ac, n); clock_t start = clock(); Merge_sort(ac, 0, n - 1); clock_t end = clock(); fuckthis(start, end); printa(ac, n); break;
 		case 5: copy_massive(a, ac, n); Counting_sort(ac, n); break;
-		case 6: copy_massive(a, ac, n); Quick_sort(ac, 0, n - 1); printa(ac, n);  break;
+		case 6: copy_massive(a, ac, n); clock_t start1 = clock(); Quick_sort(ac, 0, n - 1); clock_t end1 = clock(); fuckthis(start1, end1); printa(ac, n);  break;
 		case 7: copy_massive(a, ac, n); Shell_sort(ac, n); break;
 		case 8: copy_massive(a, ac, n); Piramyd_sort(ac, n); break;
 		case 9: copy_massive(a, ac, n); Radix_sort(ac, n); break;

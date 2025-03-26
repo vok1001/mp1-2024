@@ -132,8 +132,9 @@ Polynom Polynom::operator-(double x) {
 	return *this; 
 }
 Polynom operator-(double x, const Polynom& b) {
-	b.a[b.n] -= x; 
-	return b; 
+	Polynom g = b; 
+	g.a[g.n] -= x; 
+	return g; 
 }
 Polynom operator*(double x, const Polynom& b) {
 	double* new_a = new double [b.n + 1]; 
