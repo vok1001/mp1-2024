@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -17,23 +16,23 @@ private:
 public:
 	Monitoring() : day(1), month(1), year(2025), hour(0), temperature(0.0) {}
 
-	Monitoring(int day, int month, int year, int hour, double temperature) : day(day), month(month), year(year), hour(hour), temperature(temperature) {}
-
+	Monitoring(int day, int month, int year, int hour, double temperature) : day(day), month(month), year(year), hour(hour), temperature(temperature) {} 
+	
 	int getDay() const { return day; }
 	int getMonth() const { return month; }
 	int getYear() const { return year; }
 	int getHour() const { return hour; }
 	double getTemperature() const { return temperature; }
-	int setDay(int d) { day = d; }
-	int setMonth(int m) { month = m; }
+	int setDay(int d) { day=d; }
+	int setMonth(int m) { month=m; }
 	int setYear(int y) { year = y; }
-	int setHour(int h) { hour = h; }
+	int setHour(int h) { hour=h; }
 	double setTemperature(double t) { temperature = t; }
 
 	void printMon() const {
-		cout << "Äàòà: " << day << "." << month << "." << year << "  " << hour << ":00  " << temperature << " C" << endl;
+		cout << "Ğ”Ğ°Ñ‚Ğ°: " << day << "." << month << "." << year << "  " << hour << ":00  " << temperature << " C" << endl;
 	}
-
+	
 };
 
 class Thermometr {
@@ -96,7 +95,7 @@ public:
 							break;
 						}
 						if (monitor[c].getHour() == skib.getHour()) {
-							cout << "îùèáêà íè÷åãî íå ïàëó÷èëàñü";
+							cout << "Ğ¾Ñ‰Ğ¸Ğ±ĞºĞ° Ğ½Ğ¸Ñ‡ĞµĞ³Ğ¾ Ğ½Ğµ Ğ¿Ğ°Ğ»ÑƒÑ‡Ğ¸Ğ»Ğ°ÑÑŒ";
 						}
 					}
 				}
@@ -183,7 +182,7 @@ public:
 							break;
 						}
 						if (monitor[c].getHour() == skib.getHour()) {
-							cout << "îùèáêà íè÷åãî íå ïàëó÷èëàñü";
+							cout << "Ğ¾Ñ‰Ğ¸Ğ±ĞºĞ° Ğ½Ğ¸Ñ‡ĞµĞ³Ğ¾ Ğ½Ğµ Ğ¿Ğ°Ğ»ÑƒÑ‡Ğ¸Ğ»Ğ°ÑÑŒ";
 						}
 					}
 				}
@@ -235,12 +234,12 @@ public:
 		int k = 0;
 		for (int i = 0; i < monitor.size(); i++) {
 			if (d == monitor[i].getDay() && m == monitor[i].getMonth() && y == monitor[i].getYear() && h == monitor[i].getHour()) {
-				cout << "Òåìïåğàòóğà -   " << monitor[i].getTemperature() << " C" << endl;
+				cout << "Ğ¢ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ğ° -   " << monitor[i].getTemperature() << " C" << endl;
 				k = 1;
 			}
 		}
 		if (k != 1) {
-			cout << "Òàêîãî çàìåğà íå áûëî (((";
+			cout << "Ğ¢Ğ°ĞºĞ¾Ğ³Ğ¾ Ğ·Ğ°Ğ¼ĞµÑ€Ğ° Ğ½Ğµ Ğ±Ñ‹Ğ»Ğ¾ (((";
 		}
 	}
 
@@ -254,17 +253,17 @@ public:
 		while (k != 0) {
 			int h;
 
-			cout << "Ââåäèòå âğåìÿ" << endl;
+			cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ²Ñ€ĞµĞ¼Ñ" << endl;
 			cin >> h;
 			while (h < 0 || h > 24) {
 
-				cout << "Îøèáêà ââåäèòå çàíîâî" << endl;
+				cout << "ĞÑˆĞ¸Ğ±ĞºĞ° Ğ²Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ·Ğ°Ğ½Ğ¾Ğ²Ğ¾" << endl;
 				cin >> h;
 
 			}
 			for (int i = 0; i < k; i++) {
 				if (t[i] == h) {
-					cout << "Îøèáêà ââåäèòå çàíîâî" << endl;
+					cout << "ĞÑˆĞ¸Ğ±ĞºĞ° Ğ²Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ·Ğ°Ğ½Ğ¾Ğ²Ğ¾" << endl;
 					cin >> h;
 
 					i = 0;
@@ -272,7 +271,7 @@ public:
 			}
 			t[c] = h;
 			double temper;
-			cout << "Ââåäèòå òåìïåğàòóğó ";
+			cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‚ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ñƒ ";
 			cin >> temper;
 			newMonit(d, m, y, h, temper);
 			k--;
@@ -289,7 +288,7 @@ public:
 				counter += 1;
 			}
 		}
-		cout << "Ñğåäíÿÿ òåìïåğàòóğà çà " << d << "." << m << "." << y << "  " << (c_temp / counter);
+		cout << "Ğ¡Ñ€ĞµĞ´Ğ½ÑÑ Ñ‚ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ğ° Ğ·Ğ° " << d<<"."<<m<<"."<<y<<"  "<<(c_temp / counter);
 	}
 
 	void findAvgTempForMonth(int m, int y) {
@@ -301,9 +300,9 @@ public:
 				counter += 1;
 			}
 		}
-		cout << "Ñğåäíÿÿ òåìïåğàòóğà çà ìåñÿö = " << (c_temp / counter);
+		cout << "Ğ¡Ñ€ĞµĞ´Ğ½ÑÑ Ñ‚ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ğ° Ğ·Ğ° Ğ¼ĞµÑÑÑ† = " << (c_temp / counter);
 	}
-
+	
 	void findAvgTempForYear(int m, int y) {
 		int counter = 0;
 		double c_temp = 0.0;
@@ -313,9 +312,9 @@ public:
 				counter += 1;
 			}
 		}
-		cout << "Ñğåäíÿÿ òåìïåğàòóğà çà ãîä = " << (c_temp / counter);
+		cout << "Ğ¡Ñ€ĞµĞ´Ğ½ÑÑ Ñ‚ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ğ° Ğ·Ğ° Ğ³Ğ¾Ğ´ = " << (c_temp / counter);
 	}
-
+	
 	void avgdaytempformonth(int m, int y) {
 		int counter = 0;
 		double c_temp = 0.0;
@@ -325,9 +324,9 @@ public:
 				counter += 1;
 			}
 		}
-		cout << "Ñğåäíÿÿ äíåâíàÿ òåìïåğàòóğà çà ìåñÿö = " << (c_temp / counter);
+		cout << "Ğ¡Ñ€ĞµĞ´Ğ½ÑÑ Ğ´Ğ½ĞµĞ²Ğ½Ğ°Ñ Ñ‚ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ğ° Ğ·Ğ° Ğ¼ĞµÑÑÑ† = " << (c_temp / counter);
 	}
-
+	
 	void avgnighttempformonth(int m, int y) {
 		int counter = 0;
 		double c_temp = 0.0;
@@ -337,7 +336,29 @@ public:
 				counter += 1;
 			}
 		}
-		cout << "Ñğåäíÿÿ íî÷íàÿ òåìïåğàòóğà çà ìåñÿö = " << (c_temp / counter);
+		cout << "Ğ¡Ñ€ĞµĞ´Ğ½ÑÑ Ğ½Ğ¾Ñ‡Ğ½Ğ°Ñ Ñ‚ĞµĞ¼Ğ¿ĞµÑ€Ğ°Ñ‚ÑƒÑ€Ğ° Ğ·Ğ° Ğ¼ĞµÑÑÑ† = " << (c_temp / counter);
 	}
 
 };
+
+
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	Thermometr t;
+
+	t.setBaseDateTime(1, 1, 2025, 0, -15.2);
+	t.getBaseDateTime();  
+
+	t.newMonit(1, 1, 2025, 12, 5.0);
+	t.getTemper(1, 1, 2025, 12);  
+
+	t.addMonitoringSeries(2, 1, 2025, 2);  
+	t.getTemper(2, 1, 2025, 14);  
+	t.getTemper(2, 1, 2025, 18);  
+
+
+	t.findAvgTempForDay(1, 1, 2025);  
+
+
+}
