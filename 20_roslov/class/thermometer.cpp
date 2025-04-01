@@ -25,6 +25,39 @@ bool operator==(const discover &a, const discover &b)
 }
 
 
+bool check_time(string& str){
+    return count(str.begin(), str.end(), ':') > 0;
+}
+
+bool check_date(string& str){
+    return count(str.begin(), str.end(), '/') > 0;
+}
+
+bool check_temp(string& str){
+    return count(str.begin(), str.end(), '.') > 0;
+}
+
+bool check_command(string& str){
+    vector <string> type_command = {"get", "set"};
+    for (int i = 0; i < type_command.size(); i++){
+        if (type_command[i] == str){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool check_weaher(string& str){
+    vector <string> type_weaher = {"Солнечно", "Пасмурно", "Дождливо", "Ветренно"};
+    for (int i = 0; i < type_weaher.size(); i++){
+        if (type_weaher[i] == str){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 class Thermometer{
     private:
         discover *all_info;
@@ -39,6 +72,48 @@ class Thermometer{
                 delete[] all_info;
                 all_info = tmp;
                 size = fullness+10;
+        }
+
+        void WorkCommand(vector <string> arr){
+            if (arr[0] == "set"){
+                
+            }
+            else if (arr[0] == "get"){
+                if (arr[1] == "min"){
+                    this->SearchMin();
+                }else if(arr[1] == "max"){
+                    this->SearchMax();
+                }else{
+                    discover start, end;
+                    for (int i = 1; i<arr.size();i++){
+                        vector <string> date;
+                        string token;
+                        istringstream tokenStream(arr[i]);
+                        while (getline(tokenStream, token, '/')) {
+                            date.push_back(token);
+                        }
+                        if (i == 1){
+                            start.year = stoi(date[0]);
+                            start.mount = stoi(date[1]);
+                            start.day = stoi(date[2]);
+                        }else{
+                            end.year = stoi(date[0]);
+                            end.mount = stoi(date[1]);
+                            end.day = stoi(date[2]);
+                        }
+                    }
+                    cout << "События в выбранном периоде" << endl;
+                    for (int i = 0; i < fullness; i++){
+                        if(start.year <= all_info[i].year <= end.year && start.mount<= all_info[i].mount <= end.mount && 
+                        start.day <= all_info[i].day <= end.day){
+                            cout << "Год: " << all_info[i].year << " Месяц: " << all_info[i].mount << " День: " << 
+                            all_info[i].day  << " Часы: " << all_info[i].hour << " Минуты: " << all_info[i].minute << endl;
+                            cout << "Описание: " << all_info[i].specification << endl; 
+                            cout << "Температура: " << all_info[i].temperature << endl; 
+                        }
+                    }
+                }
+            }
         }
 
     public:
@@ -218,29 +293,59 @@ class Thermometer{
               
             }
             int count = 0;
+            
             while (std::getline(inFile, line)) {
                 if (line.empty()) continue;
                 // Используем stringstream для разбиения строки по пробелам
-                std::istringstream iss(line);
-                std::string word;
+                istringstream iss(line);
+                string word;
+                bool flag_command = false;
 
                 // Разбиваем строку на слова
-                vector <string> arr;
+                vector <string> split_space;
                 while (iss >> word) {
-                    arr.push_back(word);
+                    split_space.push_back(word);
                 }
                 if (size == fullness){
                     this->AddMemory();
                 }
-                all_info[fullness].year = stoi(arr[0]);
-                all_info[fullness].mount = stoi(arr[1]);
-                all_info[fullness].day = stoi(arr[2]);
-                all_info[fullness].hour = stoi(arr[3]);
-                all_info[fullness].minute = stoi(arr[4]);
-                all_info[fullness].specification = arr[5];
-                all_info[fullness].temperature = stod(arr[6]);
-                fullness++;
-                count++;
+                for (int i = 0; i < split_space.size(); i++){
+                    if (check_command(split_space[i])){
+                        flag_command = true;
+                        break;
+                    }else if (check_time(split_space[i])){
+                        vector <string> time;
+                        string token;
+                        istringstream tokenStream(split_space[i]);
+                        while (getline(tokenStream, token, ':')) {
+                            time.push_back(token);
+                        }
+                        all_info[fullness].hour = stoi(time[0]);
+                        all_info[fullness].minute = stoi(time[1]);
+
+                    }
+                    else if (check_date(split_space[i])){
+                        vector <string> date;
+                        string token;
+                        istringstream tokenStream(split_space[i]);
+                        while (getline(tokenStream, token, '/')) {
+                            date.push_back(token);
+                        }
+                        all_info[fullness].year = stoi(date[0]);
+                        all_info[fullness].mount = stoi(date[1]);
+                        all_info[fullness].day = stoi(date[2]);
+                    }else if (check_temp(split_space[i])){
+                        all_info[fullness].temperature = stod(split_space[i]);
+                    }else if (check_weaher(split_space[i])){
+                        all_info[fullness].specification = split_space[i];
+                    }
+                }
+                if (flag_command){
+                    this->WorkCommand(split_space);
+                }else{
+                    fullness++;
+                    count++;
+                }
             }
             inFile.close(); 
         }
@@ -254,10 +359,24 @@ class Thermometer{
             }
         }
 
-        
+        void SearchMin(){
+            double minumym = 10000000;
+            for (int i = 0; i < fullness; i++){
+                minumym = min(all_info[i].temperature, minumym);    
+            }
+            cout << "Минимальная температура" << endl;
+            cout << minumym << endl;
+        }
 
-        
-
+        void SearchMax(){
+            double maximym = -10000000;
+            for (int i = 0; i < fullness; i++){
+                maximym = max(all_info[i].temperature, maximym);    
+            }
+            cout << "Максимальная температура" << endl;
+            cout << maximym << endl;
+        }
+ 
         ~Thermometer(){delete[] all_info;};
 };
 
@@ -266,7 +385,7 @@ class Thermometer{
 int main(){
     Thermometer a1(1);
     a1.LoadHistory();
-    a1.PrintInfo();
+    //a1.PrintInfo();
     
     return 0;
 }
