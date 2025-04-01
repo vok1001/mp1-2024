@@ -91,7 +91,7 @@ void choice1( TFunc function)
 	struct SUMMA ANS;
 	printf("¬ведите точку\n");
 	scanf_s("%lf", &x);
-	if (function == &sin1 || function == &cos1)
+	if (function == &sin1 || function == &cos1)///
 	{
 		while (x > 2 * M_PI)
 		{
