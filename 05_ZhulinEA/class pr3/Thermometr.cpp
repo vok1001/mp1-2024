@@ -8,7 +8,7 @@ using namespace std;
 inv::inv() : year(0), month(0), day(0), hours(0), value(-100) {} 
 
 
-inv::inv(int y, int m, int d, int h, int v) {
+inv::inv(int y, int m, int d, int h, double v) {
 	year = y;
 	month = m; 
 	day = d; 

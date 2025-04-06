@@ -5,15 +5,14 @@
 using namespace std; 
 
 class inv {
-private:
+public:
 	int year;
 	int month;
 	int day;
 	int hours;
-	int value;
-public:
+	double value;
 	inv();
-	inv(int year, int month, int day, int hours, int value);
+	inv(int year, int month, int day, int hours, double value);
 	inv(const inv& b);
 	bool operator<(const inv& b);
 	friend ostream& operator<<(ostream& os, inv& b);
