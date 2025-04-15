@@ -117,7 +117,7 @@ Thermometr::Thermometr(const vector <inv>& c) {
 void Thermometr::append_inv(inv b) {
 	a.push_back(b);
 	kolvo++;
-	if (b < a[kolvo - 1]) { 
+	if (b < a[kolvo - 1] or b == a[kolvo - 1]) {
 		min_date = b;
 	}
 };
@@ -149,6 +149,9 @@ double Thermometr::average_value_in_day(int year, int month, int day) {
 
 double Thermometr::average_value() {
 	double res = 0;
+	if (kolvo == 0) {
+		return 0; 
+	}
 	for (int i = 0; i < kolvo; i++) {
 		res += a[i].value; 
 	}
