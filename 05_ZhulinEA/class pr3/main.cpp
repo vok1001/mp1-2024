@@ -5,9 +5,11 @@
 #include <sstream>
 
 // 03.12.2021
-// пример ввода:	adflj appind_inv 12.12.1245 al 17:23 aldfj 14.5	 
+// пример ввода:	adflj appind_inv 12.12.1245 al 17:23 aldfj 15.0	
+// adflj appind_inv 12.12.1245 al 18:23 aldfj 19.0
 // adf get average_value adlfjlkdj 
-//надо дописать считывание функции
+// adlf get cout_value_in_date 12.12.1245 17:23 
+// //надо дописать считывание функции
 using namespace std;
 
 int levenshtein_distance(const std::string& s1, const std::string& s2) {
@@ -124,7 +126,9 @@ inv sDate(string x) {
 	s4 += x[ind - 2];
 	s4 += x[ind - 1];
 	a.hours = stoi(s4);
-	a.value = stod(value); 
+	if (!value.empty()) {
+		a.value = stod(value);
+	}
 	return a;
 }
 
