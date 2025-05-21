@@ -1,5 +1,4 @@
 ﻿// 2.3 Вектор,  12.03.25
-
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -10,7 +9,6 @@ private:
     int* data;
 
 public:
-
     Vector() {
         size = 0;
         data = nullptr;
@@ -36,7 +34,6 @@ public:
         if (this == &v) return *this;
 
         delete[] data;
-
         size = v.size;
         data = new int[size];
         for (int i = 0; i < size; i++) {
@@ -53,7 +50,6 @@ public:
         if (nSize == size) return;
 
         delete[] data;
-
         size = nSize;
         data = new int[size];
         for (int i = 0; i < size; i++) {
@@ -61,7 +57,7 @@ public:
         }
     }
 
-    int getSize() {
+    int getSize() const {
         return size;
     }
 
@@ -74,7 +70,7 @@ public:
         }
     }
 
-    int getComponent(int ind) {
+    int getComponent(int ind) const {
         if (ind >= 0 && ind < size) {
             return data[ind];
         }
@@ -84,7 +80,7 @@ public:
         }
     }
 
-    double len() {
+    double len() const {
         double sum = 0;
         for (int i = 0; i < size; i++) {
             sum += pow(data[i], 2);
@@ -92,8 +88,25 @@ public:
         return sqrt(sum);
     }
 
-    // Перегрузка + 
-    Vector operator+(Vector& v) {
+    int& operator[](int index) {
+        if (index < 0 || index >= size) {
+            cout << "Ошибка: выход за границы вектора" << endl;
+            return data[0];
+        }
+        return data[index];
+    }
+
+    // Перегрузка []
+    const int& operator[](int index) const {
+        if (index < 0 || index >= size) {
+            cout << "Ошибка: выход за границы вектора" << endl;
+            return data[0];
+        }
+        return data[index];
+    }
+
+    // Перегрузка +
+    Vector operator+(const Vector& v) const {
         Vector result(size);
         if (size != v.size) {
             cout << "Ошибка, разный размер векторов или отсутствие одного из них" << endl;
@@ -106,7 +119,7 @@ public:
     }
 
     // Перегрузка * 
-    int operator*(Vector& v) {
+    int operator*(const Vector& v) const {
         if (size != v.size) {
             cout << "Ошибка, разный размер векторов или отсутствие одного из них" << endl;
             return 0;
@@ -118,20 +131,26 @@ public:
         return res;
     }
 
-    friend ostream& operator<<(ostream& os, Vector& v);
+    // Перегрузка ==
+    bool operator==(const Vector& v) const {
+        if (size != v.size) return false;
+        for (int i = 0; i < size; i++) {
+            if (data[i] != v.data[i]) return false;
+        }
+        return true;
+    }
+
+    friend ostream& operator<<(ostream& os, const Vector& v);
 };
 
-
-ostream& operator<<(ostream& ost, Vector& v) {
+ostream& operator<<(ostream& ost, const Vector& v) {
     ost << "[ ";
     for (int j = 0; j < v.size; j++) {
         ost << v.data[j] << " ";
     }
     ost << "]";
-
     return ost;
 }
-
 
 void fillVector(Vector& v) {
     int n = v.getSize();
@@ -144,9 +163,7 @@ void fillVector(Vector& v) {
     }
 }
 
-
 void showMenu() {
-
     cout << "\n==============================\n";
     cout << "              МЕНЮ\n";
     cout << "==============================\n";
@@ -219,7 +236,6 @@ int main() {
             cout << "Сумма векторов: " << sum << endl;
             break;
         }
-
         case 7: {
             exit = true;
             cout << "Выход..." << endl;
